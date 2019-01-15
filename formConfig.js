@@ -4,57 +4,23 @@
 
 function getTranslationConfig(formID){
   return {
-	"timestamp":{
-            "title":"Časová značka",
-        },
-        "registrationType":{
-            "title":"Typ registrace",
-        },
-        "lengthOfStay":{
-            "title":"Délka pobytu",
-        },
-        "section":{
-            "title":"Sekce",
-        },
-        "food":{
-            "title":"Volba jídla",
-        },
-        "name":{
-            "title":"Jméno",
-        },
-        "surname":{
-            "title":"Příjmení",
-        },
-        "email":{
-            "title":"Email",
-        },
-        "phone":{
-            "title":"Telefon",
-        },
-        "sex":{
-            "title":"Pohlaví",
-        },
-        "street":{
-            "title":"Ulice a č.p.",
-        },
-        "city":{
-            "title":"Město",
-        },
-        "postalCode":{
-            "title":"PSČ",
-        },
-        "city":{
-            "title":"Město",
-        },
-        "birthDate":{
-            "title":"Datum narození",
-        },
-        "parish":{
-            "title":"Vysokoškolské společenství",
-        },
-        "message":{
-            "title":"Vzkaz organizátorům",
-        },
+    "timestamp":       { "title":"Časová značka" },
+    "registrationType":{ "title":"Typ registrace" },
+    "lengthOfStay":    { "title":"Délka pobytu" },
+    "section":         { "title":"Sekce" },
+    "food":            { "title":"Volba jídla" },
+    "name":            { "title":"Jméno" },
+    "surname":         { "title":"Příjmení" },
+    "email":           { "title":"Email" },
+    "phone":           { "title":"Telefon" },
+    "sex":             { "title":"Pohlaví" },
+    "street":          { "title":"Ulice a č.p." },
+    "city":            { "title":"Město" },
+    "postalCode":      { "title":"PSČ" },
+    "city":            { "title":"Město" },
+    "birthDate":       { "title":"Datum narození" },
+    "parish":          { "title":"Vysokoškolské společenství" },
+    "message":         { "title":"Vzkaz organizátorům" },
     }
 }
 
