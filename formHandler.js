@@ -1,49 +1,23 @@
 
-
 function onFormSubmit(formSubmitObj) {
   runtimeLog('On form submited fired.');
-
-  var formID = getFormID(formSubmitObj);
-  runtimeLog('Form id is:' + formID);
-
-  if (formID == 'err') {
-    logError(['Form id unkwnon:', formID]);
-    return;
-  }
-
   prepareHeaderForId(formSubmitObj);
-  workOnSendingConfirmationEmail(formSubmitObj, formID);
-
+  workOnSendingConfirmationEmail(formSubmitObj);
 }
-
-function getFormID(formSubmitObj) {
-  var formIdConfig = getFormIdConfig();
-  var configUniqueQuestion = formIdConfig['uniqueQuestionFormIdTest'];
-
-  var formID = '';
-  var eventsNamedValues = formSubmitObj.namedValues;
-
-  if (eventsNamedValues.hasOwnProperty(configUniqueQuestion['cz'])) { formID = 'cz'; }
-  else if (eventsNamedValues.hasOwnProperty(configUniqueQuestion['en'])) { formID = 'en'; }
-  else { formID = 'err'; }
-
-  return formID;
-}
-
 
 function prepareHeaderForId(formSubmitObj) {
   var sheet = formSubmitObj.range.getSheet();
   insertComumnIfDoesNotExist('id/var. symbol', sheet, 1);
 }
 
-function workOnSendingConfirmationEmail(formSubmitObj, formID) {
-
+function workOnSendingConfirmationEmail(formSubmitObj) {
   Logger.log("Sending email...");
 
-  var translationConfig = getTranslationConfig(formID);
+  var translationConfig = getTranslationConfig();
   var priceConfig = getPriceConfig();
 
-  var formData = getFormData(formSubmitObj, translationConfig); runtimeLog(formData);
+  var formData = getFormData(formSubmitObj, translationConfig);
+  runtimeLog(formData);
   var ticketPriceInfo = getTicketPriceInfo(formData, priceConfig);
   //var fairTradePrice = getFaireTradePrice(formData, priceConfig);
 
