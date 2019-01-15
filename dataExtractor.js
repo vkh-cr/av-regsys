@@ -48,6 +48,7 @@ function getFormData(formSubmitObj, translationConfig) {
     runtimeLog(propertyName);
 
     formData[propertyName] = { originalValue: null, value: null };
+    var propertyData = formData[propertyName];
 
     var translationInfo = translationConfig[propertyName];
 
