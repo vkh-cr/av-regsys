@@ -1,6 +1,11 @@
-function testIfExistsElseLog(variable, logMessage){
-  if (typeof variable === "undefined") { ; return false; }
-  else { return true; }
+
+function logErrorOnUndefined(variable, logMsg) {
+  if (typeof variable === "undefined") {
+    logError(logMsg);
+    return false;
+  } else {
+    return true;
+  }
 }
 
 function translateAnswerElseLog(answersConfig, answerValue, propertyName){
@@ -30,7 +35,7 @@ function getInfoFromIndexes(dataConfig, indexArray, propertyName){
 
 function getInfoFromIndex(dataConfig, index, propertyName){
   var dataForIndex = dataConfig[index];
-  if(!testIfExistsElseLog(dataForIndex, ['Can not find data for:', propertyName, index ])){return null;}
+  if(!logErrorOnUndefined(dataForIndex, ['Can not find data for:', propertyName, index ])){return null;}
   return dataForIndex;
 }
 
@@ -54,11 +59,11 @@ function getFormData(formSubmitObj, translationConfig) {
       continue;
     }
 
-    var titleInForm = translationInfo.title;
-    if(!testIfExistsElseLog(titleInForm, ['Missing title in translation config:', propertyName])){continue;}
+    var formFieldName = translationInfo.title;
+    if(!logErrorOnUndefined(formFieldName, ['Missing title in translation config:', propertyName])){continue;}
 
-    var answerArrInForm = formAnswers[titleInForm];
-    if(!testIfExistsElseLog(answerArrInForm, ['Missing answer in form:', propertyName, titleInForm])){continue;}
+    var answerArrInForm = formAnswers[formFieldName];
+    if(!logErrorOnUndefined(answerArrInForm, ['Missing answer in form:', propertyName, formFieldName])){continue;}
 
     answerArrInForm = answerArrInForm.filter(function(item) {return (item !== '');});
 
