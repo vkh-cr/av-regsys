@@ -6,7 +6,7 @@
 //
 function logError(message){
   sheetLog('errorLog', message);
-  Logger.log(obj);
+  Logger.log(message);
 }
 
 function logNeedsAttention(message, email, id) {
