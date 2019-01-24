@@ -43,6 +43,8 @@ function getFormData(formSubmitObj, translationConfig) {
   var formData = {};
   var formAnswers = formSubmitObj.namedValues;
 
+  runtimeLog(formAnswers)
+
   runtimeLog(translationConfig);
   for (var propertyName in translationConfig) {
     runtimeLog(propertyName);
