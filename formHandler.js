@@ -18,67 +18,45 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var formData = getFormData(formSubmitObj, translationConfig);
   runtimeLog(formData);
-  var ticketPriceInfo = getTicketPriceInfo(formData, priceConfig);
-  //var fairTradePrice = getFaireTradePrice(formData, priceConfig);
+  var price = getTicketPriceInfo(formData, priceConfig);
 
   var userEmailAddress = formData.email.value;
-  //var varSymbolId = getVarriableSymbol(formData);
   var timestamp = formData['timestamp'].value;
-  var dateTime = timestamp.split(" ");
-  var date = dateTime[0].split(".");
-  var time = dateTime[1].split(":");
-  var varSymbolId = date[0] + date[1] + time[0] + time[1] + time[2];
+  var varSymbolId =
 
-  if(varSymbolId == null || varSymbolId == '') {
-    varSymbolId = getVarriableSymbol(formData);
-  }
-
-  Logger.log("Email Jídlo: " + formData['food'].value);
-
-  var registrationType = formData['registrationType'].value || ' ';
-  var lengthOfStay = formData['lengthOfStay'].value || ' ';
-  var section = formData['section'].value || ' ';
-  var food = formData['food'].value || ' ';
+  var accommodation = formData['accommodation'].value || ' ';
   var name = formData['name'].value || ' ';
   var surname = formData['surname'].value || ' ';
   var phone = formData['phone'].value || ' ';
-  var sex = formData['sex'].value || ' ';
-  var street = formData['street'].value || ' ';
-  var city = formData['city'].value || ' ';
-  var postalCode = formData['postalCode'].value || ' ';
-  var birthDate = formData['birthDate'].value || ' ';
-  var parish = formData['parish'].value || ' ';
-  var message = formData['message'].value || ' ';
+  var birthYear = formData['birthYear'].value || ' ';
+  var address = formData['address'].value || ' ';
+  var roommate = formData['roommate'].value || ' ' ;
+  var support = formData['support'].value || 0 ;
+  var note = formData['note'].value || '' ;
 
   var summaryVars = {
     'timestamp' : timestamp,
-    'registrationType' : registrationType,
-    'lengthOfStay' : lengthOfStay,
-    'section' : section,
-    'food' : food,
+    'accommodation' : accommodation,
     'name' : name + ' ' + surname,
     'email' : userEmailAddress,
     'phone' : phone,
-    'sex' : sex,
-    'street' : street,
-    'city' : city,
-    'postalCode' : postalCode,
-    'birthDate' : birthDate,
-    'parish' : parish,
-    'message' : message,
-    'priceCZK' : ticketPriceInfo.priceCZK,
-    //'priceFairTrade' : fairTradePrice.priceFairTrade,
+    'address' : address,
+    'roommate' : roommate,
+    'support' : support,
+    'note' : note,
+    'birthYear' : birthYear,
+    'price' : price,
     'varSymbol' : varSymbolId
   };
 
-  storeNewRelevantDataToOriginalSheet(formSubmitObj.range, varSymbolId);
+  // store inferred var symbol in sheet
+  addDataToCurrentRow(formSubmitObj.range, 1, varSymbolId);
 
-  saveBankImportantData(summaryVars, name + ' ' + surname, userEmailAddress, formID, true); //ulozi do money_info
-  sendEmailConfirmation(summaryVars, userEmailAddress, formID, 'normal');
+  startTrackingPayment(summaryVars, name + ' ' + surname, userEmailAddress, true);
+  sendEmailConfirmation(summaryVars, userEmailAddress, 'normal');
 }
 
-// GENEROVÁNÍ ID ÚČASTNÍKA
-function getVarriableSymbol(formData) {
+function getVarriableSymbol() {
   var otherData = formData.birthDate.toString();
   var email = formData.email.value;
 
@@ -96,27 +74,21 @@ function getVarriableSymbol(formData) {
   return hashValue;
 }
 
-//VÝPOČET CENY
 function getTicketPriceInfo(formData, priceConfig){
 
-  var res = formData['accommodation'].value
+  var accommodation = formData['accommodation'].value
+  var support = formData['support'].value
 
-  if(res == 'Postel s příslušenstvím') { return {'price' : priceConfig.With }; }
-  else if(res == 'Postel bez příslušenství') { return {'price' : priceConfig.Without }; }
-  else if(res == 'Spacák') { return {'price' : priceConfig.SleepingBag }; }
-  else { logError('Something is wrong with accommodation option settings'); }
+  if(accommodation == 'Postel s příslušenstvím')       { return {'price' : priceConfig.With + support }; }
+  else if(accommodation == 'Postel bez příslušenství') { return {'price' : priceConfig.Without + support }; }
+  else if(accommodation == 'Spacák')                   { return {'price' : priceConfig.SleepingBag + support }; }
+  else { logError('Invalid accommodation value: ' + accommodation); }
 }
 
-// ULOŽÍ ID ÚČASTNÍKA DO TABULKY
-function storeNewRelevantDataToOriginalSheet(currRange, varSymbolId){
-  addDataToCurrentRow(currRange, 1, varSymbolId);
-}
-
-
-function saveBankImportantData(summaryVars, name, email, formId, registrationValid) {
+function startTrackingPayment(summaryVars, name, email, registrationValid) {
   var moneyInfoSheetName = 'money info';
 
-  var userDataHeader = ['timestamp','name', 'id', 'manual override', 'email', 'language', 'price CZK', 'paid CZK', 'paid everything', 'registration valid (not too old, ...)', 'other notes'];
+  var userDataHeader = ['timestamp','name', 'id', 'manual override', 'email', 'price CZK', 'paid CZK', 'paid everything', 'registration valid (not too old, ...)', 'other notes'];
   createSheetIfDoesntExist(moneyInfoSheetName, userDataHeader);
 
   var moneyInfo = {
@@ -124,24 +96,24 @@ function saveBankImportantData(summaryVars, name, email, formId, registrationVal
     'id' : summaryVars.varSymbol,
     'manualOverrideReq' : false,
     'email' : email,
-    'language' : formId,
     'finalPriceCZK' : summaryVars.priceCZK,
     'paidCZK' : 0,
     'paidEverything' : false,
     'registrationValid' : registrationValid
-
   };
   sheetLog(moneyInfoSheetName, objectValuesToArray(moneyInfo));
 }
 
+function sendEmailConfirmation(summaryVars, userEmailAddress, emailType) {
 
-// POTVRZENÍ REGISTRACE
-function sendEmailConfirmation(summaryVars, userEmailAddress, formID, emailType) {
+  Logger.log(summaryVars);
+  Logger.log(userEmailAddress);
+  Logger.log(emailType);
 
-  var template = getConfirmationEmailTemplate(formID)[emailType];
-  var templatedData = fillInTemplate(template.text, summaryVars);
-
-  var subject = template.subject;
-
-  sendEmail(userEmailAddress, subject, templatedData, undefined, true);
+//  var template = getConfirmationEmailTemplate()[emailType];
+//  var templatedData = fillInTemplate(template.text, summaryVars);
+//
+//  var subject = template.subject;
+//
+//  sendEmail(userEmailAddress, subject, templatedData, undefined, true);
 }

@@ -1,9 +1,5 @@
-// ŠABLONY E-MAILOVÉ KOMUNIKACE
 
-
-//POTVRZENÍ REGISTRACE
-function getConfirmationEmailTemplate(formID) {
-  if (formID == "cz") {
+function getConfirmationEmailTemplate() {
     return { 'normal' :{
 
       'subject': "KAPACITA NAPLNĚNA Studentský velehrad 2018 – potvrzení přihlášky KAPACITA NAPLNĚNA",
@@ -48,7 +44,6 @@ Vzkaz organizátorům: #message"
 
       },
     };
-  };
 }
 
 //POTVRZENÍ PLATBY
