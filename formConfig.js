@@ -21,15 +21,8 @@ function getTranslationConfig(formID){
 
 function getPriceConfig(){
     return {
-        "WeekFoodFull":1099,
-        "WeekendFoodFull":899,
-        "WeekNofoodFull":799,
-        "WeekendNofoodFull":699,
-        "WeekFoodFavored":899,
-        "WeekendFoodFavored":699,
-        "WeekNofoodFavored":699,
-        "WeekendNofoodFavored":599,
-        //"WeekFairTrade":1650,
-        //"WeekendFairTrade":1430,
+         "With":1450,
+	 "Without":1150,
+	 "SleepingBag":750,
     };
 }

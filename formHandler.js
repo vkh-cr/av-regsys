@@ -99,43 +99,12 @@ function getVarriableSymbol(formData) {
 //VÝPOČET CENY
 function getTicketPriceInfo(formData, priceConfig){
 
-  // ukončení výhodných cen
-  var favoredDate = new Date('February 28, 2018 23:59:59');
-  var isFavored = favoredDate > new Date();
+  var res = formData['accommodation'].value
 
-  Logger.log("Get ticket Jídlo: " + formData['food'].value);
-
-  var isFood = true;
-  if(formData['food'].value == "bez stravy") isFood = false;
-
-  var isStayWeek = true;
-  if(formData['lengthOfStay'].value == "Víkendová (21. - 22.4.)") isStayWeek = false;
-
-  //výpočet ceny (zvýhodněná cena, s jídlem, celý SV)
-  if(isFavored && isFood && isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekFoodFavored};
-  }
-  else if(isFavored && isFood && !isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekendFoodFavored};
-  }
-  else if(isFavored && !isFood && isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekNofoodFavored};
-  }
-  else if(isFavored && !isFood && !isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekendNofoodFavored};
-  }
-  else if(!isFavored && isFood && isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekFoodFull};
-  }
-  else if(!isFavored && isFood && !isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekendFoodFull};
-  }
-  else if(!isFavored && !isFood && isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekNofoodFull};
-  }
-  else if(!isFavored && !isFood && !isStayWeek) {
-	  return {'priceCZK' : priceConfig.WeekendNofoodFull};
-  }
+  if(res == 'Postel s příslušenstvím') { return {'price' : priceConfig.With }; }
+  else if(res == 'Postel bez příslušenství') { return {'price' : priceConfig.Without }; }
+  else if(res == 'Spacák') { return {'price' : priceConfig.SleepingBag }; }
+  else { logError('Something is wrong with accommodation option settings'); }
 }
 
 // ULOŽÍ ID ÚČASTNÍKA DO TABULKY
