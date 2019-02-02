@@ -52,7 +52,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   addDataToCurrentRow(formSubmitObj.range, 1, varSymbolId);
 
   startTrackingPayment(summaryVars, name + ' ' + surname, userEmailAddress, true);
-  sendEmailConfirmation(summaryVars, userEmailAddress, 'normal');
+  sendEmailConfirmation(summaryVars, userEmailAddress);
 }
 
 function getVariableSymbol(range, price) {
@@ -111,16 +111,15 @@ function startTrackingPayment(summaryVars, name, email, registrationValid) {
   sheetLog(moneyInfoSheetName, objectValuesToArray(moneyInfo));
 }
 
-function sendEmailConfirmation(summaryVars, userEmailAddress, emailType) {
+function sendEmailConfirmation(summaryVars, userEmailAddress) {
 
   Logger.log(summaryVars);
   Logger.log(userEmailAddress);
-  Logger.log(emailType);
 
-//  var template = getConfirmationEmailTemplate()[emailType];
-//  var templatedData = fillInTemplate(template.text, summaryVars);
-//
-//  var subject = template.subject;
-//
-//  sendEmail(userEmailAddress, subject, templatedData, undefined, true);
+  var template = getConfirmationEmailTemplate();
+  var templatedData = fillInTemplate(template.text, summaryVars);
+
+  var subject = template.subject;
+
+  sendEmail(userEmailAddress, subject, templatedData, undefined, true);
 }

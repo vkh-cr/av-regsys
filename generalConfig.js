@@ -1,7 +1,7 @@
 function getGeneralConfig() {
   return {
-    'attentionEmail' : 'registrace@studentskyvelehrad.cz',
-    'attentionSubject' : 'SV 2018 - dotaz k registraci',
-    'replyToEmail' : 'registrace@studentskyvelehrad.cz',
+    'attentionEmail' : 'tym.realizace@absolventskyvelehrad.cz',
+    'attentionSubject' : 'AV19 - problematicka registrace',
+    'replyToEmail' : 'tym.realizace@absolventskyvelehrad.cz',
   };
 }

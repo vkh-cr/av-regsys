@@ -4,7 +4,7 @@
 
 function getTranslationConfig(formID){
   return {
-    "timestamp":       { "title":"Timestamp" },
+    "timestamp":       { "title":"Časová značka" },
     "name":            { "title":"Jméno" },
     "surname":         { "title":"Příjmení" },
     "email":           { "title":"Email" },
