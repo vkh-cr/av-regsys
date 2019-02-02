@@ -17,7 +17,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var priceConfig = getPriceConfig();
 
   var formData = getFormData(formSubmitObj, translationConfig);
-  var price = getTicketPriceInfo(formData, priceConfig);
+  var price = getTicketPrice(formData, priceConfig);
 
   var userEmailAddress = formData.email.value;
   var timestamp = formData['timestamp'].value;
@@ -73,15 +73,22 @@ function getVarriableSymbol() {
   return hashValue;
 }
 
-function getTicketPriceInfo(formData, priceConfig){
+function getTicketPrice(formData, priceConfig){
 
-  var accommodation = formData['accommodation'].value
-  var support = formData['support'].value
+  var accommodation = formData['accommodation'].value;
+  var support = parseInt(formData['support'].value);
 
-  if(accommodation == 'Postel s příslušenstvím')       { return {'price' : priceConfig.With + support }; }
-  else if(accommodation == 'Postel bez příslušenství') { return {'price' : priceConfig.Without + support }; }
-  else if(accommodation == 'Spacák')                   { return {'price' : priceConfig.SleepingBag + support }; }
+  var priceStr = undefined
+
+  if(accommodation == 'Postel s příslušenstvím')       { priceStr = priceConfig.With; }
+  else if(accommodation == 'Postel bez příslušenství') { priceStr = priceConfig.Without; }
+  else if(accommodation == 'Spacák')                   { priceStr = priceConfig.SleepingBag; }
   else { logError('Invalid accommodation value: ' + accommodation); }
+
+  var price = parseInt(priceStr) + support
+  runtimeLog("price inferrect: " + price)
+
+  return price
 }
 
 function startTrackingPayment(summaryVars, name, email, registrationValid) {
