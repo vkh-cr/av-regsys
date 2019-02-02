@@ -21,7 +21,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var userEmailAddress = formData.email.value;
   var timestamp = formData['timestamp'].value;
-  var varSymbolId =
+  var varSymbolId = getVariableSymbol(formSubmitObj.range, price);
 
   var accommodation = formData['accommodation'].value || ' ';
   var name = formData['name'].value || ' ';
@@ -55,22 +55,11 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   sendEmailConfirmation(summaryVars, userEmailAddress, 'normal');
 }
 
-function getVarriableSymbol() {
-  var otherData = formData.birthDate.toString();
-  var email = formData.email.value;
-
-  var varSymbolIndex = 2;
-
-  var uniqueString = '';
-  var hashValue = 0;
-  do{
-    uniqueString += otherData + email;
-    hashValue = getStringHashCode(uniqueString);
-
-  }while(findRowIndexAndRangeInSheet("money info", hashValue, varSymbolIndex) != null)
-
-
-  return hashValue;
+function getVariableSymbol(range, price) {
+  var rowNumber = range.getRow();
+  var rowNumberPadded = ("000" + rowNumber).slice(-3);
+  var pricePadded = ("0000" + price).slice(-4);
+  return '19' + rowNumberPadded + pricePadded;
 }
 
 function getTicketPrice(formData, priceConfig){
