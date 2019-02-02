@@ -83,15 +83,27 @@ function getTicketPrice(formData, priceConfig){
 function startTrackingPayment(summaryVars, name, email, registrationValid) {
   var moneyInfoSheetName = 'money info';
 
-  var userDataHeader = ['timestamp','name', 'id', 'manual override', 'email', 'price CZK', 'paid CZK', 'paid everything', 'registration valid (not too old, ...)', 'other notes'];
+  var userDataHeader = [
+	  'timestamp',
+	  'name',
+	  'id',
+	  'manual override',
+	  'email',
+	  'price',
+	  'paid',
+	  'paid everything',
+	  'registration valid (not too old, ...)',
+	  'other notes'
+  ];
   createSheetIfDoesntExist(moneyInfoSheetName, userDataHeader);
 
   var moneyInfo = {
+    // timestamp is added by sheetLog function
     'name' : name,
     'id' : summaryVars.varSymbol,
     'manualOverrideReq' : false,
     'email' : email,
-    'finalPriceCZK' : summaryVars.priceCZK,
+    'finalPrice' : summaryVars.price,
     'paidCZK' : 0,
     'paidEverything' : false,
     'registrationValid' : registrationValid
