@@ -84,27 +84,7 @@ function extractTransaction(transaction){
 
   }
 
-  handleAdditionalInfoWhenSendingEurosToCZKAccount(transactionObject);
   return transactionObject;
-}
-
-function handleAdditionalInfoWhenSendingEurosToCZKAccount(transactionObj){
-
-  if(!transactionObj.hasOwnProperty('additionalInfo')) { return;}
-
-  var additionalInfo = transactionObj['additionalInfo'];
-  var match =  additionalInfo.match(/^([0-9]+\.[0-9]+) EUR$/);
-
-  if(match != null && match.length < 2){ return; }
-  var newAmountEUR = match[1];
-
-  transactionObj['currencyOrig'] = transactionObj.currency;
-  transactionObj['amountOrig'] = transactionObj.amount;
-  transactionObj.currency = 'EUR';
-  transactionObj.amount  = newAmountEUR;
-
-  runtimeLog(transactionObj);
-
 }
 
 function writeDownTransactionsToBankInfo(transactionDictionary){
