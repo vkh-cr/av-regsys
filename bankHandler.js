@@ -120,31 +120,25 @@ function writeDownTransactionsToBankInfo(transactionDictionary){
 
 function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndexInRange){
 
+  var manualOverrideIndex = 3;
+  var userEmailIndex = 4;
+  var finalPriceIndex = 5;
+  var alreadyPaidIndex = 6;
+  var paidEverythingIndex = 7;
+
   var sheet = bankSheetRange.getSheet();
   var values = bankSheetRange.getValues()[rowIndexInRange];
 
-  var userEmailIndex = 4;
-  var userLanguageIndex = 5;
-
   var userEmail = values[userEmailIndex];
-  var userLanguage = values[userLanguageIndex];
 
-  var manualOverrideIndex = 3;
-
-  if(transactionObj.currency == 'CZK'){
-    var finalPriceIndex = 6;
-    var alreadyPaidIndex = 7;
-    var paidEverythingIndex = 8;
-  }
-  else {
-
-    logNeedsAttention(['Someone paid in non-supportd currency.', transactionObj.currency, transactionObj.amount], userEmail, transactionObj.variableSymbol);
+  if(transactionObj.currency != 'CZK') {
+    logNeedsAttention(
+      ['Someone paid in non-supportd currency.', transactionObj.currency, transactionObj.amount],
+      userEmail,
+      transactionObj.variableSymbol);
     sheet.getRange(rowIndexInRange + 1, manualOverrideIndex + 1).setValue(true);
     return;
-
   }
-
-  var values = bankSheetRange.getValues()[rowIndexInRange];
 
   var alreadyPaid = reliableToInt(values[alreadyPaidIndex]);
   var finalPrice = reliableToInt(values[finalPriceIndex]);
@@ -155,6 +149,10 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   sheet.getRange(rowIndexInRange + 1, alreadyPaidIndex + 1).setValue(alreadyPaidNew);
 
   var paidEverything = (alreadyPaidNew >= finalPrice);
+
+  if(alreadyPaidNew > finalPrice) {
+    logNeedsAttention('Someone paid more then expected', userEmail, transactionObj.variableSymbol);
+  }
 
   var paidEverythingBefore = values[paidEverythingIndex];
 
@@ -167,25 +165,14 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
     'leftToBePaid' : finalPrice - alreadyPaidNew,
   };
 
-  var emailTemplate = null;
-
   if(paidEverything){
     sheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
-    sheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
   }
 
-  if(paidEverything){
-    emailTemplate = getPaidEverythingtEmail(userLanguage);
-  }
-  else {
-    emailTemplate = getNotYetEverythingEmail(userLanguage);
-  }
-
-  bankLog(["New payment:"].concat(objectValuesToArray(variablesObject)));
+  var emailTemplate = getPaidEverythingtEmail();
+  bankLog("New payment: " + JSON.stringify(variablesObject));
   var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-
   var subject = emailTemplate.subject;
-
   sendEmail(userEmail, subject, templatedData, undefined);
 }
 
@@ -270,22 +257,8 @@ function testBankAccess(){
 
 function testBankWriteDown(){
     var transactionDictionary = {
-        "0":[
-            {"transferId":10810816122,"date":"2016-07-25+0200","amount":270,"currency":"CZK","accountNumber":"250759191","variableSymbol":"0"},
-            {"transferId":10810885551,"date":"2016-07-25+0200","amount":220,"currency":"CZK","accountNumber":"35-4901320237","variableSymbol":"0"},
-            {"transferId":10810887096,"date":"2016-07-25+0200","amount":220,"currency":"CZK","accountNumber":"43-6614030287","variableSymbol":"0"},
-            {"transferId":10824264139,"date":"2016-08-23+0200","amount":440,"currency":"CZK","accountNumber":"43-5055990227","variableSymbol":"0"},
-            {"transferId":10824269003,"date":"2016-08-23+0200","amount":220,"currency":"CZK","accountNumber":"107-3120930257","variableSymbol":"0"},
-            {"transferId":10824755392,"date":"2016-08-24+0200","amount":220,"currency":"CZK","accountNumber":"224099476","variableSymbol":"0"},
-            {"transferId":11331170097,"date":"2016-09-07+0200","amount":500,"currency":"CZK","accountNumber":"107431492","variableSymbol":"0"}
-        ],
-        "1896841632":[{"transferId":10821625937,"date":"2016-08-16+0200","amount":-349,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"1896841632"}],
-        "1171027960":[{"transferId":10822317506,"date":"2016-08-18+0200","amount":899,"currency":"CZK","accountNumber":"670100-2212691412","variableSymbol":"1171027960"}],
-        "12345":[{"transferId":10824880789,"date":"2016-08-24+0200","amount":899,"currency":"CZK","accountNumber":"2800394860","variableSymbol":"12345"}],
-        "1794212464":[{"transferId":11331260158,"date":"2016-09-07+0200","amount":2000,"currency":"CZK","accountNumber":"1015593472","variableSymbol":"1794212464"}],
-        "1701446672":[{"transferId":10822317506,"date":"2016-08-18+0200","amount":899,"currency":"CZK","accountNumber":"670100-2212691412","variableSymbol":"1701446672"}],
-        //The last one is used for testing
-        "1441690989":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"1441690989"}]
+        "1441690989":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"1441690989"}],
+        "190021450":[{"transferId":1234567890,"date":"2019-02-02+0200","amount":11450,"currency":"CZK","accountNumber":"3400304745","variableSymbol":"190021450"}]
     };
 
     writeDownTransactionsToBankInfo(transactionDictionary);

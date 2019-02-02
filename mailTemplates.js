@@ -26,25 +26,18 @@ varSymbol #varSymbol"
     };
 }
 
-//POTVRZENÍ PLATBY
-function getPaidEverythingtEmail(formID) {
-  if (formID == "cz") {
+function getPaidEverythingtEmail() {
     return {
-      'subject': "Potvrzení o zaplacení Studentského velehradu 2018!",
+      'subject': "[av19] Payment confirmation email TEST",
       'text': "Ahoj,\n\
-\n\
-potvrzujeme, že jsme od Tebe přijali platbu za Studentský Velehrad 2018. \n\
-Děkujeme.\n\
-\n\
-Za tým registrace a ubytování.\n\
-\n\
-Jan Rychtár\n\
-Registrace Studentský Velehrad 2018\n\
-registrace@studentskyvelehrad.cz\n\
-www.studentskyvelehrad.cz\n\
-"
+this is test text of payment confirmation email. It can contain these values:\n\
+variabilní symbol #varSymbol\n\
+zaplaceno pred #alreadyPaidOld\n\
+zaplaceno ted #alreadyPaidNew\n\
+mena #currency\n\
+cena celkem #finalPrice\n\
+zbyva k zaplaceni #leftToBePaid"
     };
-  };
 }
 
 //VÝZVA K ZAPLACENÍ

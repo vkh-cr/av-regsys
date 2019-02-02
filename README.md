@@ -53,6 +53,13 @@ av19 done
 1. Log all payments into `bank log` sheet
 
 ## Test payment pairing (bankHandler/testBankWriteDown)
-av19 pending
+av19 done
 Exactly as `onGetBankingDataTick` but using static data instead of fetching.
 
+# Various fields description
+## Money/bank info sheet
+* manual override 
+  * It is not attempted to match this to payment
+  * It is set by regsys when there is variable id match but some other issue with payment (wrong currency)
+* paid everything - set by regsys when whole sum is paid
+* other notes - this field is for human editing
