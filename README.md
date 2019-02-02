@@ -40,7 +40,7 @@ av19 pending
 av19 pending
 
 ## Manually inserting payment (uiAdditions/userPaidFunctionUI)
-av19 pending
+av19 done
 1. Prompts admin to enter variable symbol and amount paid
 1. Find entry with var. symbol in `money info` sheet
 1. Put email of logged in admin and amount into note of that payment for reference

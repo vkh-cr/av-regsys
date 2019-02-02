@@ -1,4 +1,4 @@
-function onOpenAddUI() {
+function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Manage payments')
       .addItem('User paid', 'userPaidFunctionUI')
@@ -10,7 +10,7 @@ function userPaidFunctionUI(){
 
   var result = ui.prompt(
       'Enter information about payment',
-      'Please user id, amount paid, and currency (CZK or EUR); all separated with ";".\n E.g.: "9510234298;CZK;2000"',
+      'Please enter var. symbol and amount paid separated by ; (E.g.: "9510234298;2000"',
       ui.ButtonSet.OK);
 
   // Process the user's response.
@@ -21,16 +21,18 @@ function userPaidFunctionUI(){
     return;
   }
 
-  var matches = text.match(/^([0-9]+);((CZK)|(EUR));([0-9]+)$/);
-  if(matches == null || matches.length != 6){
+  var matches = text.match(/^([0-9]+);([0-9]+)$/);
+  if(matches == null || matches.length != 3){
     ui.alert("Incorrect format :(. #matches");
     return;
   }
 
   var varSymbol = matches[1];
   var transactionObj = {
-    'currency' : matches[2],
-    'amount' : matches[5],
+    // we want CZK here so downstream is not marking this payment as 'needs attention'
+    // because of payment not in czk
+    'currency' : 'CZK', 
+    'amount' : matches[2],
     'variableSymbol' : varSymbol,
   };
 
@@ -54,7 +56,7 @@ function updateBankInfoWithTransactionObj(varSymbol, transactionObj){
 
 function writeDownInfoAboutDirectPayment(rowInfo, transactionObj){
 
-  var otherNotesIndex = 15;
+  var otherNotesIndex = 9;
   var indexInRange = rowInfo.indexInRange;
   var currRange = rowInfo.range;
 
