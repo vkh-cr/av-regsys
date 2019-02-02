@@ -33,6 +33,8 @@ We use clasp command line tool here. To bound this project with prepared sheet d
 1. Skip if `manual override` set to true
 1. If not paid or long enough then send nudge email
 
+## Sending equeued emails (commonUtils/onTryToSendEnqueuedEmailsTick)
+
 ## Manually inserting payment (uiAdditions/userPaidFunctionUI)
 1. Prompts admin to enter variable symbol and amount paid
 1. Find entry with var. symbol in `money info` sheet
