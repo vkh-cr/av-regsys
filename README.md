@@ -32,6 +32,7 @@ av19 pending
 
 ## Checking non received payments (bankHandler/onCheckNotReceivedPayments)
 av19 pending
+
 (All non header rows in `money info` sheet).foreach:
 1. Skip if `manual override` set to true
 1. If not paid or long enough then send nudge email
@@ -54,6 +55,7 @@ av19 done
 
 ## Test payment pairing (bankHandler/testBankWriteDown)
 av19 done
+
 Exactly as `onGetBankingDataTick` but using static data instead of fetching.
 
 # Various fields description
