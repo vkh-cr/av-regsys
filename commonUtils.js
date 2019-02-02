@@ -129,8 +129,15 @@ function fillInTemplate(template, data) {
   if(templateVars == null) {return template;}
 
   for (var i = 0; i < templateVars.length; ++i) {
-    var variableData = data[templateVars[i].substring(1)].toString();
-    templatedString = templatedString.replace(templateVars[i], variableData || "#ERROR");
+    var dataKey = templateVars[i].substring(1);
+    if(data.hasOwnProperty(dataKey)) {
+      var dataValue = data[dataKey];
+    } else {
+      var dataValue = "";
+      logError("No key \"" + dataKey + "\" in " + data)
+    }
+
+    templatedString = templatedString.replace(templateVars[i], dataValue);
   }
 
   return templatedString;
