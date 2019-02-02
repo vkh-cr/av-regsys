@@ -23,10 +23,10 @@ We use clasp command line tool here. To bound this project with prepared sheet d
 1. Fetch statement from bank api for latest time period
 1. Parse it and filter payments
 1. Go through `money info` sheet and if variable symbol matches do this:
-  1. Mark row in sheet as "needs attention" if payment is not in CZK
-  1. Update `already paid` field in sheet
-  1. Log pairing result in `bank log` sheet
-  1. Sends an email to user (confirmation or more to pay)
+   1. Mark row in sheet as "needs attention" if payment is not in CZK
+   1. Update `already paid` field in sheet
+   1. Log pairing result in `bank log` sheet
+   1. Sends an email to user (confirmation or more to pay)
 
 ## Checking non received payments (bankHandler/onCheckNotReceivedPayments)
 (All non header rows in `money info` sheet).foreach:
