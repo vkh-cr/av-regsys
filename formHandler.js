@@ -17,7 +17,6 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var priceConfig = getPriceConfig();
 
   var formData = getFormData(formSubmitObj, translationConfig);
-  runtimeLog(formData);
   var price = getTicketPriceInfo(formData, priceConfig);
 
   var userEmailAddress = formData.email.value;
