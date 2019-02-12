@@ -1,3 +1,6 @@
+# Notes
+* Use `console.log` for logging instead of `Logger.log`. One can access logs for more executions then last one.
+
 # Local work with source code
 We use clasp command line tool here. To bound this project with prepared sheet document:
 
@@ -9,6 +12,12 @@ We use clasp command line tool here. To bound this project with prepared sheet d
   * sheet -> Tools -> Script editor -> Edit -> Current project's triggers -> create a new trigger
   * You need to grant permissions to the app under your account. This is called app verification. It will involve this nasty "go to ...(unsafe)" dialog
 * Done
+
+# Starting registration
+* Create new spreadsheet
+* Share it with Vojta
+* Push code into it
+* Create form with fields' names and options having exact strings
 
 # Entry methods
 
