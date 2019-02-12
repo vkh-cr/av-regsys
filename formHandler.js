@@ -1,6 +1,7 @@
 
 function onFormSubmit(formSubmitObj) {
   runtimeLog('On form submited fired.');
+  console.log(formSubmitObj);
   prepareHeaderForId(formSubmitObj);
   workOnSendingConfirmationEmail(formSubmitObj);
 }

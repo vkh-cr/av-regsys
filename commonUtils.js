@@ -111,7 +111,11 @@ function addDataToCurrentRow(range, columnIndex, data) {
   //Range isn't zero based index
   var cellObject = sheet.getRange(rowNumber, columnIndex + 1);
   var originalValue = cellObject.getValue();
-  if (originalValue !== '') { logError(['Cell for id was not empty:', originalValue]); runtimeLog(originalValue); }
+  if (originalValue !== '') {
+    logError(['Cell for id was not empty:', originalValue, ' ', rowNumber]);
+    logError(range);
+    runtimeLog(originalValue);
+  }
 
   cellObject.setValue(data);
 }
