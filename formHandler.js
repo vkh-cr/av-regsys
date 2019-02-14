@@ -1,7 +1,11 @@
 
 function onFormSubmit(formSubmitObj) {
-  runtimeLog('On form submited fired.');
   console.log(formSubmitObj);
+  if (formSubmitObj.namedValues.Email == '' || formSubmitObj.namedValues['Varianta ubytování'] == '') {
+    console.log('On form submitted call suppressed');
+    return;
+  }
+  runtimeLog('On form submited fired.');
   prepareHeaderForId(formSubmitObj);
   workOnSendingConfirmationEmail(formSubmitObj);
 }
