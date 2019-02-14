@@ -71,6 +71,9 @@ function getTicketPrice(formData, priceConfig){
 
   var accommodation = formData['accommodation'].value;
   var support = parseInt(formData['support'].value);
+  if (support < 0) {
+    support = 0;
+  }
 
   var priceStr = undefined
 
