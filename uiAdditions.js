@@ -1,7 +1,8 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Manage payments')
-      .addItem('User paid', 'userPaidFunctionUI')
+      .addItem('Zadat platbu', 'userPaidFunctionUI')
+      .addItem('Poslat upominky k zaplaceni', 'onCheckNotRecievedPayments')
       .addToUi();
 }
 

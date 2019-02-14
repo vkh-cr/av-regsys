@@ -193,12 +193,22 @@ function onGetBankingDataTick(){
 
 function onCheckNotRecievedPayments(){
   var timestampIndex = 0;
+  // name 1
+  // variable id 2
   var manualOverrideIndex = 3;
-  var userLanguageIndex = 5;
   var userEmailIndex = 4;
-  var paidEverythingIndex = 8;
+  // price 5
+  // amounth paid 6
+  var paidEverythingIndex = 7;
+  // registration valid 8
+  var paymentReminderSentDateIndex = 9;
+  // notes 10
 
-  var bankSheetRange = getActiveRange('money info');
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = spreadsheet.getSheetByName('money info');
+
+  if (sheet == null) { return null; }
+  var bankSheetRange = sheet.getDataRange();
   if(bankSheetRange == null) { return; } //No info to be processed
 
   var bankSheetData = bankSheetRange.getValues();
@@ -210,39 +220,35 @@ function onCheckNotRecievedPayments(){
     var manOverride = bankData[manualOverrideIndex];
     if(manOverride) { continue; }
 
-    var userLanguage = bankData[userLanguageIndex];
-    var userEmail = bankData[userEmailIndex];
+    var reminderAlreadySent = bankData[paymentReminderSentDateIndex];
+    if(reminderAlreadySent != '') { continue; }
+
     var paidEverything = bankData[paidEverythingIndex];
+    if(paidEverything) { continue; }
 
     var timestamp = new Date(bankData[timestampIndex]);
     var today = new Date();
-
     var timeDiff = Math.abs(today.getTime() - timestamp.getTime());
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-   /* if(diffDays == 5 && !paidEverything) {
-      var variablesObject = {};
-      var emailTemplate = notRecievedPayment(userLanguage);
-      var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-      var subject = emailTemplate.subject;
-      sendEmail(userEmail, subject, templatedData, undefined);
+    if(diffDays < 7) { continue; }
+  
+    // save 'today' date as timstamp of when payment reminder email was sent
+    var cellObject = sheet.getRange(i+1, paymentReminderSentDateIndex + 1);
+    var originalValue = cellObject.getValue();
+    if (originalValue !== '') {
+      logError(['Cell for date was not empty:', originalValue, i, today]);
+      runtimeLog(originalValue);
     }
+    cellObject.setValue(today);
 
-    if(diffDays == 30 && !paidEverything) {
-      var variablesObject = {};
-      var emailTemplate = notRecievedPayment(userLanguage);
-      var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-      var subject = emailTemplate.subject;
-      sendEmail(userEmail, subject, templatedData, undefined);
-    }
-    */
-    if(!paidEverything) {
-      var variablesObject = {};
-      var emailTemplate = notRecievedPayment(userLanguage);
-      var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-      var subject = emailTemplate.subject;
-      sendEmail(userEmail, subject, templatedData, undefined);
-    }
+    // send email
+    var userEmail = bankData[userEmailIndex];
+    var variablesObject = {};
+    var emailTemplate = notRecievedPayment();
+    var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
+    var subject = emailTemplate.subject;
+    sendEmail(userEmail, subject, templatedData, undefined);
   }
 }
 

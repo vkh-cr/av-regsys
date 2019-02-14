@@ -101,6 +101,7 @@ function startTrackingPayment(summaryVars, name, email, registrationValid) {
 	  'paid',
 	  'paid everything',
 	  'registration valid (not too old, ...)',
+	  'upominka odeslana',
 	  'other notes'
   ];
   createSheetIfDoesntExist(moneyInfoSheetName, userDataHeader);

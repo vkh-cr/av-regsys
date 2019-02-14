@@ -41,8 +41,7 @@ zbyva k zaplaceni #leftToBePaid"
 }
 
 //VÝZVA K ZAPLACENÍ
-function notRecievedPayment(formID) {
-  if (formID == "cz") {
+function notRecievedPayment() {
     return {
       'subject': "Výzva k zaplacení Studentského velehradu 2018!",
       'text': "Ahoj!\n\
@@ -62,7 +61,6 @@ registrace@studentskyvelehrad.cz\n\
 www.studentskyvelehrad.cz\n\
 "
     };
-  };
 }
 
 //VÝZVA K ZAPLACENÍ ZBYTKU
