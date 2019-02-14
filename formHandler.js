@@ -22,6 +22,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var priceConfig = getPriceConfig();
 
   var formData = getFormData(formSubmitObj, translationConfig);
+  console.log(formData);
   var price = getTicketPrice(formData, priceConfig);
 
   var userEmailAddress = formData.email.value;
@@ -70,22 +71,21 @@ function getVariableSymbol(range, price) {
 function getTicketPrice(formData, priceConfig){
 
   var accommodation = formData['accommodation'].value;
-  var support = parseInt(formData['support'].value);
+  var support = parseInt(formData['support'].value) || 0;
   if (support < 0) {
     support = 0;
   }
 
-  var priceStr = undefined
+  var priceStr = undefined;
 
   if(accommodation == 'Postel s příslušenstvím')       { priceStr = priceConfig.With; }
   else if(accommodation == 'Postel bez příslušenství') { priceStr = priceConfig.Without; }
   else if(accommodation == 'Spacák')                   { priceStr = priceConfig.SleepingBag; }
   else { logError('Invalid accommodation value: ' + accommodation); }
 
-  var price = parseInt(priceStr) + support
-  runtimeLog("price inferrect: " + price)
+  var price = parseInt(priceStr) + support;
 
-  return price
+  return price;
 }
 
 function startTrackingPayment(summaryVars, name, email, registrationValid) {
