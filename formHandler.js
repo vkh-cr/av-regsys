@@ -23,7 +23,11 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
-  var price = getTicketPrice(formData, priceConfig);
+
+  var accommodationCode = getAccommodationCode();
+  var supportValue = formData['support'].value;
+
+  var price = getTicketPrice(accommodationCode, supportValue, priceConfig);
 
   var userEmailAddress = formData.email.value;
   var timestamp = formData['timestamp'].value;
@@ -42,6 +46,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var summaryVars = {
     'timestamp' : timestamp,
     'accommodation' : accommodation,
+    'accommodationCode': accommodationCode,
     'name' : name + ' ' + surname,
     'email' : userEmailAddress,
     'phone' : phone,
@@ -68,20 +73,30 @@ function getVariableSymbol(range, price) {
   return '19' + rowNumberPadded + pricePadded;
 }
 
-function getTicketPrice(formData, priceConfig){
+function getAccommodationCode(formData) {
+  if(accommodation == 'Postel s příslušenstvím')       { return 'with'; }
+  else if(accommodation == 'Postel bez příslušenství') { return 'without'; }
+  else if(accommodation == 'Spacák')                   { return 'spacak'; }
+  else {
+    logError('Invalid accommodation value: ' + accommodation);
+  }
+}
 
-  var accommodation = formData['accommodation'].value;
-  var support = parseInt(formData['support'].value) || 0;
+function getTicketPrice(accommodationCode, supportValue, priceConfig){
+
+  var support = parseInt(supportValue) || 0;
   if (support < 0) {
     support = 0;
   }
 
   var priceStr = undefined;
 
-  if(accommodation == 'Postel s příslušenstvím')       { priceStr = priceConfig.With; }
-  else if(accommodation == 'Postel bez příslušenství') { priceStr = priceConfig.Without; }
-  else if(accommodation == 'Spacák')                   { priceStr = priceConfig.SleepingBag; }
-  else { logError('Invalid accommodation value: ' + accommodation); }
+  if(accommodationCode == 'with')         { priceStr = priceConfig.With; }
+  else if(accommodationCode == 'without') { priceStr = priceConfig.Without; }
+  else if(accommodationCode == 'spacak')  { priceStr = priceConfig.SleepingBag; }
+  else {
+    logError('Invalid accommodationCode value: ' + accommodation);
+  }
 
   var price = parseInt(priceStr) + support;
 
@@ -125,9 +140,14 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
   Logger.log(summaryVars);
   Logger.log(userEmailAddress);
 
-  var template = getConfirmationEmailTemplate();
-  var templatedData = fillInTemplate(template.text, summaryVars);
+  var accommCode = summaryVars['accommodationCode'];
+  var template;
 
+  if (accommCode == 'with')        { template = getConfirmationEmailTemplateWith(); }
+  else if (accommCode = 'without') { template = getConfirmationEmailTemplateWithout(); }
+  else if (accommCode = 'spacak')  { template = getConfirmationEmailTemplateSpacak(); }
+
+  var templatedData = fillInTemplate(template.text, summaryVars);
   var subject = template.subject;
 
   sendEmail(userEmailAddress, subject, templatedData, undefined, true);

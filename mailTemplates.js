@@ -1,29 +1,53 @@
 
-function getConfirmationEmailTemplate() {
-    return {
-      'subject': "[av19] Confirmation email TEST",
-      'text': "Ahoj!\n\
-This is testing text of confirmation email after registration.\n\
-It should contains these static information:\n\
-link to av website\n\
-bank account number\n\
-info regarding payment deadline\n\
-\n\
-Then it contains these variables values:\n\
-timestamp #timestamp\n\
-accommodation #accommodation\n\
-name #name\n\
-email #email\n\
-phone #phone\n\
-address #address\n\
-roommate #roommate\n\
-support #support\n\
-note #note\n\
-birthYear #birthYear\n\
-price #price\n\
-varSymbol #varSymbol"
+function getConfirmationEmailTemplateWith() {
+  return {
+    'subject': "AV19 - potvrzení registrace a detaily platby"
+    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu UBYTOVÁNÍ S PŘÍSLUŠENSTVÍM, proto prosíme o uhrazení částky 1 450 Kč." ++ confirmationSuffix();
+  }
+}
 
-    };
+function getConfirmationEmailTemplateWithout() {
+  return {
+    'subject': "AV19 - potvrzení registrace a detaily platby"
+    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu UBYTOVÁNÍ BEZ PŘÍSLUŠENSTVÍ, proto prosíme o uhrazení částky 1 150 Kč." ++ confirmationSuffix();
+  }
+}
+
+function getConfirmationEmailTemplateSpacak() {
+  return {
+    'subject': "AV19 - potvrzení registrace a detaily platby"
+    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu SPACÁK, proto prosíme o uhrazení částky 750 Kč." ++ confirmationSuffix();
+  }
+}
+
+function confirmationTextPrefix() {
+  return "Milá účastnice/ milý účastníku,\n\
+\n\
+\n\
+\n\
+úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\
+\n\
+";
+}
+
+function confirmationTextSuffix() {
+  return "\n\
+\n\
+Celou částku prosím pošli do #deadline na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varsymbol.\n\
+\n\
+Registrace neuhrazené do #deadline budou stornovány. Po připsání platby na účet ti zašleme potvrzovací email.\n\
+\n\
+Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě v průběhu setkání.\n\
+\n\
+Novinky najdeš na webu www.absolventskyvelehrad.cz. Sleduj taky Facebook a Instagram. V případě změny nebo dotazů nás kontaktuj na e-mailu tym.realizace@absolventskyvelehrad.cz.\n\
+\n\
+Tématem AV19 je „Co je cíl?“. Inspiruj se příběhy obyčejně neobyčejných lidí, kteří se rozhodli nepromarnit svůj život.\n\
+\n\
+Díky a těšíme se na setkání\n\
+\n\
+Za přípravný tým AV19\n\
+Anička a Jakub\n\
+"
 }
 
 function getPaidEverythingtEmail() {
