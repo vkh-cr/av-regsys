@@ -11,7 +11,7 @@ Při registraci sis vybral/a variantu #accommodation, proto prosíme o uhrazení
 \n\
 Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varSymbol.\n\
 \n\
-Registrace neuhrazené do #deadline budou stornovány. Po připsání platby na účet ti zašleme potvrzovací email.\n\
+Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do #deadline. Jestli platba tou dobou nedorazí, bude registrace stornována.\n\
 \n\
 Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě v průběhu setkání.\n\
 \n\
