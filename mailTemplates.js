@@ -1,37 +1,14 @@
 
-function getConfirmationEmailTemplateWith() {
+function getConfirmationEmailTemplate() {
   return {
-    'subject': "AV19 - potvrzení registrace a detaily platby"
-    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu UBYTOVÁNÍ S PŘÍSLUŠENSTVÍM, proto prosíme o uhrazení částky 1 450 Kč." ++ confirmationSuffix();
-  }
-}
-
-function getConfirmationEmailTemplateWithout() {
-  return {
-    'subject': "AV19 - potvrzení registrace a detaily platby"
-    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu UBYTOVÁNÍ BEZ PŘÍSLUŠENSTVÍ, proto prosíme o uhrazení částky 1 150 Kč." ++ confirmationSuffix();
-  }
-}
-
-function getConfirmationEmailTemplateSpacak() {
-  return {
-    'subject': "AV19 - potvrzení registrace a detaily platby"
-    'text': confirmationTextPrefix() ++ "Při registraci sis vybral/a variantu SPACÁK, proto prosíme o uhrazení částky 750 Kč." ++ confirmationSuffix();
-  }
-}
-
-function confirmationTextPrefix() {
-  return "Milá účastnice/ milý účastníku,\n\
+    'subject': "AV19 - potvrzení registrace a detaily platby",
+    'text': "Milá účastnice/ milý účastníku,\n\
 \n\
 \n\
 \n\
 úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\
 \n\
-";
-}
-
-function confirmationTextSuffix() {
-  return "\n\
+Při registraci sis vybral/a variantu #accommodation, proto prosíme o uhrazení částky #price Kč.\n\
 \n\
 Celou částku prosím pošli do #deadline na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varsymbol.\n\
 \n\
@@ -48,6 +25,7 @@ Díky a těšíme se na setkání\n\
 Za přípravný tým AV19\n\
 Anička a Jakub\n\
 "
+  };
 }
 
 function getPaidEverythingtEmail() {

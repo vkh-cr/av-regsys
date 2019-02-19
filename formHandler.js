@@ -24,7 +24,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
 
-  var accommodationCode = getAccommodationCode();
+  var accommodationCode = getAccommodationCode(formData);
   var supportValue = formData['support'].value;
 
   var price = getTicketPrice(accommodationCode, supportValue, priceConfig);
@@ -74,6 +74,7 @@ function getVariableSymbol(range, price) {
 }
 
 function getAccommodationCode(formData) {
+  var accommodation = formData['accommodation'].value || ' ';
   if(accommodation == 'Postel s příslušenstvím')       { return 'with'; }
   else if(accommodation == 'Postel bez příslušenství') { return 'without'; }
   else if(accommodation == 'Spacák')                   { return 'spacak'; }
@@ -140,15 +141,10 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
   Logger.log(summaryVars);
   Logger.log(userEmailAddress);
 
-  var accommCode = summaryVars['accommodationCode'];
-  var template;
-
-  if (accommCode == 'with')        { template = getConfirmationEmailTemplateWith(); }
-  else if (accommCode = 'without') { template = getConfirmationEmailTemplateWithout(); }
-  else if (accommCode = 'spacak')  { template = getConfirmationEmailTemplateSpacak(); }
-
+  var template = getConfirmationEmailTemplate();
   var templatedData = fillInTemplate(template.text, summaryVars);
   var subject = template.subject;
 
   sendEmail(userEmailAddress, subject, templatedData, undefined, true);
 }
+

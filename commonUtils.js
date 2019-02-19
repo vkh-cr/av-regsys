@@ -158,16 +158,12 @@ function sendEmail(recipient, subject, body, bcc, enqueue) {
     return false;
   }
 
-  var mailObject = {
-    to: recipient,
-    subject: subject,
-    body: body,
-    replyTo : getGeneralConfig()['replyToEmail']
-  };
+  var options = {
+    from: "tym.realizace@absolventskyvelehrad.cz",
+    replyTo: "tym.realizace@absolventskyvelehrad.cz" 
+  }
 
-  if (typeof bcc !== 'undefined' && bcc != 'undefined') { mailObject['bcc'] = bcc; }
-
-  MailApp.sendEmail(mailObject);
+  GmailApp.sendEmail(recipient, subject, body, options);
   return true;
 }
 
