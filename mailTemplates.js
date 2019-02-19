@@ -5,12 +5,11 @@ function getConfirmationEmailTemplate() {
     'text': "Milá účastnice/ milý účastníku,\n\
 \n\
 \n\
-\n\
 úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\
 \n\
 Při registraci sis vybral/a variantu #accommodation, proto prosíme o uhrazení částky #price Kč.\n\
 \n\
-Celou částku prosím pošli do #deadline na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varsymbol.\n\
+Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varSymbol.\n\
 \n\
 Registrace neuhrazené do #deadline budou stornovány. Po připsání platby na účet ti zašleme potvrzovací email.\n\
 \n\

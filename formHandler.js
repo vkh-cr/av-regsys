@@ -43,6 +43,9 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var support = formData['support'].value || 0 ;
   var note = formData['note'].value || '' ;
 
+  var deadline = new Date(timestamp);
+  deadline.setDate(deadline.getDate() + 11);
+
   var summaryVars = {
     'timestamp' : timestamp,
     'accommodation' : accommodation,
@@ -56,7 +59,8 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
     'note' : note,
     'birthYear' : birthYear,
     'price' : price,
-    'varSymbol' : varSymbolId
+    'varSymbol' : varSymbolId,
+    'deadline' : deadline.toLocaleDateString()
   };
 
   // store inferred var symbol in sheet
