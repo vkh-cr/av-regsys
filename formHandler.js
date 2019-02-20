@@ -50,7 +50,6 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var summaryVars = {
     'timestamp' : timestamp,
     'accommodation' : accommodation,
-    'accommodationCode': accommodationCode,
     'name' : name + ' ' + surname,
     'email' : userEmailAddress,
     'phone' : phone,
@@ -146,10 +145,11 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
   Logger.log(summaryVars);
   Logger.log(userEmailAddress);
 
-  var template = getConfirmationEmailTemplate();
-  var templatedData = fillInTemplate(template.text, summaryVars);
-  var subject = template.subject;
+  var emailObj = emailRegistrationCreated();
 
-  sendEmail(userEmailAddress, subject, templatedData, undefined, true);
+  var plainText = fillInTemplate(emailObj.textPlain, summaryVars);
+  var htmlText  = fillInTemplate(emailObj.textHtml,  summaryVars);
+
+  sendEmail(userEmailAddress, emailObj.subject, plainText, htmlText, undefined, true);
 }
 

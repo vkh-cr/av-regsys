@@ -146,7 +146,7 @@ function fillInTemplate(template, data) {
   return templatedString;
 }
 
-function sendEmail(recipient, subject, body, bcc, enqueue) {
+function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
   if (typeof enqueue === 'undefined' || enqueue === 'undefined') { enqueue = true; }
   onTryToSendEnqueuedEmailsTick();
 
@@ -154,27 +154,28 @@ function sendEmail(recipient, subject, body, bcc, enqueue) {
   runtimeLog("Remaining email quota: " + emailQuotaRemaining);
 
   if(emailQuotaRemaining < 5 && enqueue){
-    enqueueEmail(recipient, subject, body, bcc);
+    enqueueEmail(recipient, subject, plainBody, html_Body, bcc);
     return false;
   }
 
   var options = {
     from: "tym.realizace@absolventskyvelehrad.cz",
-    replyTo: "tym.realizace@absolventskyvelehrad.cz" 
+    replyTo: "tym.realizace@absolventskyvelehrad.cz",
+    htmlBody: html_Body
   }
 
-  GmailApp.sendEmail(recipient, subject, body, options);
+  GmailApp.sendEmail(recipient, subject, plainBody, options);
   return true;
 }
 
 
-function enqueueEmail(recipient, subject, body, bcc){
+function enqueueEmail(recipient, subject, plainBody, htmlBody, bcc){
   runtimeLog('enqueued email');
 
   var emailQueueSheetName = 'emailQueue';
   createSheetIfDoesntExist(emailQueueSheetName, undefined);
 
-  sheetLog(emailQueueSheetName, [recipient, subject, body, bcc, false]);
+  sheetLog(emailQueueSheetName, [recipient, subject, plainBody, htmlBody, bcc, false]);
 }
 
 function onTryToSendEnqueuedEmailsTick(){
@@ -192,17 +193,16 @@ function onTryToSendEnqueuedEmailsTick(){
   for(i = 0; i < numberOfEmailsToBeSent; ++i){
 
     var dataRow = data[i];
-    if(dataRow[5]) {continue;}
+    if(dataRow[6]) {continue;}
 
-    if(sendEmail(dataRow[1], dataRow[2], dataRow[3], dataRow[4], false)){
-      sheet.getRange(1+i, 6).setValue(true);
+    if(sendEmail(dataRow[1], dataRow[2], dataRow[3], dataRow[4], dataRow[5], false)){
+      sheet.getRange(1+i, 7).setValue(true);
     } else {break;}
 
   }
 
   runtimeLog('Sent: ' + i);
   return i;
-
 }
 
 function onTryToSendAttentionRequiredEmailsTick(){
@@ -235,7 +235,7 @@ function onTryToSendAttentionRequiredEmailsTick(){
     'body' : body,
   };
 
-  sendEmail(attentionEmailObject.recipient, attentionEmailObject.subject, attentionEmailObject.body, undefined, true);
+  sendEmail(attentionEmailObject.recipient, attentionEmailObject.subject, attentionEmailObject.body, '', undefined, true);
 }
 //
 // End Mailer;
