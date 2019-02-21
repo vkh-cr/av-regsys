@@ -50,14 +50,18 @@ function emailPaymentReminder() {
     'subject': 'AV19 - Zapomenutá platba?',
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
       'bohužel nám zatím nepřišla tvoje platba registračného poplatku.\n\n' +
-      'Musíme tě upozornit, že tvoje registrace neuhrazená do ##deadline bude zrušena. ' +
-        'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.\n\n' +
-      'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, ' +
-        'aby jsme mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
+      'Dovolujeme si tě upozornit,  že tvoje registrace je splatná do ##deadline. ' +
+      'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, budeme muset tvoji registraci zrušit.\n\n' +
+      'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.\n\n' +
+      'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
+      'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, ' +
+      'aby jsme mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
     'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám zatím nepřišla tvoje platba registračného poplatku.' + pEnd() +
-      pStart() + 'Musíme tě upozornit, že <b>tvoje registrace neuhrazená do ##deadline bude zrušena</b>. ' +
-        'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.' + pEnd() +
+      pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná do ##deadline</b>. ' +
+       'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, ' +
+       'budeme muset tvoji registraci zrušit.' + pEnd() +
+      pStart() + 'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.' + pEnd() +
       pStart() + 'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
         'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, aby jsme mohli tvoje místo nabídnout někomu jinému.' + pEnd() +
       htmlSignature() + htmlFooter()

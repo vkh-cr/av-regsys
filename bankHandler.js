@@ -241,6 +241,9 @@ function onCheckNotRecievedPayments(){
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     if(diffDays < 7) { continue; }
+
+    timestamp.setDate(timestamp.getDate() + 11);
+    var deadline = Utilities.formatDate(timestamp, 'Europe/Prague', 'dd.MM.yyyy');
   
     // save 'today' date as timstamp of when payment reminder email was sent
     var cellObject = sheet.getRange(i+1, paymentReminderSentDateIndex + 1);
@@ -253,14 +256,15 @@ function onCheckNotRecievedPayments(){
 
     // send email
     var userEmail = bankData[userEmailIndex];
-    var variablesObject = {};
-    var emailTemplate = notRecievedPayment();
-    var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-    var subject = emailTemplate.subject;
-    sendEmail(userEmail, subject, templatedData, undefined);
+    var summaryVars = { 'deadline' : deadline };
+    var emailObj = emailPaymentReminder();
+
+    var plainBody = fillInTemplate(emailObj.textPlain, summaryVars);
+    var htmlBody  = fillInTemplate(emailObj.textHtml,  summaryVars);
+
+    sendEmail(userEmail, emailObj.subject, plainBody, htmlBody, undefined);
   }
 }
-
 
 function testBankAccess(){
 
