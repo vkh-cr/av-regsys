@@ -47,13 +47,18 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var support = formData['support'].value || 0 ;
   var note = formData['note'].value || '' ;
 
+  if (support < 0) { support = 0; }
+
   var date = new Date();
   date.setDate(date.getDate() + 11);
   var deadline = Utilities.formatDate(date, 'Europe/Prague', 'dd.MM.yyyy');
+  
+  var supportMsg = '';
+  if (support > 0) { supportMsg = ' a dobrovolný příspěvek ' + support + 'Kč'; }
 
   var summaryVars = {
     'timestamp' : timestamp,
-    'accommodation' : accommodation,
+    'accommodation' : accommodation.toLowerCase(),
     'name' : name + ' ' + surname,
     'email' : userEmailAddress,
     'phone' : phone,
@@ -64,7 +69,8 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
     'birthYear' : birthYear,
     'price' : price,
     'varSymbol' : varSymbolId,
-    'deadline' : deadline
+    'deadline' : deadline,
+    'supportMsg' : supportMsg
   };
 
   // store inferred var symbol in sheet

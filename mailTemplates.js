@@ -4,7 +4,7 @@ function emailRegistrationCreated() {
     'subject': "AV19 - potvrzení registrace a detaily platby",
     'textPlain': 'Milá účastnice/ milý účastníku,\n\n' +
       'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\n' +
-      'Při registraci sis vybral/a variantu #accommodation, proto prosíme o uhrazení částky #price Kč.\n\n' +
+      'Při registraci sis vybral/a variantu #accommodation#supportMsg, proto prosíme o uhrazení částky #price Kč.\n\n' +
       'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varSymbol.\n\n' +
       'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do #deadline. ' +
       'Jestli platba tou dobou nedorazí, bude registrace stornována.\n\n' +
@@ -13,7 +13,7 @@ function emailRegistrationCreated() {
       'v průběhu setkání.' + plainTextSignature(),
     'textHtml': htmlHeader() + '<h1>Milá účastnice/ milý účastníku,</h1>' +
       pStart() + 'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.' + pEnd() +
-      pStart() + 'Při registraci sis vybral/a variantu #accommodation, proto prosíme o uhrazení částky <b>#price Kč</b>.' + pEnd() +
+      pStart() + 'Při registraci sis vybral/a variantu "#accommodation"#supportMsg, proto prosíme o uhrazení částky <b>#price Kč</b>.' + pEnd() +
       pStart() +
       'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je <b>2700062738/2010</b>, variabilní symbol <b>#varSymbol</b>.' +
       pEnd() + pStart() +
