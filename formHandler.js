@@ -1,6 +1,10 @@
 
 function onFormSubmit(formSubmitObj) {
   console.log(formSubmitObj);
+
+  // For unknown reason onFormSubmit is sometimes called without form being submitted.
+  // Usually two or three times immediately after legitimate submission. In such a case
+  // formSubmitObj contains timestmap but it is otherwise empty.
   if (formSubmitObj.namedValues.Email == '' || formSubmitObj.namedValues['Varianta ubytování'] == '') {
     console.log('On form submitted call suppressed');
     return;
