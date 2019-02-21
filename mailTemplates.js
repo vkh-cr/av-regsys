@@ -4,20 +4,20 @@ function emailRegistrationCreated() {
     'subject': "AV19 - potvrzení registrace a detaily platby",
     'textPlain': 'Milá účastnice/ milý účastníku,\n\n' +
       'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\n' +
-      'Při registraci sis vybral/a variantu #accommodation#supportMsg, proto prosíme o uhrazení částky #price Kč.\n\n' +
-      'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol #varSymbol.\n\n' +
-      'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do #deadline. ' +
+      'Při registraci sis vybral/a variantu ##accommodation##supportMsg, proto prosíme o uhrazení částky ##price Kč.\n\n' +
+      'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol ##varSymbol.\n\n' +
+      'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do ##deadline. ' +
       'Jestli platba tou dobou nedorazí, bude registrace stornována.\n\n' +
       'Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
       'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
       'v průběhu setkání.' + plainTextSignature(),
     'textHtml': htmlHeader() + '<h1>Milá účastnice/ milý účastníku,</h1>' +
       pStart() + 'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.' + pEnd() +
-      pStart() + 'Při registraci sis vybral/a variantu "#accommodation"#supportMsg, proto prosíme o uhrazení částky <b>#price Kč</b>.' + pEnd() +
+      pStart() + 'Při registraci sis vybral/a variantu "##accommodation"##supportMsg, proto prosíme o uhrazení částky <b>##price Kč</b>.' + pEnd() +
       pStart() +
-      'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je <b>2700062738/2010</b>, variabilní symbol <b>#varSymbol</b>.' +
+      'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je <b>2700062738/2010</b>, variabilní symbol <b>##varSymbol</b>.' +
       pEnd() + pStart() +
-      'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do <b>#deadline</b>. ' +
+      'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do <b>##deadline</b>. ' +
       'Jestli platba tou dobou nedorazí, bude tvoje registrace stornována.' + pEnd() +
       pStart() +
       'Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
@@ -50,13 +50,13 @@ function emailPaymentReminder() {
     'subject': 'AV19 - Zapomenutá platba?',
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
       'bohužel nám zatím nepřišla tvoje platba registračného poplatku.\n\n' +
-      'Musíme tě upozornit, že tvoje registrace neuhrazená do #deadline bude zrušena. ' +
+      'Musíme tě upozornit, že tvoje registrace neuhrazená do ##deadline bude zrušena. ' +
         'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.\n\n' +
       'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, ' +
         'aby jsme mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
     'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám zatím nepřišla tvoje platba registračného poplatku.' + pEnd() +
-      pStart() + 'Musíme tě upozornit, že <b>tvoje registrace neuhrazená do #deadline bude zrušena</b>. ' +
+      pStart() + 'Musíme tě upozornit, že <b>tvoje registrace neuhrazená do ##deadline bude zrušena</b>. ' +
         'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.' + pEnd() +
       pStart() + 'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
         'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, aby jsme mohli tvoje místo nabídnout někomu jinému.' + pEnd() +

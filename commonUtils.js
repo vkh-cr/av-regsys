@@ -126,13 +126,13 @@ function addDataToCurrentRow(range, columnIndex, data) {
 // Mailer:
 //
 function fillInTemplate(template, data) {
-  var templateVars = template.match(/#[A-Za-z]+/g);
+  var templateVars = template.match(/##[A-Za-z]+/g);
   var templatedString = template;
 
   if(templateVars == null) {return template;}
 
   for (var i = 0; i < templateVars.length; ++i) {
-    var dataKey = templateVars[i].substring(1);
+    var dataKey = templateVars[i].substring(2);
     if(data.hasOwnProperty(dataKey)) {
       var dataValue = data[dataKey];
     } else {
