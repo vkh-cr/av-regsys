@@ -36,11 +36,11 @@ function emailPaymentArrived() {
       'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
       'a nevíš, kde je Stojanov, mrkni do mapy (https://en.mapy.cz/s/3p8hx).' + plainTextSignature(),
     'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
-      pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.' + pEnds() +
-      pStart() + 'Registrace na AV19 bude probíhať <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním exercičním domě Stojanov ' +
+      pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.' + pEnd() +
+      pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním exercičním domě Stojanov ' +
         'na Velehradě. Vezmi si sebou občanský průkaz.' + pEnd() +
       pStart() + 'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokus jsi ještě nebyl/a na Velehradě ' +
-        'a nevíš, kde je Stojanov, mrkni do <a src="https://en.mapy.cz/s/3p8hx" target="_blank" style="text-decoration: none; ' +
+        'a nevíš, kde je Stojanov, mrkni do <a href="https://en.mapy.cz/s/3p8hx" target="_blank" style="text-decoration: none; ' +
         'color: #f2583a;">mapy</a>.' + pEnd() + htmlSignature() + htmlFooter()
   }
 }
@@ -73,7 +73,7 @@ function emailRegistrationCancelled() {
     'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám v průběhu 11 dní nepřišla tvoje platba registračního poplatku. ' +
         'Z tohoto důvodu byla tvoje registrace zrušena.' + pEnd() +
-      pStart() + 'Je to nějaký omyl? Ozvi  se nám a vyřešíme to.' + pEnds() + htmlSignature() + htmlFooter()
+      pStart() + 'Je to nějaký omyl? Ozvi  se nám a vyřešíme to.' + pEnd() + htmlSignature() + htmlFooter()
   }
 }
 

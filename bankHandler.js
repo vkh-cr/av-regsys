@@ -148,14 +148,7 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   var alreadyPaidNew = alreadyPaid + justPaid;
   sheet.getRange(rowIndexInRange + 1, alreadyPaidIndex + 1).setValue(alreadyPaidNew);
 
-  var paidEverything = (alreadyPaidNew >= finalPrice);
-
-  if(alreadyPaidNew > finalPrice) {
-    logNeedsAttention('Someone paid more then expected', userEmail, transactionObj.variableSymbol);
-  }
-
-  var paidEverythingBefore = values[paidEverythingIndex];
-
+  // log payment in bank log
   var variablesObject = {
     'varSymbol' : transactionObj.variableSymbol,
     'alreadyPaidOld' : alreadyPaid,
@@ -165,15 +158,31 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
     'leftToBePaid' : finalPrice - alreadyPaidNew,
   };
 
-  if(paidEverything){
-    sheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
+  bankLog("New payment: " + JSON.stringify(variablesObject));
+
+  // insufficient payment case
+  if (alreadyPaidNew < finalPrice) {
+    logNeedsAttention('Nekdo zaplatil min nez je potreba', userEmail, transactionObj.variableSymbol);
+    return;
   }
 
-  var emailTemplate = getPaidEverythingtEmail();
-  bankLog("New payment: " + JSON.stringify(variablesObject));
-  var templatedData = fillInTemplate(emailTemplate.text, variablesObject);
-  var subject = emailTemplate.subject;
-  sendEmail(userEmail, subject, templatedData, undefined);
+  // now we alredy know that everyting was paid (possibly more)
+  sheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
+
+  // paid more then expected case
+  if (alreadyPaidNew > finalPrice) {
+    logNeedsAttention('Nekdo zaplatil vic nez je potreba', userEmail, transactionObj.variableSymbol);
+    // no return. We want to continue to send confirmation email
+  }
+
+  // send email
+
+  var emailObj = emailPaymentArrived();
+
+  var plainText = fillInTemplate(emailObj.textPlain, variablesObject);
+  var htmlText  = fillInTemplate(emailObj.textHtml,  variablesObject);
+
+  sendEmail(userEmail, emailObj.subject, plainText, htmlText, undefined, true);
 }
 
 function onGetBankingDataTick(){
