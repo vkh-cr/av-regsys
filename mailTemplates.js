@@ -1,7 +1,7 @@
 
 function emailRegistrationCreated() {
   return {
-    'subject': "AV19 - potvrzení registrace a detaily platby",
+    'subject': "AV19 - Potvrzení registrace a detaily platby",
     'textPlain': 'Milá účastnice/ milý účastníku,\n\n' +
       'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\n' +
       'Při registraci sis vybral/a variantu ##accommodation##supportMsg, proto prosíme o uhrazení částky ##price Kč.\n\n' +
