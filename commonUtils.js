@@ -151,7 +151,7 @@ function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
   onTryToSendEnqueuedEmailsTick();
 
   var emailQuotaRemaining = MailApp.getRemainingDailyQuota();
-  runtimeLog("Remaining email quota: " + emailQuotaRemaining);
+  console.log("Remaining email quota: " + emailQuotaRemaining);
 
   if(emailQuotaRemaining < 5 && enqueue){
     enqueueEmail(recipient, subject, plainBody, html_Body, bcc);
