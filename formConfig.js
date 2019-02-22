@@ -10,7 +10,7 @@ function getTranslationConfig(formID){
     "email":           { "title":"Email" },
     "birthYear":       { "title":"Rok narození" },
     "address":         { "title":"Adresa trvalého bydliště" },
-    "roommate":        { "title":"Chci bydlet s" },
+    "roommate":        { "title":"Chceme bydlet spolu" },
     "accommodation":   { "title":"Varianta ubytování" },
     "phone":           { "title":"Telefon" },
     "support":         { "title":"Dobrovolný příspěvek" },
