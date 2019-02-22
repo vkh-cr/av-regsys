@@ -78,6 +78,18 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   startTrackingPayment(summaryVars, name + ' ' + surname, userEmailAddress, true);
   sendEmailConfirmation(summaryVars, userEmailAddress);
+
+  // copy line added by form submittion into sheet where we do our calculations
+  // we do not want to manually add rows into original form responses sheet
+  // and at the same time we do not want to copy data from sheet to sheet manually.
+  // using simple equals formular is not working since new form data are added by
+  // inserting new row instead of filling existing empty row. Therefore all
+  // formula pointing to last empty line are still pointing to empty line after new
+  // response
+  var valuesArr = formSubmitObj.range.getDisplayValues()[0];
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = spreadsheet.getSheetByName('You CAN touch this');
+  sheet.appendRow(valuesArr);
 }
 
 function getVariableSymbol(range, price) {
