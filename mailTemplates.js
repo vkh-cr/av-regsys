@@ -2,7 +2,7 @@
 function emailRegistrationCreated() {
   return {
     'subject': "AV19 - Potvrzení registrace a detaily platby",
-    'textPlain': 'Milá účastnice/ milý účastníku,\n\n' +
+    'textPlain': 'Milá účastnice / milý účastníku,\n\n' +
       'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.\n\n' +
       'Při registraci sis vybral/a variantu ##accommodation##supportMsg, proto prosíme o uhrazení částky ##price Kč.\n\n' +
       'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol ##varSymbol.\n\n' +
@@ -11,7 +11,7 @@ function emailRegistrationCreated() {
       'Protože platby účastníků nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
       'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
       'v průběhu setkání.' + plainTextSignature(),
-    'textHtml': htmlHeader('templateAV2_allok.jpg') + '<h1>Milá účastnice/ milý účastníku,</h1>' +
+    'textHtml': htmlHeader('templateAV2_allok.jpg') + '<h1>Milá účastnice / milý účastníku,</h1>' +
       pStart() + 'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.' + pEnd() +
       pStart() + 'Při registraci sis vybral/a variantu "##accommodation"##supportMsg, proto prosíme o uhrazení částky <b>##price Kč</b>.' + pEnd() +
       pStart() +
@@ -30,16 +30,16 @@ function emailPaymentArrived() {
   return {
     'subject': 'AV19 - Potvrzení platby',
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
-      'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.\n\n' +
-      'Registrace na AV19 bude probíhat v pátek 17. 5. 2019 od 17 do 20 hodin v poutním exercičním domě Stojanov na Velehradě. ' +
+      'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe těšíme.\n\n' +
+      'Registrace na AV19 bude probíhat v pátek 17. 5. 2019 od 17 do 20 hodin v poutním a exercičním domě Stojanov na Velehradě. ' +
       'Vezmi si s sebou občanský průkaz.\n\n' +
-      'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
+      'Při registraci na místě dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
       'a nevíš, kde je Stojanov, mrkni do mapy (https://en.mapy.cz/s/3p8hx).' + plainTextSignature(),
     'textHtml': htmlHeader('templateAV2_pay.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
-      pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.' + pEnd() +
-      pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním exercičním domě Stojanov ' +
-        'na Velehradě. Vezmi si sebou občanský průkaz.' + pEnd() +
-      pStart() + 'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
+      pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe těšíme.' + pEnd() +
+      pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním a exercičním domě Stojanov ' +
+        'na Velehradě. Vezmi si s sebou občanský průkaz.' + pEnd() +
+      pStart() + 'Při registraci na místě dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
         'a nevíš, kde je Stojanov, mrkni do <a href="https://en.mapy.cz/s/3p8hx" target="_blank" style="text-decoration: none; ' +
         'color: #f2583a;">mapy</a>.' + pEnd() + htmlSignature() + htmlFooter()
   }
@@ -50,20 +50,20 @@ function emailPaymentReminder() {
     'subject': 'AV19 - Zapomenutá platba?',
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
       'bohužel nám zatím nepřišla tvoje platba registračního poplatku.\n\n' +
-      'Dovolujeme si tě upozornit,  že tvoje registrace je splatná do ##deadline. ' +
+      'Dovolujeme si tě upozornit,  že tvoje registrace je splatná ##deadline. ' +
       'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, budeme muset tvoji registraci zrušit.\n\n' +
       'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.\n\n' +
       'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
-      'Pokud už teď víš, že se nemúžeš zůčastnit, napiš nám, ' +
+      'Jestliže už teď víš, že se nemúžeš zůčastnit, napiš nám, ' +
       'abychom mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
     'textHtml': htmlHeader('templateAV2_warning.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám zatím nepřišla tvoje platba registračního poplatku.' + pEnd() +
-      pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná do ##deadline</b>. ' +
+      pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná ##deadline</b>. ' +
        'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, ' +
        'budeme muset tvoji registraci zrušit.' + pEnd() +
       pStart() + 'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.' + pEnd() +
       pStart() + 'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
-        'Pokud už teď víš, že se nemúžeš zůčastnit, napiš nám, abychom mohli tvoje místo nabídnout někomu jinému.' + pEnd() +
+        'Jestliže už teď víš, že se nemúžeš zůčastnit, napiš nám, abychom mohli tvoje místo nabídnout někomu jinému.' + pEnd() +
       htmlSignature() + htmlFooter()
   }
 }
