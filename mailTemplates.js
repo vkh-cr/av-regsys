@@ -8,9 +8,7 @@ function emailRegistrationCreated() {
       'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol ##varSymbol.\n\n' +
       'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do ##deadline. ' +
       'Jestli platba tou dobou nedorazí, bude registrace stornována.\n\n' +
-      'Protože platby účastníků nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
-      'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
-      'v průběhu setkání.' + plainTextSignature(),
+      'Budeme velmi vděční za dobrovolné příspěvky na realizaci AV19, které můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě v průběhu setkání.\n\n' + plainTextSignature(),
     'textHtml': htmlHeader('templateAV2_allok.jpg') + '<h1>Milá účastnice / milý účastníku,</h1>' +
       pStart() + 'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.' + pEnd() +
       pStart() + 'Při registraci sis vybral/a variantu "##accommodation"##supportMsg, proto prosíme o uhrazení částky <b>##price Kč</b>.' + pEnd() +
@@ -20,9 +18,7 @@ function emailRegistrationCreated() {
       'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do <b>##deadline</b>. ' +
       'Jestli platba tou dobou nedorazí, bude tvoje registrace stornována.' + pEnd() +
       pStart() +
-      'Protože platby účastníků nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
-      'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
-      'v průběhu setkání.' + pEnd() + htmlSignature() + htmlFooter()
+      'Budeme velmi vděční za dobrovolné příspěvky na realizaci AV19, které můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě v průběhu setkání.' + pEnd() + htmlSignature() + htmlFooter()
   };
 }
 
