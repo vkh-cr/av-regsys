@@ -3,6 +3,7 @@ function onOpen() {
   ui.createMenu('Manage payments')
       .addItem('Zadat platbu', 'userPaidFunctionUI')
       .addItem('Poslat upominky k zaplaceni', 'onCheckNotRecievedPayments')
+      .addItem('Stahnout a sparovat platby', 'onGetBankingDataTick')
       .addToUi();
 }
 
