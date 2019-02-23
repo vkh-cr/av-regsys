@@ -11,7 +11,7 @@ function emailRegistrationCreated() {
       'Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
       'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
       'v průběhu setkání.' + plainTextSignature(),
-    'textHtml': htmlHeader() + '<h1>Milá účastnice/ milý účastníku,</h1>' +
+    'textHtml': htmlHeader('templateAV2_allok.jpg') + '<h1>Milá účastnice/ milý účastníku,</h1>' +
       pStart() + 'úspěšně jsme zpracovali tvoji registraci na Absolventský Velehrad 2019.' + pEnd() +
       pStart() + 'Při registraci sis vybral/a variantu "##accommodation"##supportMsg, proto prosíme o uhrazení částky <b>##price Kč</b>.' + pEnd() +
       pStart() +
@@ -35,7 +35,7 @@ function emailPaymentArrived() {
       'Vezmi si s sebou občanský průkaz.\n\n' +
       'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
       'a nevíš, kde je Stojanov, mrkni do mapy (https://en.mapy.cz/s/3p8hx).' + plainTextSignature(),
-    'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
+    'textHtml': htmlHeader('templateAV2_pay.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.' + pEnd() +
       pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním exercičním domě Stojanov ' +
         'na Velehradě. Vezmi si sebou občanský průkaz.' + pEnd() +
@@ -56,7 +56,7 @@ function emailPaymentReminder() {
       'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
       'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, ' +
       'aby jsme mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
-    'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
+    'textHtml': htmlHeader('templateAV2_warning.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám zatím nepřišla tvoje platba registračného poplatku.' + pEnd() +
       pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná do ##deadline</b>. ' +
        'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, ' +
@@ -74,7 +74,7 @@ function emailRegistrationCancelled() {
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
       'bohužel nám v průběhu 11 dní nepřišla tvoje platba registračního poplatku. Z tohoto důvodu byla tvoje registrace zrušena.\n\n' +
       'Je to nějaký omyl? Ozvi sa nám a vyřešíme to.\n\n' + plainTextSignature(),
-    'textHtml': htmlHeader() + '<h1>Milý účastníku/ milá účastnice,</h1>' +
+    'textHtml': htmlHeader('graphic_info.png') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
       pStart() + 'bohužel nám v průběhu 11 dní nepřišla tvoje platba registračního poplatku. ' +
         'Z tohoto důvodu byla tvoje registrace zrušena.' + pEnd() +
       pStart() + 'Je to nějaký omyl? Ozvi  se nám a vyřešíme to.' + pEnd() + htmlSignature() + htmlFooter()
@@ -102,12 +102,12 @@ function htmlSignature() {
 function pStart() { return '<p style="text-align: justify;">'; }
 function pEnd() { return '</p>'; }
 
-function htmlHeader() {
+function htmlHeader(pictureName) {
     return '<!DOCTYPE html> <html>' +
 '<head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title>AV19 email</title> <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet"> --> <style type="text/css"> @media screen {'+
 '@font-face { font-family: \'Muli\'; font-style: normal; font-weight: 400; src: url(https://fonts.gstatic.com/l/font?kit=7Auwp_0qiz-aTTDUiiP262YuHHwg-3Aa2sGY6F-zlgBLNsFnDh1U1hNHmw7L081bFWw7rgDTvo1-khvslqKcUWe8nd_aAC5nlYPglunG_MzYSGvSOqX0hr9THiJxnZzAYeHVynF6fLtp4Pj036zC2W-Pmj1XsI_Uc_dOe_lcdpRm-TAUvedn32T9RB9ca5mqJm2wdmXkZleQmHMcVVprRYILiPfK68BID6wGXvY2Ia0&skey=2b55aa3f2f059b75&v=v12) format(\'woff2\'); } } </style> </head>'+
 '<body> <div>' +
-'<div style="background: #EEEEEE; font-family: \'Muli\', sans-serif; margin: 0; padding: 10px 0;"> <div class="emailbody" style="margin: 40px auto; max-width: 700px;"> <div class="whitepart"> <div class="header" style="background: #585A89; color: #FFF; font-size: x-large; padding: 10px;"> <img src="http://absolventskyvelehrad.cz/wp-content/uploads/2019/02/logo.png" width="25px" style="vertical-align: middle; padding-left: 10px;" /> <span style="padding-left: 10px; vertical-align: middle;">Absolventský Velehrad 2019</span> </div> <div class="picture" style="background: #FFF;"> <img src="http://absolventskyvelehrad.cz/wp-content/uploads/2019/02/graphic_info.png" width="100%" /> </div> <div class="text" style="background: #FFF; padding: 20px; font-size: 120%;">';
+'<div style="background: #EEEEEE; font-family: \'Muli\', sans-serif; margin: 0; padding: 10px 0;"> <div class="emailbody" style="margin: 40px auto; max-width: 700px;"> <div class="whitepart"> <div class="header" style="background: #585A89; color: #FFF; font-size: x-large; padding: 10px;"> <img src="http://absolventskyvelehrad.cz/wp-content/uploads/2019/02/logo.png" width="25px" style="vertical-align: middle; padding-left: 10px;" /> <span style="padding-left: 10px; vertical-align: middle;">Absolventský Velehrad 2019</span> </div> <div class="picture" style="background: #FFF;"> <img src="http://absolventskyvelehrad.cz/wp-content/uploads/2019/02/'+ pictureName + '" width="100%" /> </div> <div class="text" style="background: #FFF; padding: 20px; font-size: 120%;">';
 }
 
 function htmlFooter() {
