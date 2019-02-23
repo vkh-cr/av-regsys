@@ -8,7 +8,7 @@ function emailRegistrationCreated() {
       'Celou částku prosím pošli na účet VKH ČR, z.s. Číslo účtu je 2700062738/2010, variabilní symbol ##varSymbol.\n\n' +
       'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do ##deadline. ' +
       'Jestli platba tou dobou nedorazí, bude registrace stornována.\n\n' +
-      'Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
+      'Protože platby účastníků nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
       'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
       'v průběhu setkání.' + plainTextSignature(),
     'textHtml': htmlHeader('templateAV2_allok.jpg') + '<h1>Milá účastnice/ milý účastníku,</h1>' +
@@ -20,7 +20,7 @@ function emailRegistrationCreated() {
       'Po připsání platby na účet ti zašleme potvrzovací email. Na připsání platby budeme čekat do <b>##deadline</b>. ' +
       'Jestli platba tou dobou nedorazí, bude tvoje registrace stornována.' + pEnd() +
       pStart() +
-      'Protože registrační příspěvky nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
+      'Protože platby účastníků nepokrývají 100 % nákladů na AV19, budeme rádi za jakékoli příspěvky na jeho realizaci. ' +
       'Dobrovolné příspěvky můžeš zaslat na účet 2700062738/2010 s variabilním symbolem 102 nebo předat osobně na místě ' +
       'v průběhu setkání.' + pEnd() + htmlSignature() + htmlFooter()
   };
@@ -39,7 +39,7 @@ function emailPaymentArrived() {
       pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe tešíme.' + pEnd() +
       pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním exercičním domě Stojanov ' +
         'na Velehradě. Vezmi si sebou občanský průkaz.' + pEnd() +
-      pStart() + 'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokus jsi ještě nebyl/a na Velehradě ' +
+      pStart() + 'Při registraci dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
         'a nevíš, kde je Stojanov, mrkni do <a href="https://en.mapy.cz/s/3p8hx" target="_blank" style="text-decoration: none; ' +
         'color: #f2583a;">mapy</a>.' + pEnd() + htmlSignature() + htmlFooter()
   }
@@ -49,21 +49,21 @@ function emailPaymentReminder() {
   return {
     'subject': 'AV19 - Zapomenutá platba?',
     'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
-      'bohužel nám zatím nepřišla tvoje platba registračného poplatku.\n\n' +
+      'bohužel nám zatím nepřišla tvoje platba registračního poplatku.\n\n' +
       'Dovolujeme si tě upozornit,  že tvoje registrace je splatná do ##deadline. ' +
       'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, budeme muset tvoji registraci zrušit.\n\n' +
       'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.\n\n' +
       'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
-      'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, ' +
-      'aby jsme mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
+      'Pokud už teď víš, že se nemúžeš zůčastnit, napiš nám, ' +
+      'abychom mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
     'textHtml': htmlHeader('templateAV2_warning.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
-      pStart() + 'bohužel nám zatím nepřišla tvoje platba registračného poplatku.' + pEnd() +
+      pStart() + 'bohužel nám zatím nepřišla tvoje platba registračního poplatku.' + pEnd() +
       pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná do ##deadline</b>. ' +
        'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, ' +
        'budeme muset tvoji registraci zrušit.' + pEnd() +
       pStart() + 'Máš problém s platbou? Napiš nám a zkusíme to vyřešit.' + pEnd() +
       pStart() + 'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
-        'Pokud už teď víš, že se nemůžeš zůčastnit, napiš nám, aby jsme mohli tvoje místo nabídnout někomu jinému.' + pEnd() +
+        'Pokud už teď víš, že se nemúžeš zůčastnit, napiš nám, abychom mohli tvoje místo nabídnout někomu jinému.' + pEnd() +
       htmlSignature() + htmlFooter()
   }
 }
