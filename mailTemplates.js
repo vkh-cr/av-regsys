@@ -25,13 +25,13 @@ function emailRegistrationCreated() {
 function emailPaymentArrived() {
   return {
     'subject': 'AV19 - Potvrzení platby',
-    'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
+    'textPlain': 'Milý účastníku / milá účastnice,\n\n' +
       'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe těšíme.\n\n' +
       'Registrace na AV19 bude probíhat v pátek 17. 5. 2019 od 17 do 20 hodin v poutním a exercičním domě Stojanov na Velehradě. ' +
       'Vezmi si s sebou občanský průkaz.\n\n' +
       'Při registraci na místě dostaneš veškeré potřebné informace o AV19 i o ubytování. Pokud jsi ještě nebyl/a na Velehradě ' +
       'a nevíš, kde je Stojanov, mrkni do mapy (https://en.mapy.cz/s/3p8hx).' + plainTextSignature(),
-    'textHtml': htmlHeader('templateAV2_pay.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
+    'textHtml': htmlHeader('templateAV2_pay.jpg') + '<h1>Milý účastníku / milá účastnice,</h1>' +
       pStart() + 'potvrzujeme, že tvoje platba dorazila na náš účet. Už se na tebe těšíme.' + pEnd() +
       pStart() + 'Registrace na AV19 bude probíhat <b>v pátek 17. 5. 2019 od 17 do 20 hodin</b> v poutním a exercičním domě Stojanov ' +
         'na Velehradě. Vezmi si s sebou občanský průkaz.' + pEnd() +
@@ -44,7 +44,7 @@ function emailPaymentArrived() {
 function emailPaymentReminder() {
   return {
     'subject': 'AV19 - Zapomenutá platba?',
-    'textPlain': 'Milý účastníku/ milá účastnice,\n\n' +
+    'textPlain': 'Milý účastníku / milá účastnice,\n\n' +
       'bohužel nám zatím nepřišla tvoje platba registračního poplatku.\n\n' +
       'Dovolujeme si tě upozornit,  že tvoje registrace je splatná ##deadline. ' +
       'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, budeme muset tvoji registraci zrušit.\n\n' +
@@ -52,7 +52,7 @@ function emailPaymentReminder() {
       'Pokud se pořád chystáš na AV19, tak prosím pošli platbu co nejdřív. ' +
       'Jestliže už teď víš, že se nemúžeš zůčastnit, napiš nám, ' +
       'abychom mohli tvoje místo nabídnout někomu jinému.' + plainTextSignature(),
-    'textHtml': htmlHeader('templateAV2_warning.jpg') + '<h1>Milý účastníku/ milá účastnice,</h1>' +
+    'textHtml': htmlHeader('templateAV2_warning.jpg') + '<h1>Milý účastníku / milá účastnice,</h1>' +
       pStart() + 'bohužel nám zatím nepřišla tvoje platba registračního poplatku.' + pEnd() +
       pStart() + 'Dovolujeme si tě upozornit, že tvoje <b>registrace je splatná ##deadline</b>. ' +
        'Nenajdeme-li k tomuto datu tvoji platbu na našem účtu, ' +
