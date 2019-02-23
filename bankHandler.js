@@ -4,7 +4,6 @@ function bankLog(message){
 
 function getNewDataFromBank(token){
   var url = "https://www.fio.cz/ib_api/rest/last/" + token + "/transactions.json";
- // var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2018-03-23/2018-03-25/transactions.json"
   var data = UrlFetchApp.fetch(url);
 
   var decodedData = processDataFromBank(data);
@@ -19,7 +18,7 @@ function getNewDataFromBank(token){
 
 function getTestingDataFromBank(){
   var token = getBankSecret();
-  var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2016-07-25/2016-09-10/transactions.json";
+  var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2019-01-01/2019-01-31/transactions.json";
   var data = UrlFetchApp.fetch(url);
 
   return processDataFromBank(data);
