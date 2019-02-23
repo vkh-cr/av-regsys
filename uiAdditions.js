@@ -58,7 +58,7 @@ function updateBankInfoWithTransactionObj(varSymbol, transactionObj){
 
 function writeDownInfoAboutDirectPayment(rowInfo, transactionObj){
 
-  var otherNotesIndex = 9;
+  var otherNotesIndex = 11;
   var indexInRange = rowInfo.indexInRange;
   var currRange = rowInfo.range;
 
