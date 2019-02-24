@@ -4,6 +4,7 @@ function onOpen() {
       .addItem('Zadat platbu', 'userPaidFunctionUI')
       .addItem('Poslat upominky k zaplaceni', 'onCheckNotRecievedPayments')
       .addItem('Stahnout a sparovat platby', 'onGetBankingDataTick')
+      .addItem('Poslat email zrusena registrace', 'sendRegistrationCancelledEmail')
       .addToUi();
 }
 
@@ -74,3 +75,24 @@ function writeDownInfoAboutDirectPayment(rowInfo, transactionObj){
 
 }
 
+function sendRegistrationCancelledEmail() {
+  var ui = SpreadsheetApp.getUi(); // Same variations.
+
+  var result = ui.prompt(
+      'Email address please', '',
+      ui.ButtonSet.OK);
+
+  var button = result.getSelectedButton();
+  var emailAddress = result.getResponseText();
+
+  if (button == ui.Button.CLOSE || emailAddress == null || emailAddress == '') {
+    return;
+  }
+
+  var emailObj = emailRegistrationCancelled();
+  sendEmail(
+    emailAddress,
+    emailObj.subject,
+    emailObj.textPlain,
+    emailObj.textHtml, undefined, true);
+}
