@@ -190,6 +190,7 @@ function onGetBankingDataTick(){
 
     var data = getNewDataFromBank(tokens[i]);
     var transactionsRaw = data.accountStatement.transactionList.transaction;
+    bankLog("All downloaded payments: " + JSON.stringify(transactionsRaw));
     var transactionsDictionary = extactTransactions(transactionsRaw);
 
     writeDownTransactionsToBankInfo(transactionsDictionary);
