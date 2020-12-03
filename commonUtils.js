@@ -146,6 +146,15 @@ function fillInTemplate(template, data) {
   return templatedString;
 }
 
+function logCurrentEmailQuota() {
+  var q = MailApp.getRemainingDailyQuota();
+  runtimeLog('current remaining daily quota ' + q);
+}
+
+function emailQuotaVojta() {
+  return MailApp.getRemainingDailyQuota();
+}
+
 function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
   if (typeof enqueue === 'undefined' || enqueue === 'undefined') { enqueue = true; }
   onTryToSendEnqueuedEmailsTick();

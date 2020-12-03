@@ -74,7 +74,7 @@ function writeDownInfoAboutDirectPayment(rowInfo, transactionObj){
   currRange.getSheet().getRange(indexInRange + 1, otherNotesIndex + 1).setValue(cellValue);
 
 }
-
+ 
 function sendRegistrationCancelledEmail() {
   var ui = SpreadsheetApp.getUi(); // Same variations.
 

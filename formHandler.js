@@ -23,6 +23,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   Logger.log("Sending email...");
 
   var translationConfig = getTranslationConfig();
+  console.log(translationConfig);
   var priceConfig = getPriceConfig();
 
   var formData = getFormData(formSubmitObj, translationConfig);
@@ -96,7 +97,7 @@ function getVariableSymbol(range, price) {
   var rowNumber = range.getRow();
   var rowNumberPadded = ("000" + rowNumber).slice(-3);
   var pricePadded = ("0000" + price).slice(-4);
-  return '19' + rowNumberPadded + pricePadded;
+  return '21' + rowNumberPadded + pricePadded;
 }
 
 function getAccommodationCode(formData) {

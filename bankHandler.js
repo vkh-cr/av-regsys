@@ -209,7 +209,7 @@ function onCheckNotRecievedPayments(){
   // price 5
   // amounth paid 6
   var paidEverythingIndex = 7;
-  // registration valid 8
+  var registrationValidIndex = 8;
   var paymentReminderSentDateIndex = 9;
   // notes 10
 
@@ -234,6 +234,9 @@ function onCheckNotRecievedPayments(){
 
     var paidEverything = bankData[paidEverythingIndex];
     if(paidEverything) { continue; }
+
+    var regValid = bankData[registrationValidIndex];
+    if(!regValid) { continue; }
 
     var timestamp = new Date(bankData[timestampIndex]);
     var today = new Date();
