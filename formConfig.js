@@ -14,6 +14,7 @@ function getTranslationConfig(formID){
     "accommodation":   { "title":"Varianta ubytování" },
     "phone":           { "title":"Telefon" },
     "support":         { "title":"Dobrovolný příspěvek" },
+    "healthCondition": { "title":"Máš nějaké zdravotní omezení či dietu?" },
     "note":            { "title":"Poznámka" },
     }
 }

@@ -4,20 +4,20 @@
 ////
 // Logger
 //
-function logError(message){
+function logError(message) {
   sheetLog('errorLog', message);
   Logger.log(message);
 }
 
 function logNeedsAttention(message, email, id) {
 
-    var needsAttentionSheetName = 'needs attention';
+  var needsAttentionSheetName = 'needs attention';
 
-    var userDataHeader = ['timestamp', 'id', 'email', 'already looked at (enter your name after you fix it)', 'other data'];
-    createSheetIfDoesntExist(needsAttentionSheetName, userDataHeader);
+  var userDataHeader = ['timestamp', 'id', 'email', 'already looked at (enter your name after you fix it)', 'other data'];
+  createSheetIfDoesntExist(needsAttentionSheetName, userDataHeader);
 
-    var data = [id, email, false].concat(message);
-    sheetLog(needsAttentionSheetName, data);
+  var data = [id, email, false].concat(message);
+  sheetLog(needsAttentionSheetName, data);
 }
 
 function runtimeLog(obj) {
@@ -43,25 +43,32 @@ function sheetLog(logSheetName, message) {
 // End Logger
 ////
 
-
 ////
 // Sheet manipulating functions
 //
-function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex){
+function getStringsFromColumn(column, sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow == 0) {
+    return [];
+  }
+  return sheet.getRange(column + "1:" + column + lastRow).getDisplayValues().map(s => s.toString());
+}
+
+function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex) {
 
   var dataRange = getActiveRange(sheetName);
-  if (dataRange == null) { logError('sheet' + sheetName + 'does not exist but should.'); return null;}
+  if (dataRange == null) { logError('sheet' + sheetName + 'does not exist but should.'); return null; }
 
   var data = dataRange.getValues();
 
-  for(var i = 0; i < data.length; ++i){
+  for (var i = 0; i < data.length; ++i) {
 
     var dataRow = data[i];
-    if(dataRow[searchColumnIndex] != searchValue) {continue; }
+    if (dataRow[searchColumnIndex] != searchValue) { continue; }
 
     return {
-      'range' : dataRange,
-      'indexInRange' : i,
+      'range': dataRange,
+      'indexInRange': i,
     };
 
   }
@@ -69,7 +76,7 @@ function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex){
   return null;
 }
 
-function getActiveRange(sheetName){
+function getActiveRange(sheetName) {
 
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = spreadsheet.getSheetByName(sheetName);
@@ -129,11 +136,11 @@ function fillInTemplate(template, data) {
   var templateVars = template.match(/##[A-Za-z]+/g);
   var templatedString = template;
 
-  if(templateVars == null) {return template;}
+  if (templateVars == null) { return template; }
 
   for (var i = 0; i < templateVars.length; ++i) {
     var dataKey = templateVars[i].substring(2);
-    if(data.hasOwnProperty(dataKey)) {
+    if (data.hasOwnProperty(dataKey)) {
       var dataValue = data[dataKey];
     } else {
       var dataValue = "";
@@ -155,6 +162,43 @@ function emailQuotaVojta() {
   return MailApp.getRemainingDailyQuota();
 }
 
+function sendEmailSendGrid(recipient, templateData, templateId) {
+
+  var body =
+  {
+    'personalizations': [
+      {
+        'to': [
+          {
+            'email': recipient
+          }
+        ],
+        'dynamic_template_data': templateData
+      }
+    ],
+    'from': {
+      'email': 'no-reply@absolventskyvelehrad.cz',
+      'name': 'AV21'
+    },
+    'reply_to': {
+      'email': 'info@absolventskyvelehrad.cz',
+      'name': 'AV21'
+    },
+    'template_id': templateId
+  }
+  var options = {
+    "method": "post",
+    "contentType": "application/json",
+    "headers": {
+      "authorization": "Bearer " + getSendGridkey()
+    },
+    "payload": JSON.stringify(body)
+  }
+
+  var response = UrlFetchApp.fetch("https://api.sendgrid.com/v3/mail/send", options);
+  Logger.log(response);
+}
+
 function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
   if (typeof enqueue === 'undefined' || enqueue === 'undefined') { enqueue = true; }
   onTryToSendEnqueuedEmailsTick();
@@ -162,7 +206,7 @@ function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
   var emailQuotaRemaining = MailApp.getRemainingDailyQuota();
   console.log("Remaining email quota: " + emailQuotaRemaining);
 
-  if(emailQuotaRemaining < 5 && enqueue){
+  if (emailQuotaRemaining < 5 && enqueue) {
     enqueueEmail(recipient, subject, plainBody, html_Body, bcc);
     return false;
   }
@@ -178,7 +222,7 @@ function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
 }
 
 
-function enqueueEmail(recipient, subject, plainBody, htmlBody, bcc){
+function enqueueEmail(recipient, subject, plainBody, htmlBody, bcc) {
   runtimeLog('enqueued email');
 
   var emailQueueSheetName = 'emailQueue';
@@ -187,9 +231,9 @@ function enqueueEmail(recipient, subject, plainBody, htmlBody, bcc){
   sheetLog(emailQueueSheetName, [recipient, subject, plainBody, htmlBody, bcc, false]);
 }
 
-function onTryToSendEnqueuedEmailsTick(){
+function onTryToSendEnqueuedEmailsTick() {
   var todaysQuota = MailApp.getRemainingDailyQuota();
-  if (todaysQuota < 1) {return -1;}
+  if (todaysQuota < 1) { return -1; }
 
   var dataRange = getActiveRange('emailQueue');
   if (dataRange == null) { return -1; }
@@ -199,14 +243,14 @@ function onTryToSendEnqueuedEmailsTick(){
 
   var numberOfEmailsToBeSent = Math.min(data.length, todaysQuota); runtimeLog('To be sent:' + numberOfEmailsToBeSent);
   var i = 0;
-  for(i = 0; i < numberOfEmailsToBeSent; ++i){
+  for (i = 0; i < numberOfEmailsToBeSent; ++i) {
 
     var dataRow = data[i];
-    if(dataRow[6]) {continue;}
+    if (dataRow[6]) { continue; }
 
-    if(sendEmail(dataRow[1], dataRow[2], dataRow[3], dataRow[4], dataRow[5], false)){
-      sheet.getRange(1+i, 7).setValue(true);
-    } else {break;}
+    if (sendEmail(dataRow[1], dataRow[2], dataRow[3], dataRow[4], dataRow[5], false)) {
+      sheet.getRange(1 + i, 7).setValue(true);
+    } else { break; }
 
   }
 
@@ -214,9 +258,9 @@ function onTryToSendEnqueuedEmailsTick(){
   return i;
 }
 
-function onTryToSendAttentionRequiredEmailsTick(){
+function onTryToSendAttentionRequiredEmailsTick() {
   var todaysQuota = MailApp.getRemainingDailyQuota();
-  if (todaysQuota < 1) {return;}
+  if (todaysQuota < 1) { return; }
 
   var dataRange = getActiveRange('needs attention');
   if (dataRange == null) { return; }
@@ -226,22 +270,22 @@ function onTryToSendAttentionRequiredEmailsTick(){
 
   var body = '';
   var numberOfNeedsAttentionMessages = 0;
-  for(var i = 1; i < data.length; ++i){
+  for (var i = 1; i < data.length; ++i) {
 
     var dataRow = data[i];
-    if(dataRow[3]) {continue;}
+    if (dataRow[3]) { continue; }
     body += dataRow.join(', ') + '\n';
     numberOfNeedsAttentionMessages += 1;
 
   }
 
-  if(!(numberOfNeedsAttentionMessages > 0)) { return; }
+  if (!(numberOfNeedsAttentionMessages > 0)) { return; }
 
   var generalConfig = getGeneralConfig();
   var attentionEmailObject = {
-    'subject' : generalConfig['attentionSubject'],
-    'recipient' : generalConfig['attentionEmail'],
-    'body' : body,
+    'subject': generalConfig['attentionSubject'],
+    'recipient': generalConfig['attentionEmail'],
+    'body': body,
   };
 
   sendEmail(attentionEmailObject.recipient, attentionEmailObject.subject, attentionEmailObject.body, '', undefined, true);
@@ -329,18 +373,18 @@ function dateTimeToLimitedString(date) {
   return dateTime;
 }
 
-function reliableToInt(obj){
+function reliableToInt(obj) {
   var objType = typeof obj;
-  if(objType === "string"){
+  if (objType === "string") {
     return parseInt(obj);
   }
-  else if(objType === "number"){
+  else if (objType === "number") {
     return obj;
   }
-  else if(objType == "booloean"){
+  else if (objType == "booloean") {
     return (obj) ? 1 : 0;
   }
-  else {return undefined;}
+  else { return undefined; }
 }
 //
 // End Utils;
