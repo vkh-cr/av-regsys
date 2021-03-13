@@ -162,40 +162,39 @@ function emailQuotaVojta() {
   return MailApp.getRemainingDailyQuota();
 }
 
-function sendEmailSendGrid(recipient, templateData, templateId) {
+function sendEmailMailerSend(recipient, templateData, templateId) {
 
   var body =
   {
-    'personalizations': [
+    "to": [
       {
-        'to': [
-          {
-            'email': recipient
-          }
-        ],
-        'dynamic_template_data': templateData
+        "email": recipient,
       }
     ],
-    'from': {
-      'email': 'no-reply@absolventskyvelehrad.cz',
-      'name': 'AV21'
-    },
-    'reply_to': {
-      'email': 'info@absolventskyvelehrad.cz',
-      'name': 'AV21'
-    },
-    'template_id': templateId
+    "template_id": templateId,
+    "reply_to": [
+      {
+        "email": 'info@absolventskyvelehrad.cz',
+        "name": 'AV21'
+      }
+    ],
+    "variables": [
+      {
+        "email": recipient,
+        "substitutions": templateData
+      }
+    ]
   }
   var options = {
     "method": "post",
     "contentType": "application/json",
     "headers": {
-      "authorization": "Bearer " + getSendGridkey()
+      "authorization": "Bearer " + getMailerSendkey()
     },
     "payload": JSON.stringify(body)
   }
 
-  var response = UrlFetchApp.fetch("https://api.sendgrid.com/v3/mail/send", options);
+  var response = UrlFetchApp.fetch("https://api.mailersend.com/v1/email", options);
   Logger.log(response);
 }
 
