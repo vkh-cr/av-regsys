@@ -51,7 +51,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   if (support < 0) { support = 0; }
 
   var date = new Date();
-  date.setDate(date.getDate() + 11);
+  date.setDate(date.getDate() + PAYMENT_DEADLINE_DAYS);
   var deadline = Utilities.formatDate(date, 'Europe/Prague', 'dd.MM.yyyy');
   
   var supportMsg = '';
@@ -143,6 +143,7 @@ function startTrackingPayment(summaryVars, name, email, registrationValid) {
 	  'price',
 	  'paid',
 	  'paid everything',
+    'paid everything timestamp',
 	  'registration valid (not too old, ...)',
 	  'upominka odeslana',
 	  'expired alert',
@@ -174,6 +175,6 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
   var plainText = fillInTemplate(emailObj.textPlain, summaryVars);
   var htmlText  = fillInTemplate(emailObj.textHtml,  summaryVars);
 
-  sendEmail(userEmailAddress, emailObj.subject, plainText, htmlText, undefined, true);
+  sendEmailMailerSend(userEmailAddress, null, CONFIRMATION_TEMPLATE)
 }
 

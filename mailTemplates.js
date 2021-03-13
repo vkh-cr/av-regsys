@@ -1,3 +1,4 @@
+const CONFIRMATION_TEMPLATE = "pxkjn4172q4z7815";
 
 function emailRegistrationCreated() {
   return {

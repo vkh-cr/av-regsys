@@ -124,28 +124,30 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   var finalPriceIndex = 5;
   var alreadyPaidIndex = 6;
   var paidEverythingIndex = 7;
+  var paidEverythingTimestampIndex = 8;
 
-  var sheet = bankSheetRange.getSheet();
-  var values = bankSheetRange.getValues()[rowIndexInRange];
+  var moneyInfoSheet = bankSheetRange.getSheet();
+  var row = bankSheetRange.getValues()[rowIndexInRange];
 
-  var userEmail = values[userEmailIndex];
+  var userEmail = row[userEmailIndex];
 
   if(transactionObj.currency != 'CZK') {
     logNeedsAttention(
       ['Someone paid in non-supportd currency.', transactionObj.currency, transactionObj.amount],
       userEmail,
       transactionObj.variableSymbol);
-    sheet.getRange(rowIndexInRange + 1, manualOverrideIndex + 1).setValue(true);
+    moneyInfoSheet.getRange(rowIndexInRange + 1, manualOverrideIndex + 1).setValue(true);
     return;
   }
 
-  var alreadyPaid = reliableToInt(values[alreadyPaidIndex]);
-  var finalPrice = reliableToInt(values[finalPriceIndex]);
+  var alreadyPaid = reliableToInt(row[alreadyPaidIndex]);
+  var finalPrice = reliableToInt(row[finalPriceIndex]);
 
   var justPaid = reliableToInt(transactionObj.amount);
+  var transactionDate = transactionObj.date;
 
   var alreadyPaidNew = alreadyPaid + justPaid;
-  sheet.getRange(rowIndexInRange + 1, alreadyPaidIndex + 1).setValue(alreadyPaidNew);
+  moneyInfoSheet.getRange(rowIndexInRange + 1, alreadyPaidIndex + 1).setValue(alreadyPaidNew);
 
   // log payment in bank log
   var variablesObject = {
@@ -155,6 +157,7 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
     'currency' : transactionObj.currency,
     'finalPrice' : finalPrice,
     'leftToBePaid' : finalPrice - alreadyPaidNew,
+    'dateOfTransaction' : transactionDate
   };
 
   bankLog("New payment: " + JSON.stringify(variablesObject));
@@ -165,8 +168,14 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
     return;
   }
 
-  // now we alredy know that everyting was paid (possibly more)
-  sheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
+  // now we already know that everyting was paid (possibly more)
+  moneyInfoSheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
+  
+  // add timestamp, when everything was paid
+  if(!row[paidEverythingTimestampIndex])
+  {
+    moneyInfoSheet.getRange(rowIndexInRange + 1, paidEverythingTimestampIndex + 1).setValue(transactionDate);
+  }
 
   // paid more then expected case
   if (alreadyPaidNew > finalPrice) {
@@ -209,8 +218,9 @@ function onCheckNotRecievedPayments(){
   // price 5
   // amounth paid 6
   var paidEverythingIndex = 7;
-  var registrationValidIndex = 8;
-  var paymentReminderSentDateIndex = 9;
+  var paidEverythingTimestampIndex = 8;
+  var registrationValidIndex = 9;
+  var paymentReminderSentDateIndex = 10;
   // notes 10
 
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -243,9 +253,9 @@ function onCheckNotRecievedPayments(){
     var timeDiff = Math.abs(today.getTime() - timestamp.getTime());
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-    if(diffDays < 7) { continue; }
+    if(diffDays < REMINDER_DAYS) { continue; }
 
-    timestamp.setDate(timestamp.getDate() + 11);
+    timestamp.setDate(timestamp.getDate() + PAYMENT_DEADLINE_DAYS);
     var deadline = Utilities.formatDate(timestamp, 'Europe/Prague', 'dd.MM.yyyy');
   
     // save 'today' date as timstamp of when payment reminder email was sent
@@ -267,21 +277,4 @@ function onCheckNotRecievedPayments(){
 
     sendEmail(userEmail, emailObj.subject, plainBody, htmlBody, undefined);
   }
-}
-
-function testBankAccess(){
-
-    var data = getTestingDataFromBank();
-    var transactionsRaw = data.accountStatement.transactionList.transaction;
-    var transactionsDictionary = extactTransactions(transactionsRaw);
-    bankLog(transactionsDictionary);
-}
-
-function testBankWriteDown(){
-    var transactionDictionary = {
-        "1441690989":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"1441690989"}],
-        "190021450":[{"transferId":1234567890,"date":"2019-02-02+0200","amount":11450,"currency":"CZK","accountNumber":"3400304745","variableSymbol":"190021450"}]
-    };
-
-    writeDownTransactionsToBankInfo(transactionDictionary);
 }
