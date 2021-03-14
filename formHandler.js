@@ -169,9 +169,9 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
 
 function getCurrentAccomodationTypeCounts(){
   var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
-  var sheet = spreadsheet.getSheetByName('Odpovědi Formuláře');
-  var values = getStringsFromColumn("I", sheet);
-  var allowed = values.filter(v => Object.values(AccomondationType).indexOf(v) > -1);
+  var sheet = spreadsheet.getSheetByName('Odpovědi formuláře 6');
+  var values = getStringsFromColumn("J", sheet);
+  var allowed = values.filter(v => Object.values(AccomondationType).some(a=>v.startsWith(a)));
   var withCount = allowed.filter(a=>a.startsWith(AccomondationType[WITH_TYPE])).length;
   var withoutCount = allowed.filter(a=>a.startsWith(AccomondationType[WITHOUT_TYPE])).length;
   var spacakCount = allowed.filter(a=>a.startsWith(AccomondationType[SPACAK_TYPE])).length;

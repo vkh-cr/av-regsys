@@ -100,7 +100,7 @@ function sendRegistrationCancelledEmail() {
 
 function getOptionString(type, remainings) {
   const splitter = ", ";
-  const czk = " Kč (zbývá ";
+  const czk = " Kč (zbývájící kapacita: ";
   const end = ")"
   return AccomondationType[type] + splitter + AccomondationPrice[type] + czk + remainings + end;
 }
@@ -113,6 +113,7 @@ function updateSignInForm() {
     var thisItem = allItems[i];
     if (thisItem.getTitle() == "Varianta ubytování" && thisItem.getType() === FormApp.ItemType.MULTIPLE_CHOICE) {
       var multipleChoice = thisItem.asMultipleChoiceItem();
+
       var choices = [];
       var counts = getCurrentAccomodationTypeCounts();
 
@@ -132,7 +133,7 @@ function updateSignInForm() {
         //form.deleteItem(thisItem);
         return;
       }
-
+      //multipleChoice.setHelpText("text");
       multipleChoice.setChoiceValues(choices);
     }
   }

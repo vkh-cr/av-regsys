@@ -41,4 +41,4 @@ const AccomondationType = {
   [PROGRAM_ONLY_TYPE]: "Jen program (bez ubytování a bez stravy)"
 };
 
-const MAIN_SPREADSHEET = '1YqsH66HdEmDPnIEILmL8ccOsGaIfjyoZX5CFRn7gR5c';
+const MAIN_SPREADSHEET = '1OZ65MpjlksqZfOeUHlVsmZ-S0UhDfPaOf4I6hJ3vJnE';

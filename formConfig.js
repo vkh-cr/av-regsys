@@ -7,15 +7,21 @@ function getTranslationConfig(formID) {
     "timestamp": { "title": "Časová značka" },
     "name": { "title": "Jméno" },
     "surname": { "title": "Příjmení" },
+    "sex": { "title": "Pohlaví" },
     "email": { "title": "Email" },
     "birthYear": { "title": "Rok narození" },
     "address": { "title": "Adresa trvalého bydliště" },
-    "roommate": { "title": "Chceme bydlet spolu" },
+    "region": { "title": "Kraj" },
+    "city": { "title": "Město, kde trávíš čas" },
     "accommodation": { "title": "Varianta ubytování" },
-    "phone": { "title": "Telefon" },
+    "roommate": { "title": "Chceme bydlet spolu" },
     "support": { "title": "Dobrovolný příspěvek" },
+    "phone": { "title": "Telefon" },
     "healthCondition": { "title": "Máš nějaké zdravotní omezení či dietu?" },
     "note": { "title": "Poznámka" },
+    "volunteerPreference": { "title": "Preferovaná oblast tvé pomoci" },
+    "volunteerWeekend": { "title": "Pojedu na víkendovku pro dobrovolníky" },
+    "afterAVinfo": { "title": "Informace po AV" },
   }
 }
 
