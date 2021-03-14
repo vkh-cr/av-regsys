@@ -96,3 +96,36 @@ function sendRegistrationCancelledEmail() {
     emailObj.textPlain,
     emailObj.textHtml, undefined, true);
 }
+
+function updateSignInForm() {
+  var form = FormApp.getActiveForm();
+  var allItems = form.getItems();
+
+  for (var i=0;i<allItems.length;i+=1) {
+    var thisItem = allItems[i];
+    if(thisItem.getTitle()=="Varianta ubytování" && thisItem.getType()===FormApp.ItemType.MULTIPLE_CHOICE)
+    {
+      var multipleChoice = thisItem.asMultipleChoiceItem();
+
+      var choices = [];
+      multipleChoice.setChoiceValues();
+
+      var counts = getCurrentAccomodationTypeCounts();
+
+      if(counts[WITHOUT_TYPE]<MAX_WITHOUT){
+        choices.push(multipleChoice.createChoice("Postel bez příslušenství se stravou, 2 015 Kč"));
+      }
+      if(counts[WITH_TYPE]<MAX_WITH){
+        choices.push(multipleChoice.createChoice("Postel s příslušenstvím a se stravou, 2 495 Kč"));
+      }
+      if(counts[SPACAK_TYPE]<MAX_SPACAK){
+        choices.push(multipleChoice.createChoice("Spacák se stravou, 1 520 Kč"));
+      }
+      if(counts[PROGRAM_ONLY_TYPE]<MAX_PROGRAM){
+        choices.push(multipleChoice.createChoice("Program a strava (bez ubytování), 1 160 Kč"));
+        choices.push(multipleChoice.createChoice("Jen program (bez ubytování a bez stravy), 500 Kč"));
+      }
+
+    }
+  }
+}
