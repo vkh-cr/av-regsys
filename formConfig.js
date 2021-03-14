@@ -19,18 +19,5 @@ function getTranslationConfig(formID) {
   }
 }
 
-function getPriceConfig() {
-  return {
-    "With": 2495,
-    "Without": 2015,
-    "SleepingBag": 1500,
-  };
-}
-
-const MAX_WITH = 12;
-const MAX_WITHOUT = 100;
-const MAX_SPACAK = 80;
-const MAX_PROGRAM = 158;
-
 const PAYMENT_DEADLINE_DAYS = 18;
 const REMINDER_DAYS = 7;

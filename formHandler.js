@@ -24,7 +24,6 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var translationConfig = getTranslationConfig();
   console.log(translationConfig);
-  var priceConfig = getPriceConfig();
 
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
@@ -32,7 +31,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var accommodationCode = getAccommodationCode(formData);
   var supportValue = formData['support'].value;
 
-  var price = getTicketPrice(accommodationCode, supportValue, priceConfig);
+  var price = getTicketPrice(accommodationCode, supportValue);
 
   var userEmailAddress = formData.email.value;
   var timestamp = formData['timestamp'].value;
@@ -102,33 +101,23 @@ function getVariableSymbol(range, price) {
 
 function getAccommodationCode(formData) {
   var accommodation = formData['accommodation'].value || ' ';
-  if(accommodation == 'Postel s příslušenstvím')       { return 'with'; }
-  else if(accommodation == 'Postel bez příslušenství') { return 'without'; }
-  else if(accommodation == 'Spacák')                   { return 'spacak'; }
-  else {
-    logError('Invalid accommodation value: ' + accommodation);
+  if (accommodation in AccomondationType)
+  {
+    return AccomondationType[accommodation];
   }
+  logError('Invalid accommodation value: ' + accommodation);
 }
 
-function getTicketPrice(accommodationCode, supportValue, priceConfig){
+function getTicketPrice(accommodationCode, supportValue){
 
   var support = parseInt(supportValue) || 0;
   if (support < 0) {
     support = 0;
   }
 
-  var priceStr = undefined;
+  var price = AccomondationPrice[accommodationCode];
 
-  if(accommodationCode == 'with')         { priceStr = priceConfig.With; }
-  else if(accommodationCode == 'without') { priceStr = priceConfig.Without; }
-  else if(accommodationCode == 'spacak')  { priceStr = priceConfig.SleepingBag; }
-  else {
-    logError('Invalid accommodationCode value: ' + accommodation);
-  }
-
-  var price = parseInt(priceStr) + support;
-
-  return price;
+  return price+support;
 }
 
 function startTrackingPayment(summaryVars, name, email, registrationValid) {
@@ -176,5 +165,17 @@ function sendEmailConfirmation(summaryVars, userEmailAddress) {
   var htmlText  = fillInTemplate(emailObj.textHtml,  summaryVars);
 
   sendEmailMailerSend(userEmailAddress, null, CONFIRMATION_TEMPLATE)
+}
+
+function getCurrentAccomodationTypeCounts(){
+  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  var sheet = spreadsheet.getSheetByName('Odpovědi Formuláře');
+  var values = getStringsFromColumn("I", sheet);
+  var allowed = values.filter(v => Object.values(AccomondationType).indexOf(v) > -1);
+  var withCount = allowed.filter(a=>a.startsWith(AccomondationType[WITH_TYPE])).length;
+  var withoutCount = allowed.filter(a=>a.startsWith(AccomondationType[WITHOUT_TYPE])).length;
+  var spacakCount = allowed.filter(a=>a.startsWith(AccomondationType[SPACAK_TYPE])).length;
+  var programCount = allowed.filter(a=>a.startsWith(AccomondationType[PROGRAM_ONLY_TYPE])||a.startsWith(AccomondationType[PROGRAM_FOOD_ONLY_TYPE])).length;
+  return {[WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount};
 }
 
