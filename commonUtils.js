@@ -1,6 +1,3 @@
-//NESAHAT!!
-
-
 ////
 // Logger
 //
@@ -46,12 +43,61 @@ function sheetLog(logSheetName, message) {
 ////
 // Sheet manipulating functions
 //
+function getSummaryVars(mail, sheet)
+{
+  var translations = getTranslationConfig();  
+  var columns =  getColumnNames(sheet);
+  var rowIndex = getIndexOfValueFromColumn(translations[K_EMAIL].title, mail, columns, sheet);
+  if(rowIndex==-1)
+  {
+    logError(mail + ' was not found.');
+    return;
+  }
+
+  // +1, because first row is column names
+  var values = getStringsFromRow(rowIndex+1, sheet);
+  var summaryVars = {};
+  for (const i in columns) 
+  {
+    var translationKey = getKeyByTranslationValue(translations, columns[i]);
+    if (typeof translationKey !== "undefined" && (values[i].length !== 0 && values[i].trim()))
+    {
+      summaryVars[translationKey] = values[i];
+    }
+  }
+  return summaryVars;
+}
+
 function getStringsFromColumn(column, sheet) {
   var lastRow = sheet.getLastRow();
   if (lastRow == 0) {
     return [];
   }
-  return sheet.getRange(column + "1:" + column + lastRow).getDisplayValues().map(s => s.toString());
+  return sheet.getRange(2, column + 1, lastRow, 1).getDisplayValues().map(s => s.toString());
+}
+
+function getIndexOfValueFromColumn(columnName, value, columns, sheet)
+{
+  var index = columns.indexOf(columnName);
+  if(index == -1)
+  {
+    logError(columnName + ' was not found in columns.');
+    return;
+  }
+  var allValues = getStringsFromColumn(index, sheet);
+  return allValues.indexOf(value);
+}
+
+function getColumnNames(sheet) 
+{
+  return getStringsFromRow(0, sheet);
+}
+
+function getStringsFromRow(rowIndex, sheet)
+{
+  var lastColumn = sheet.getLastColumn();
+  var range = sheet.getRange(rowIndex + 1, 1, 1, lastColumn);
+  return range.getDisplayValues()[0].map(s => s.toString());
 }
 
 function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex) {
@@ -70,7 +116,6 @@ function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex) 
       'range': dataRange,
       'indexInRange': i,
     };
-
   }
 
   return null;
@@ -127,170 +172,6 @@ function addDataToCurrentRow(range, columnIndex, data) {
 }
 //
 // End Sheet manipulating functions
-////
-
-////
-// Mailer:
-//
-function fillInTemplate(template, data) {
-  var templateVars = template.match(/##[A-Za-z]+/g);
-  var templatedString = template;
-
-  if (templateVars == null) { return template; }
-
-  for (var i = 0; i < templateVars.length; ++i) {
-    var dataKey = templateVars[i].substring(2);
-    if (data.hasOwnProperty(dataKey)) {
-      var dataValue = data[dataKey];
-    } else {
-      var dataValue = "";
-      logError("No key \"" + dataKey + "\" in " + data)
-    }
-
-    templatedString = templatedString.replace(templateVars[i], dataValue);
-  }
-
-  return templatedString;
-}
-
-function logCurrentEmailQuota() {
-  var q = MailApp.getRemainingDailyQuota();
-  runtimeLog('current remaining daily quota ' + q);
-}
-
-function emailQuotaVojta() {
-  return MailApp.getRemainingDailyQuota();
-}
-
-function sendEmailMailerSend(recipient, templateData, templateId) {
-
-  var body =
-  {
-    "to": [
-      {
-        "email": recipient,
-      }
-    ],
-    "template_id": templateId,
-    "reply_to": [
-      {
-        "email": 'info@absolventskyvelehrad.cz',
-        "name": 'AV21'
-      }
-    ],
-    "variables": [
-      {
-        "email": recipient,
-        "substitutions": templateData
-      }
-    ]
-  }
-  var options = {
-    "method": "post",
-    "contentType": "application/json",
-    "headers": {
-      "authorization": "Bearer " + getMailerSendkey()
-    },
-    "payload": JSON.stringify(body)
-  }
-
-  var response = UrlFetchApp.fetch("https://api.mailersend.com/v1/email", options);
-  Logger.log(response);
-}
-
-function sendEmail(recipient, subject, plainBody, html_Body, bcc, enqueue) {
-  if (typeof enqueue === 'undefined' || enqueue === 'undefined') { enqueue = true; }
-  onTryToSendEnqueuedEmailsTick();
-
-  var emailQuotaRemaining = MailApp.getRemainingDailyQuota();
-  console.log("Remaining email quota: " + emailQuotaRemaining);
-
-  if (emailQuotaRemaining < 5 && enqueue) {
-    enqueueEmail(recipient, subject, plainBody, html_Body, bcc);
-    return false;
-  }
-
-  var options = {
-    from: "tym.realizace@absolventskyvelehrad.cz",
-    replyTo: "tym.realizace@absolventskyvelehrad.cz",
-    htmlBody: html_Body
-  }
-
-  GmailApp.sendEmail(recipient, subject, plainBody, options);
-  return true;
-}
-
-
-function enqueueEmail(recipient, subject, plainBody, htmlBody, bcc) {
-  runtimeLog('enqueued email');
-
-  var emailQueueSheetName = 'emailQueue';
-  createSheetIfDoesntExist(emailQueueSheetName, undefined);
-
-  sheetLog(emailQueueSheetName, [recipient, subject, plainBody, htmlBody, bcc, false]);
-}
-
-function onTryToSendEnqueuedEmailsTick() {
-  var todaysQuota = MailApp.getRemainingDailyQuota();
-  if (todaysQuota < 1) { return -1; }
-
-  var dataRange = getActiveRange('emailQueue');
-  if (dataRange == null) { return -1; }
-
-  var sheet = dataRange.getSheet();
-  var data = dataRange.getValues();
-
-  var numberOfEmailsToBeSent = Math.min(data.length, todaysQuota); runtimeLog('To be sent:' + numberOfEmailsToBeSent);
-  var i = 0;
-  for (i = 0; i < numberOfEmailsToBeSent; ++i) {
-
-    var dataRow = data[i];
-    if (dataRow[6]) { continue; }
-
-    if (sendEmail(dataRow[1], dataRow[2], dataRow[3], dataRow[4], dataRow[5], false)) {
-      sheet.getRange(1 + i, 7).setValue(true);
-    } else { break; }
-
-  }
-
-  runtimeLog('Sent: ' + i);
-  return i;
-}
-
-function onTryToSendAttentionRequiredEmailsTick() {
-  var todaysQuota = MailApp.getRemainingDailyQuota();
-  if (todaysQuota < 1) { return; }
-
-  var dataRange = getActiveRange('needs attention');
-  if (dataRange == null) { return; }
-
-  var sheet = dataRange.getSheet();
-  var data = dataRange.getValues();
-
-  var body = '';
-  var numberOfNeedsAttentionMessages = 0;
-  for (var i = 1; i < data.length; ++i) {
-
-    var dataRow = data[i];
-    if (dataRow[3]) { continue; }
-    body += dataRow.join(', ') + '\n';
-    numberOfNeedsAttentionMessages += 1;
-
-  }
-
-  if (!(numberOfNeedsAttentionMessages > 0)) { return; }
-
-  var generalConfig = getGeneralConfig();
-  var attentionEmailObject = {
-    'subject': generalConfig['attentionSubject'],
-    'recipient': generalConfig['attentionEmail'],
-    'body': body,
-  };
-
-  sendEmail(attentionEmailObject.recipient, attentionEmailObject.subject, attentionEmailObject.body, '', undefined, true);
-}
-//
-// End Mailer;
 ////
 
 ////
@@ -380,7 +261,7 @@ function reliableToInt(obj) {
   else if (objType === "number") {
     return obj;
   }
-  else if (objType == "booloean") {
+  else if (objType == "boolean") {
     return (obj) ? 1 : 0;
   }
   else { return undefined; }

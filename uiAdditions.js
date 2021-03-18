@@ -117,23 +117,23 @@ function updateSignInForm() {
       var choices = [];
       var counts = getCurrentAccomodationTypeCounts();
 
-      Object.keys(counts).forEach(function (key) {
-        if (counts[key] < AccomondationLimits[key]) {
-          var remainings = AccomondationLimits[key]-counts[key];
-          if (key == PROGRAM_TYPE) {
-            choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE, remainings));
-            choices.push(getOptionString(PROGRAM_ONLY_TYPE, remainings));
-            return;
+      Object.keys(counts).forEach((key) => {
+          if (counts[key] < AccomondationLimits[key]) {
+            var remainings = AccomondationLimits[key] - counts[key];
+            if (key == PROGRAM_TYPE) {
+              choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE, remainings));
+              choices.push(getOptionString(PROGRAM_ONLY_TYPE, remainings));
+              return;
+            }
+            choices.push(getOptionString(key, remainings));
           }
-          choices.push(getOptionString(key, remainings));
-        }
-      });
+        });
 
       if (choices.length == 0) {
-        //form.deleteItem(thisItem);
+        form.deleteItem(thisItem);
         return;
       }
-      //multipleChoice.setHelpText("text");
+      multipleChoice.setHelpText("");
       multipleChoice.setChoiceValues(choices);
     }
   }

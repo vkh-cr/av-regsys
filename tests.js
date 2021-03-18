@@ -1,13 +1,8 @@
-function testEmail() {
-  var subs = [{
-    "var": "salutation",
-    "value": "Mikael!!!"
-}];
-sendEmailMailerSend("bujnmi@gmail.com", subs, "pxkjn4172q4z7815")
-}
-
 function testSendAllEmails() {
   var values = SpreadsheetApp.getActiveSheet().getDataRange().getDisplayValues();
+
+  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
 
   for(n=1;n<values.length;++n){
     
@@ -15,15 +10,25 @@ function testSendAllEmails() {
     if(email == ""){
           continue;
         }
-    
-    var salutation = values[n][1];
-    var subs = [{
-      "var": "salutation",
-      "value": salutation
-  }];
-  var id = values[8][3];
-  sendEmailMailerSend(email, subs, id);
+    var summaryVars = getSummaryVars(email, answersSheet);
+    sendEmailConfirmation(summaryVars);
+
+    var id = values[8][3];
+    sendEmail(summaryVars, id);
 }
+}
+
+function testLoadingFromTableByEmail()
+{
+  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
+  var summaryVars = getSummaryVars("bujnmi@gmail.com", answersSheet);
+  sendEmailConfirmation(summaryVars);
+}
+
+function testConfirmationEmail()
+{
+  sendEmailConfirmation(testSummaryVars);
 }
 
 function testBankAccess(){
@@ -42,3 +47,28 @@ function testBankWriteDown(){
 
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
+
+const testSummaryVars = {
+  [K_TIMESTAMP] : new Date(),
+  [K_NAME] : "Jan",
+  [K_SURNAME] : "Maria",
+  [K_SEX] : "Muž",
+  [K_EMAIL] : "bujnmi@gmail.com",
+  [K_BIRTH_YEAR] : "1901",
+  [K_ADDRESS] : "17. listopadu 27",
+  [K_REGION] : "Moravskoslezský kraj",
+  [K_CITY] : "Ostrava",
+  [K_ACCOMODATION] : AccomondationType[PROGRAM_ONLY_TYPE],
+  [K_ROOMMATE] : "Jenda Šťastný",
+  [K_SUPPORT] : 0,
+  [K_PHONE] : "+420 731 805 186",
+  [K_HEALTH_CONDITION] : "ne",
+  [K_NOTE] : " ",
+  [K_VOLUNTEER_PREFERENCE] : "Recepce / informace, Stravování, Technik, Moderování modlitebních skupinek",
+  [K_VOLUNTEER_WEEKEND] : "Ano, pojedu v termínu 14. - 16. 5.",
+  [K_AFTER_AV_INFO] : "Ano",
+  [K_PRICE] : 2000,
+  [K_VAR_SYMBOL] : getVariableSymbol(1, 2000),
+  [K_DEADLINE] : getDeadlineFromCurrentDate(),
+  [K_SUPPORTMSG] : "supportMsg"
+};
