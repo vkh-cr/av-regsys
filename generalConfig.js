@@ -43,3 +43,5 @@ const AccomondationType = {
 
 const MAIN_SPREADSHEET = '1OZ65MpjlksqZfOeUHlVsmZ-S0UhDfPaOf4I6hJ3vJnE';
 const ANSWERS_SHEET = 'Odpovědi formuláře 6';
+const YOU_CAN_TOUCH_SHEET = 'You CAN touch this';
+const MONEY_INFO_SHEET = 'money info';

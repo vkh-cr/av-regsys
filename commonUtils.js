@@ -43,6 +43,12 @@ function sheetLog(logSheetName, message) {
 ////
 // Sheet manipulating functions
 //
+function getIndexOfColumnName(columnName, sheet)
+{
+  var columns = getColumnNames(sheet);
+  return columns.indexOf(columnName);
+}
+
 function getSummaryVars(mail, sheet)
 {
   var translations = getTranslationConfig();  
@@ -138,6 +144,10 @@ function getActiveRange(sheetName) {
 function createSheetIfDoesntExist(sheetName, header) {
 
   var currSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  if(typeof currSpreadsheet === 'undefined' || currSpreadsheet == null)
+  {
+    currSpreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  }
   var sheet = currSpreadsheet.getSheetByName(sheetName);
   if (sheet == null) {
     sheet = currSpreadsheet.insertSheet(sheetName);
@@ -158,19 +168,30 @@ function insertComumnIfDoesNotExist(columnHeader, sheet, indexBefore) {
   sheet.getRange(1, indexBefore + 1).setValue(columnHeader);
 }
 
-function addDataToCurrentRow(range, columnIndex, data) {
-  var sheet = range.getSheet();
-  var rowNumber = range.getRow();
-
-  //Range isn't zero based index
-  var cellObject = sheet.getRange(rowNumber, columnIndex + 1);
+// zero based index in parameters
+function addDataToCurrentRow(rowIndex, columnIndex, data, sheet) {
+  var cellObject = sheet.getRange(rowIndex, columnIndex + 1);
   var originalValue = cellObject.getValue();
   if (originalValue !== '') {
-    logError(['Cell for id was not empty:', originalValue, ' ', rowNumber, range]);
+    logError(['Cell for id was not empty:', originalValue, ' ', rowIndex + 1, range]);
     runtimeLog(originalValue);
   }
-
   cellObject.setValue(data);
+}
+
+// zero based index in parameters
+function updateValueOnColumn(value, rowIndex, columnName, sheet)
+{  
+  var columns =  getColumnNames(sheet);
+  var columnIndex = columns.indexOf(columnName);
+  var cellObject = sheet.getRange(rowIndex + 1, columnIndex + 1);
+  cellObject.setValue(value);
+}
+
+function getSheet(name)
+{
+  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  return spreadsheet.getSheetByName(name);
 }
 //
 // End Sheet manipulating functions

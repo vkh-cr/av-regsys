@@ -152,7 +152,6 @@ function sendToEmails() {
   var message = 'Opravdu chcete rozeslat:' + '\nPočet emailů: ' + emails.length + '\nŠablona: ' + templateId;
   var response = ui.alert('Opravdu?', message, ui.ButtonSet.YES_NO);
 
-  // Process the user's response.
   if (response == ui.Button.NO) 
   {
     return;

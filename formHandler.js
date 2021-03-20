@@ -1,7 +1,5 @@
 
 function onFormSubmit(formSubmitObj) {
-  console.log(formSubmitObj);
-
   // For unknown reason onFormSubmit is sometimes called without form being submitted.
   // Usually two or three times immediately after legitimate submission. In such a case
   // formSubmitObj contains timestmap but it is otherwise empty.
@@ -10,12 +8,12 @@ function onFormSubmit(formSubmitObj) {
     return;
   }
   runtimeLog('On form submited fired.');
-  prepareHeaderForId(formSubmitObj);
+  prepareHeaderForId();
   workOnSendingConfirmationEmail(formSubmitObj);
 }
 
-function prepareHeaderForId(formSubmitObj) {
-  var sheet = formSubmitObj.range.getSheet();
+function prepareHeaderForId() {
+  var sheet = getSheet(ANSWERS_SHEET);
   insertComumnIfDoesNotExist('id/var. symbol', sheet, 1);
 }
 
@@ -28,19 +26,28 @@ function getDeadlineFromCurrentDate()
 
 function workOnSendingConfirmationEmail(formSubmitObj) {
   Logger.log("Sending email...");
-
   var translationConfig = getTranslationConfig();
   console.log(translationConfig);
 
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
 
-  var accommodationCode = getAccommodationCode(formData);
   var supportValue = formData[K_SUPPORT].value;
+  var accomodationCode = formData[K_ACCOMODATION].value;
+  var price = getTicketPrice(accomodationCode, supportValue);
 
-  var price = getTicketPrice(accommodationCode, supportValue);
+  var currentRow;
+  var answersSheet = getSheet(ANSWERS_SHEET);
 
-  var varSymbolId = getVariableSymbol(formSubmitObj.range.getRow(), price);
+  if(typeof formSubmitObj.range.getRow !== "undefined")
+  {
+    currentRow = formSubmitObj.range.getRow();
+  }
+  else
+  {
+    currentRow = answersSheet.getLastRow()+1;
+  }
+  var varSymbolId = getVariableSymbol(currentRow, price);
 
   var timestamp = formData[K_TIMESTAMP].value;
   var name = formData[K_NAME].value || ' ';
@@ -90,7 +97,10 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
     };
 
   // store inferred var symbol in sheet
-  addDataToCurrentRow(formSubmitObj.range, 1, varSymbolId);
+  addDataToCurrentRow(currentRow, 1, varSymbolId, answersSheet);
+
+  // accomodation value is rewritten as a code
+  updateValueOnColumn(summaryVars[K_ACCOMODATION], currentRow-1, translationConfig[K_ACCOMODATION].title, answersSheet);
 
   startTrackingPayment(summaryVars, name + ' ' + surname, userEmailAddress, true);
   sendEmailConfirmation(summaryVars);
@@ -102,9 +112,9 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   // inserting new row instead of filling existing empty row. Therefore all
   // formula pointing to last empty line are still pointing to empty line after new
   // response
-  var valuesArr = formSubmitObj.range.getDisplayValues()[0];
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = spreadsheet.getSheetByName('You CAN touch this');
+
+  var valuesArr = formSubmitObj.values;
+  var sheet = getSheet(YOU_CAN_TOUCH_SHEET);
   sheet.appendRow(valuesArr);
 }
 
@@ -114,29 +124,18 @@ function getVariableSymbol(rowNumber, price) {
   return '21' + rowNumberPadded + pricePadded;
 }
 
-function getAccommodationCode(formData) {
-  var accommodation = formData[K_ACCOMODATION].value || ' ';
-  if (accommodation in AccomondationType)
-  {
-    return AccomondationType[accommodation];
-  }
-  logError('Invalid accommodation value: ' + accommodation);
-}
-
 function getTicketPrice(accommodationCode, supportValue){
 
   var support = parseInt(supportValue) || 0;
   if (support < 0) {
     support = 0;
   }
-
   var price = AccomondationPrice[accommodationCode];
 
   return price+support;
 }
 
 function startTrackingPayment(summaryVars, name, email, registrationValid) {
-  var moneyInfoSheetName = 'money info';
   var userDataHeader = [
 	  'timestamp',
 	  'name',
@@ -152,7 +151,7 @@ function startTrackingPayment(summaryVars, name, email, registrationValid) {
 	  'expired alert',
 	  'other notes'
   ];
-  createSheetIfDoesntExist(moneyInfoSheetName, userDataHeader);
+  createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
 
   var moneyInfo = {
     // timestamp is added by sheetLog function
@@ -165,18 +164,19 @@ function startTrackingPayment(summaryVars, name, email, registrationValid) {
     'paidEverything' : false,
     'registrationValid' : registrationValid
   };
-  sheetLog(moneyInfoSheetName, objectValuesToArray(moneyInfo));
+  sheetLog(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));
 }
 
 function getCurrentAccomodationTypeCounts()
 {
-  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
-  var sheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
-  var values = getStringsFromColumn(9, sheet);
-  var withCount = values.filter(a=>a.startsWith(AccomondationType[WITH_TYPE])).length;
-  var withoutCount = values.filter(a=>a.startsWith(AccomondationType[WITHOUT_TYPE])).length;
-  var spacakCount = values.filter(a=>a.startsWith(AccomondationType[SPACAK_TYPE])).length;
-  var programCount = values.filter(a=>a.startsWith(AccomondationType[PROGRAM_ONLY_TYPE])||a.startsWith(AccomondationType[PROGRAM_FOOD_ONLY_TYPE])).length;
+  var sheet = getSheet(ANSWERS_SHEET);
+  var translationConfig = getTranslationConfig();
+  var accomodationIndex = getIndexOfColumnName(translationConfig[K_ACCOMODATION].title, sheet);
+  var values = getStringsFromColumn(accomodationIndex, sheet);
+  var withCount = values.filter(v=>v==WITH_TYPE).length;
+  var withoutCount = values.filter(v=>v==WITHOUT_TYPE).length;
+  var spacakCount = values.filter(v=>v==SPACAK_TYPE).length;
+  var programCount = values.filter(v=>v==PROGRAM_ONLY_TYPE||v==PROGRAM_FOOD_ONLY_TYPE).length;
   return {[WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount};
 }
 

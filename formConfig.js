@@ -13,7 +13,7 @@ function getTranslationConfig() {
     [K_ADDRESS]: { "title": "Adresa trvalého bydliště" },
     [K_REGION]: { "title": "Kraj" },
     [K_CITY]: { "title": "Město, kde trávíš čas" },
-    [K_ACCOMODATION]: { "title": "Varianta ubytování" },
+    [K_ACCOMODATION]: { "title": "Varianta ubytování", "typeTranslations": AccomondationType },
     [K_ROOMMATE]: { "title": "Chceme bydlet spolu" },
     [K_SUPPORT]: { "title": "Dobrovolný příspěvek" },
     [K_PHONE]: { "title": "Telefon" },
@@ -21,7 +21,7 @@ function getTranslationConfig() {
     [K_NOTE]: { "title": "Poznámka" },
     [K_VOLUNTEER_PREFERENCE]: { "title": "Preferovaná oblast tvé pomoci" },
     [K_VOLUNTEER_WEEKEND]: { "title": "Pojedu na víkendovku pro dobrovolníky" },
-    [K_AFTER_AV_INFO]: { "title": "Informace po AV" },
+    [K_AFTER_AV_INFO]: { "title": "Informace po AV" }
   }
 }
 

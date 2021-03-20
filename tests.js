@@ -1,7 +1,6 @@
 function testLoadingFromTableByEmail()
 {
-  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
-  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
+  var answersSheet = getSheet(ANSWERS_SHEET);
   var summaryVars = getSummaryVars("bujnmi@gmail.com", answersSheet);
   Logger.log(summaryVars);
 }
@@ -26,6 +25,38 @@ function testBankWriteDown(){
   };
 
   writeDownTransactionsToBankInfo(transactionDictionary);
+}
+
+function testOnFormSubmit()
+{
+  var testData = 
+  { "authMode": "FULL", 
+  "namedValues": 
+    { 
+      "Adresa trvalého bydliště": ["dsfa"], 
+      "Poznámka": [""], 
+      "Varianta ubytování": ["Spacák, 1520 Kč (zbývájící kapacita: 76)"], 
+      "Máš nějaké zdravotní omezení či dietu?": [""], 
+      "Pojedu na víkendovku pro dobrovolníky": [""], 
+      "Telefon": [""], 
+      "Preferovaná oblast tvé pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"], 
+      "Email": ["bujnmi@gmail.com"], 
+      "Příjmení": ["fdas"], 
+      "Chceme bydlet spolu": ["bujnmi@gmail.com"], 
+      "Jméno": ["Ondřej"], 
+      "Rok narození": ["1995"], 
+      "Kraj": ["Zlínský kraj"], 
+      "Město, kde trávíš čas": ["dfas"], 
+      "Časová značka": ["20.3.2021 13:30:21"], 
+      "Informace po AV": ["Ne"], 
+      "Pohlaví": ["Žena"], 
+      "Dobrovolný příspěvek": [""] },
+  "range": { "columnEnd": 18, "columnStart": 1, "rowEnd": 14, "rowStart": 14 }, 
+  "source": {}, 
+  "triggerUid": "6513079", 
+  "values": ["20.3.2021 13:30:21", "dfdf", "fdas", "Žena", "bujnmi@gmail.com", "1995", "dsfa", "Zlínský kraj", "dfas", "Spacák, 1520 Kč (zbývájící kapacita: 76)", "bujnmi@gmail.com", "", "", "", "", "Je mi to jedno, rád/a pomůžu, kde bude potřeba", "", "Ne"] };
+  
+  onFormSubmit(testData);
 }
 
 const testSummaryVars = {
