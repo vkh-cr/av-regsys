@@ -39,14 +39,14 @@ function getSubsForMailerSend(obj)
 
 function sendEmailConfirmation(summaryVars)
 {
-  sendEmail(summaryVars, CONFIRMATION_TEMPLATE);
+  sendEmail(summaryVars[K_EMAIL], summaryVars, CONFIRMATION_TEMPLATE);
 }
 
-function sendEmail(summaryVars, templateId)
+function sendEmail(mail, summaryVars, templateId)
 {
   Logger.log(summaryVars);
   var subs = getSubsForMailerSend(summaryVars);
-  sendEmailMailerSend(summaryVars[K_EMAIL], subs, templateId);
+  sendEmailMailerSend(mail, subs, templateId);
 }
 
 function sendEmailMailerSend(recipient, templateData, templateId) {

@@ -1,5 +1,6 @@
 const MALE_PRE_SALUTATION = "Milý";
 const FEMALE_PRE_SALUTATION = "Milá";
+const DEFAULT_SALUTATION = "Příteli";
 
 function GetPreSalutation(sex)
 {
@@ -16,6 +17,10 @@ function GetPreSalutation(sex)
 
 function GetSalutation(name)
 {
+    if (typeof name === "undefined")
+    {
+        return DEFAULT_SALUTATION;
+    }
     if(name in vocatives)
     {
         return vocatives[name];

@@ -51,7 +51,7 @@ function getSummaryVars(mail, sheet)
   if(rowIndex==-1)
   {
     logError(mail + ' was not found among registered.');
-    return;
+    return {};
   }
 
   // +1, because first row is column names

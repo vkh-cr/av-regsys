@@ -161,6 +161,6 @@ function sendToEmails() {
   emails.forEach(
     e => {
       var summaryVars = getSummaryVars(e, answersSheet);
-      sendEmail(summaryVars, templateId);
+      sendEmail(e, summaryVars, templateId);
   });
 }
