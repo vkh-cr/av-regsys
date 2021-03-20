@@ -4,11 +4,6 @@ const REMINDER_TEMPLATE = "0r83ql3nw04zw1jm";
 const PAYMENT_VOLUNTEER_OK_TEMPLATE = "v69oxl5z6kl785kw";
 const PAYMENT_OK_TEMPLATE = "vywj2lpjqpl7oqzd";
 
-
-String.prototype.isEmpty = function() {
-  return (this.length === 0 || !this.trim());
-};
-
 function createOneSub(property, value)
 {
   var valueString = value.toString();

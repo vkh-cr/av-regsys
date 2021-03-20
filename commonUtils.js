@@ -50,7 +50,7 @@ function getSummaryVars(mail, sheet)
   var rowIndex = getIndexOfValueFromColumn(translations[K_EMAIL].title, mail, columns, sheet);
   if(rowIndex==-1)
   {
-    logError(mail + ' was not found.');
+    logError(mail + ' was not found among registered.');
     return;
   }
 
@@ -60,10 +60,12 @@ function getSummaryVars(mail, sheet)
   for (const i in columns) 
   {
     var translationKey = getKeyByTranslationValue(translations, columns[i]);
-    if (typeof translationKey !== "undefined" && (values[i].length !== 0 && values[i].trim()))
+    if (typeof translationKey === "undefined")
     {
-      summaryVars[translationKey] = values[i];
+      continue;
     }
+
+    summaryVars[translationKey] = values[i];
   }
   return summaryVars;
 }
@@ -177,6 +179,10 @@ function addDataToCurrentRow(range, columnIndex, data) {
 ////
 // Utils:
 //
+String.prototype.isEmpty = function() {
+  return (this.length === 0 || !this.trim());
+};
+
 function addDays(date, days) {
   var result = new Date(date);
   result.setDate(result.getDate() + days);

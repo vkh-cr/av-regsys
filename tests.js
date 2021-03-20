@@ -1,29 +1,9 @@
-function testSendAllEmails() {
-  var values = SpreadsheetApp.getActiveSheet().getDataRange().getDisplayValues();
-
-  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
-  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
-
-  for(n=1;n<values.length;++n){
-    
-    var email = values[n][0];
-    if(email == ""){
-          continue;
-        }
-    var summaryVars = getSummaryVars(email, answersSheet);
-    sendEmailConfirmation(summaryVars);
-
-    var id = values[8][3];
-    sendEmail(summaryVars, id);
-}
-}
-
 function testLoadingFromTableByEmail()
 {
   var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
   var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
   var summaryVars = getSummaryVars("bujnmi@gmail.com", answersSheet);
-  sendEmailConfirmation(summaryVars);
+  Logger.log(summaryVars);
 }
 
 function testConfirmationEmail()
@@ -69,6 +49,5 @@ const testSummaryVars = {
   [K_AFTER_AV_INFO] : "Ano",
   [K_PRICE] : 2000,
   [K_VAR_SYMBOL] : getVariableSymbol(1, 2000),
-  [K_DEADLINE] : getDeadlineFromCurrentDate(),
-  [K_SUPPORTMSG] : "supportMsg"
+  [K_DEADLINE] : getDeadlineFromCurrentDate()
 };

@@ -64,9 +64,6 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   if (support < 0) { support = 0; }
 
   var deadline = getDeadlineFromCurrentDate();
-  
-  var supportMsg = '';
-  if (support > 0) { supportMsg = ' a dobrovolný příspěvek ' + support + 'Kč'; }
 
   var summaryVars = {
     [K_TIMESTAMP] : timestamp,
@@ -89,9 +86,8 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
     [K_AFTER_AV_INFO] : afterAVinfo,
     [K_PRICE] : price,
     [K_VAR_SYMBOL] : varSymbolId,
-    [K_DEADLINE] : deadline,
-    [K_SUPPORTMSG] : supportMsg
-  };
+    [K_DEADLINE] : deadline
+    };
 
   // store inferred var symbol in sheet
   addDataToCurrentRow(formSubmitObj.range, 1, varSymbolId);

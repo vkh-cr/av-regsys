@@ -51,10 +51,8 @@ const K_AFTER_AV_INFO = "afterAVinfo";
 const K_PRICE = "finalPrice";
 const K_VAR_SYMBOL = "varSymbol";
 const K_DEADLINE = "deadline";
-const K_SUPPORTMSG = "supportMsg";
 const K_SALUTATION = "salutation";
 const K_PRESALUTATION = "presalutation";
-
 
 const PAYMENT_DEADLINE_DAYS = 18;
 const REMINDER_DAYS = 7;

@@ -138,3 +138,29 @@ function updateSignInForm() {
     }
   }
 }
+
+function sendToEmails() {
+  var templateId = SpreadsheetApp.getActiveSheet().getRange(9, 3).getValue();
+  var activeSheet = SpreadsheetApp.getActiveSheet();
+  var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
+  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
+
+  var emails = getStringsFromColumn(0, activeSheet);
+  emails = emails.filter(e=>!e.isEmpty());
+
+  var ui = SpreadsheetApp.getUi();
+  var message = 'Opravdu chcete rozeslat:' + '\nPočet emailů: ' + emails.length + '\nŠablona: ' + templateId;
+  var response = ui.alert('Opravdu?', message, ui.ButtonSet.YES_NO);
+
+  // Process the user's response.
+  if (response == ui.Button.NO) 
+  {
+    return;
+  }
+
+  emails.forEach(
+    e => {
+      var summaryVars = getSummaryVars(e, answersSheet);
+      sendEmail(summaryVars, templateId);
+  });
+}
