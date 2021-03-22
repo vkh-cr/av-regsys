@@ -41,6 +41,7 @@ const AccomondationType = {
   [PROGRAM_ONLY_TYPE]: "Jen program (bez ubytování a bez stravy)"
 };
 
+const MAIN_FORM = '1q8kRtBRwmzo9DNhnVtzBPp1-uyZ7EZOqGJRglThPWG8';
 const MAIN_SPREADSHEET = '1OZ65MpjlksqZfOeUHlVsmZ-S0UhDfPaOf4I6hJ3vJnE';
 const ANSWERS_SHEET = 'Odpovědi formuláře 6';
 const YOU_CAN_TOUCH_SHEET = 'You CAN touch this';

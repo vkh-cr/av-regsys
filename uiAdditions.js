@@ -106,9 +106,11 @@ function getOptionString(type, remainings) {
 }
 
 function updateSignInForm() {
-  var form = FormApp.getActiveForm();
+  var form = FormApp.openById(MAIN_FORM);
+  
   var allItems = form.getItems();
 
+  var normalMode = false;
   for (var i = 0; i < allItems.length; i += 1) {
     var thisItem = allItems[i];
     if (thisItem.getTitle() == "Varianta ubytování" && thisItem.getType() === FormApp.ItemType.MULTIPLE_CHOICE) {
@@ -118,24 +120,39 @@ function updateSignInForm() {
       var counts = getCurrentAccomodationTypeCounts();
 
       Object.keys(counts).forEach((key) => {
-          if (counts[key] < AccomondationLimits[key]) {
-            var remainings = AccomondationLimits[key] - counts[key];
-            if (key == PROGRAM_TYPE) {
-              choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE, remainings));
-              choices.push(getOptionString(PROGRAM_ONLY_TYPE, remainings));
-              return;
-            }
-            choices.push(getOptionString(key, remainings));
+        if (counts[key] < AccomondationLimits[key]) {
+          var remainings = AccomondationLimits[key] - counts[key];
+          if (key == PROGRAM_TYPE) {
+            choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE, remainings));
+            choices.push(getOptionString(PROGRAM_ONLY_TYPE, remainings));
+            return;
           }
-        });
+          choices.push(getOptionString(key, remainings));
+        }
+      });
 
       if (choices.length == 0) {
         form.deleteItem(thisItem);
-        return;
+        break;
       }
-      multipleChoice.setHelpText("");
+      normalMode = true;
+      multipleChoice.setHelpText("Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na www.XXXXXXXXXXXXXXXXX.cz");
       multipleChoice.setChoiceValues(choices);
     }
+  }
+
+  var originalText = "Tak velká akce jako Absolventský Velehrad se nedá zorganizovat bez pomoci dobrovolníků. Pokud se zapojí každý s nás malým dílem, dokážeme si uspořádat a  setkání plně prožít všichni. Novinkou letošního AV zároveň je, že pro dobrovolníky chceme, pokud to aktuální epidemiologická situace dovolí, uspořádat víkendové setkání ještě před samotným Absolventským Velehradem (bude na výběr ze dvou termínů, a to 14. - 16. května a 4. - 6. června). Více informací o jednotlivých činnostech se můžeš dozvědět na https://absolventskyvelehrad.cz/s-cim-potrebujeme-pomoci/";
+
+  if (normalMode) {
+    // normal mode
+    form.setTitle("AV21 - Registrace dobrovolníků")
+    form.setDescription(originalText);
+  }
+  else {
+    // substitute mode
+    form.setTitle("AV21 - Registrace dobrovolníků - REŽIM NÁHRADNÍKŮ")
+    var subsText = "Kapacita již byla vyčerpána, ale stále se můžeš hlásit jako náhradník. Pokud se nějaké místo uvolní, budeme Tě kontaktovat. Pořadí náhradníků je dáno časem odeslání přihlášky, tak neváhej!";
+    form.setDescription(subsText + "\n" + originalText);
   }
 }
 
@@ -146,14 +163,13 @@ function sendToEmails() {
   var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
 
   var emails = getStringsFromColumn(0, activeSheet);
-  emails = emails.filter(e=>!e.isEmpty());
+  emails = emails.filter(e => !e.isEmpty());
 
   var ui = SpreadsheetApp.getUi();
   var message = 'Opravdu chcete rozeslat:' + '\nPočet emailů: ' + emails.length + '\nŠablona: ' + templateId;
   var response = ui.alert('Opravdu?', message, ui.ButtonSet.YES_NO);
 
-  if (response == ui.Button.NO) 
-  {
+  if (response == ui.Button.NO) {
     return;
   }
 
@@ -161,5 +177,5 @@ function sendToEmails() {
     e => {
       var summaryVars = getSummaryVars(e, answersSheet);
       sendEmail(e, summaryVars, templateId);
-  });
+    });
 }

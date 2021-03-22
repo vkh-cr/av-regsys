@@ -61,7 +61,10 @@ function getFormData(formSubmitObj, translationConfig) {
     if (!logErrorOnUndefined(formFieldName, ['Missing title in translation config:', propertyName])) { continue; }
 
     var answerArrInForm = formAnswers[formFieldName];
-    if (!logErrorOnUndefined(answerArrInForm, ['Missing answer in form:', propertyName, formFieldName])) { continue; }
+    if(typeof answerArrInForm === "undefined")
+    {
+      continue;
+    }
 
     answerArrInForm = answerArrInForm.filter(i => !i.isEmpty());
 
