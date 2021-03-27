@@ -20,8 +20,8 @@ function testBankAccess(){
 
 function testBankWriteDown(){
   var transactionDictionary = {
-      "1441690989":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"1441690989"}],
-      "210101650":[{"transferId":1234567890,"date":"2019-02-02+0200","amount":11450,"currency":"CZK","accountNumber":"3400304745","variableSymbol":"210101650"}]
+      "210200003":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210200003"}],
+      "210181520":[{"transferId":1234567890,"date":"2019-02-02+0200","amount":11450,"currency":"CZK","accountNumber":"3400304745","variableSymbol":"210181520"}]
   };
 
   writeDownTransactionsToBankInfo(transactionDictionary);
@@ -50,7 +50,8 @@ function testOnFormSubmit()
       "Časová značka": ["20.3.2021 13:30:21"], 
       "Informace po AV": ["Ne"], 
       "Pohlaví": ["Žena"], 
-      "Dobrovolný příspěvek": [""] },
+      "Dobrovolný příspěvek": [""],
+      "Potvrzení o daru": ["Ano"] },
   "range": { "columnEnd": 18, "columnStart": 1, "rowEnd": 14, "rowStart": 14 }, 
   "source": {}, 
   "triggerUid": "6513079", 
@@ -69,7 +70,7 @@ const testSummaryVars = {
   [K_ADDRESS] : "17. listopadu 27",
   [K_REGION] : "Moravskoslezský kraj",
   [K_CITY] : "Ostrava",
-  [K_ACCOMODATION] : AccomondationType[PROGRAM_ONLY_TYPE],
+  [K_ACCOMODATION_TYPE] : PROGRAM_ONLY_TYPE,
   [K_ROOMMATE] : "Jenda Šťastný",
   [K_SUPPORT] : 0,
   [K_PHONE] : "+420 731 805 186",

@@ -45,12 +45,8 @@ function userPaidFunctionUI() {
 }
 
 function updateBankInfoWithTransactionObj(varSymbol, transactionObj) {
-  var sheetName = 'money info';
 
-  var varSymbolIndex = 2;
-  var searchValue = varSymbol;
-
-  var rowInfo = findRowIndexAndRangeInSheet(sheetName, searchValue, varSymbolIndex); runtimeLog(rowInfo);
+  var rowInfo = findRowIndexAndRangeInSheet(MONEY_INFO_SHEET, varSymbol, IndexMoneyInfo(K_VAR_SYMBOL)); runtimeLog(rowInfo);
   if (rowInfo == null) { return; }
 
   writeDownInfoAboutDirectPayment(rowInfo, transactionObj);
@@ -59,20 +55,18 @@ function updateBankInfoWithTransactionObj(varSymbol, transactionObj) {
 
 function writeDownInfoAboutDirectPayment(rowInfo, transactionObj) {
 
-  var otherNotesIndex = 11;
   var indexInRange = rowInfo.indexInRange;
   var currRange = rowInfo.range;
 
   var currUserEmail = Session.getActiveUser().getEmail();
   var newEntry = currUserEmail + ": " + transactionObj.amount + ' ' + transactionObj.currency;
 
-  var cellValue = currRange.getValues()[indexInRange][otherNotesIndex];
+  var cellValue = currRange.getValues()[indexInRange][IndexMoneyInfo(K_DETAILS)];
   if (cellValue != null || cellValue != undefined) { cellValue += '\n'; }
   else { cellValue = ''; }
 
   cellValue += newEntry;
-  currRange.getSheet().getRange(indexInRange + 1, otherNotesIndex + 1).setValue(cellValue);
-
+  currRange.getSheet().getRange(indexInRange + 1, IndexMoneyInfo(K_DETAILS) + 1).setValue(cellValue);
 }
 
 function sendRegistrationCancelledEmail() {
@@ -89,60 +83,62 @@ function sendRegistrationCancelledEmail() {
     return;
   }
 
-  var emailObj = emailRegistrationCancelled();
-  sendEmail(
-    emailAddress,
-    emailObj.subject,
-    emailObj.textPlain,
-    emailObj.textHtml, undefined, true);
+  var summaryVars = getSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+  sendEmailRegistrationCancelled(summaryVars);
 }
 
-
-function getOptionString(type, remainings) {
+function getOptionString(type) {
   const splitter = ", ";
-  const czk = " Kč (zbývájící kapacita: ";
-  const end = ")"
-  return AccomondationType[type] + splitter + AccomondationPrice[type] + czk + remainings + end;
+  const czk = " Kč";
+  return AccomondationType[type] + splitter + AccomondationPrice[type] + czk;
 }
 
 function updateSignInForm() {
-  var form = FormApp.openById(MAIN_FORM);
-  
+  var form = FormApp.getActiveForm();
+  if(!form)
+  {
+    form = FormApp.openById(MAIN_FORM);
+  }
   var allItems = form.getItems();
+  var counts = getCurrentAccomodationTypeCounts();
+  var normalMode = isFullCapacity(counts);
 
-  var normalMode = false;
   for (var i = 0; i < allItems.length; i += 1) {
     var thisItem = allItems[i];
     if (thisItem.getTitle() == "Varianta ubytování" && thisItem.getType() === FormApp.ItemType.MULTIPLE_CHOICE) {
       var multipleChoice = thisItem.asMultipleChoiceItem();
 
       var choices = [];
-      var counts = getCurrentAccomodationTypeCounts();
 
       Object.keys(counts).forEach((key) => {
-        if (counts[key] < AccomondationLimits[key]) {
-          var remainings = AccomondationLimits[key] - counts[key];
-          if (key == PROGRAM_TYPE) {
-            choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE, remainings));
-            choices.push(getOptionString(PROGRAM_ONLY_TYPE, remainings));
+        if (counts[key] < AccomondationLimits[key])
+        {
+          if (key == PROGRAM_TYPE) 
+          {
+            choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE));
+            choices.push(getOptionString(PROGRAM_ONLY_TYPE));
             return;
           }
-          choices.push(getOptionString(key, remainings));
+          choices.push(getOptionString(key));
         }
       });
 
-      if (choices.length == 0) {
+      if (!normalMode) {
         form.deleteItem(thisItem);
         break;
       }
-      normalMode = true;
-      multipleChoice.setHelpText("Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na www.XXXXXXXXXXXXXXXXX.cz");
+
+      multipleChoice.setHelpText("Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/. V ceně je započítána sleva pro dobrovolníky.");
       multipleChoice.setChoiceValues(choices);
     }
   }
 
-  var originalText = "Tak velká akce jako Absolventský Velehrad se nedá zorganizovat bez pomoci dobrovolníků. Pokud se zapojí každý s nás malým dílem, dokážeme si uspořádat a  setkání plně prožít všichni. Novinkou letošního AV zároveň je, že pro dobrovolníky chceme, pokud to aktuální epidemiologická situace dovolí, uspořádat víkendové setkání ještě před samotným Absolventským Velehradem (bude na výběr ze dvou termínů, a to 14. - 16. května a 4. - 6. června). Více informací o jednotlivých činnostech se můžeš dozvědět na https://absolventskyvelehrad.cz/s-cim-potrebujeme-pomoci/";
-
+  var par1 = "Tak velká akce jako AV se nedá zorganizovat bez pomoci dobrovolníků. Pokud se zapojí každý z nás malým dílem, dokážeme si uspořádat a setkání plně prožít všichni. Novinkou letošního AV je, že pro dobrovolníky chystáme víkendové setkání před samotným AV. Více informací najdeš na https://absolventskyvelehrad.cz/s-cim-potrebujeme-pomoci/";
+  var newParSign = "\n\n";
+  var par2 = "Podrobnosti k registraci, ubytování, stravování atd. najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/";
+  var par3 = "Proměnná kapacita z důvodu protiepidemických opatření";
+  var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
+  var originalText = par1 + newParSign + par2 + newParSign + par3 + newParSign + par4;
   if (normalMode) {
     // normal mode
     form.setTitle("AV21 - Registrace dobrovolníků")
@@ -152,7 +148,7 @@ function updateSignInForm() {
     // substitute mode
     form.setTitle("AV21 - Registrace dobrovolníků - REŽIM NÁHRADNÍKŮ")
     var subsText = "Kapacita již byla vyčerpána, ale stále se můžeš hlásit jako náhradník. Pokud se nějaké místo uvolní, budeme Tě kontaktovat. Pořadí náhradníků je dáno časem odeslání přihlášky, tak neváhej!";
-    form.setDescription(subsText + "\n" + originalText);
+    form.setDescription(subsText + newParSign + originalText);
   }
 }
 

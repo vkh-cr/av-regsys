@@ -871,6 +871,7 @@ const vocatives = {
 "Izabela":"Izabelo",
 "Jadwiga":"Jadwigo",
 "Jana":"Jančo",
+"Janča":"Jančo",
 "Janetta":"Janetto",
 "Janette":"Janette",
 "Janina":"Janino",

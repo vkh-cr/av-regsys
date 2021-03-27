@@ -10,15 +10,16 @@ function onFormSubmit(formSubmitObj) {
   runtimeLog('On form submited fired.');
   prepareHeaderForId();
   workOnSendingConfirmationEmail(formSubmitObj);
+  updateSignInForm();
 }
 
 function prepareHeaderForId() {
   var sheet = getSheet(ANSWERS_SHEET);
-  insertComumnIfDoesNotExist('id/var. symbol', sheet, 1);
+  var config = getTranslationConfig();
+  insertComumnIfDoesNotExist(config[K_VAR_SYMBOL].title, sheet, 1);
 }
 
-function getDeadlineFromCurrentDate()
-{
+function getDeadlineFromCurrentDate() {
   var date = new Date();
   date.setDate(date.getDate() + PAYMENT_DEADLINE_DAYS);
   return Utilities.formatDate(date, 'Europe/Prague', 'dd.MM.yyyy');
@@ -33,19 +34,17 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   console.log(formData);
 
   var supportValue = formData[K_SUPPORT].value;
-  var accomodationCode = formData[K_ACCOMODATION].value;
+  var accomodationCode = formData[K_ACCOMODATION_TYPE].value;
   var price = getTicketPrice(accomodationCode, supportValue);
 
   var currentRow;
   var answersSheet = getSheet(ANSWERS_SHEET);
 
-  if(typeof formSubmitObj.range.getRow !== "undefined")
-  {
+  if (typeof formSubmitObj.range.getRow !== "undefined") {
     currentRow = formSubmitObj.range.getRow();
   }
-  else
-  {
-    currentRow = answersSheet.getLastRow()+1;
+  else {
+    currentRow = answersSheet.getLastRow() + 1;
   }
   var varSymbolId = getVariableSymbol(currentRow, price);
 
@@ -58,52 +57,68 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var address = formData[K_ADDRESS].value || ' ';
   var region = formData[K_REGION].value || ' ';
   var city = formData[K_CITY].value || ' ';
-  var accommodation = formData[K_ACCOMODATION].value || ' ';
-  var roommate = formData[K_ROOMMATE].value || ' ' ;
-  var support = formData[K_SUPPORT].value || 0 ;
+  var accommodation = formData[K_ACCOMODATION_TYPE].value || ' ';
+  var roommate = formData[K_ROOMMATE].value || ' ';
+  var support = formData[K_SUPPORT].value || 0;
   var phone = formData[K_PHONE].value || ' ';
-  var healthCondition = formData[K_HEALTH_CONDITION].value || '' ;
-  var note = formData[K_NOTE].value || '' ;
-  var volunteerPreference = formData[K_VOLUNTEER_PREFERENCE].value || '' ;
-  var volunteerWeekend = formData[K_VOLUNTEER_WEEKEND].value || '' ;
-  var afterAVinfo = formData[K_AFTER_AV_INFO].value || '' ;
+  var healthCondition = formData[K_HEALTH_CONDITION].value || '';
+  var note = formData[K_NOTE].value || '';
+  var volunteerPreference = formData[K_VOLUNTEER_PREFERENCE].value || '';
+  var volunteerWeekend = formData[K_VOLUNTEER_WEEKEND].value || '';
+  var afterAVinfo = formData[K_AFTER_AV_INFO].value || '';
+  var supportConfirm = formData[K_SUPPORT_CONFIRM].value || '';
 
   if (support < 0) { support = 0; }
 
   var deadline = getDeadlineFromCurrentDate();
 
+  var counts = getCurrentAccomodationTypeCounts();
+  var normalMode = isFullCapacity(counts);
+  var overLimitCount = overLimit(counts);
+  var limitNumber = 0;
+  Object.keys(AccomondationLimits)
+  .forEach(
+    k => limitNumber+=AccomondationLimits[k]
+    );
   var summaryVars = {
-    [K_TIMESTAMP] : timestamp,
-    [K_NAME] : name,
-    [K_SURNAME] : surname,
-    [K_SEX] : sex,
-    [K_EMAIL] : userEmailAddress,
-    [K_BIRTH_YEAR] : birthYear,
-    [K_ADDRESS] : address,
-    [K_REGION] : region,
-    [K_CITY] : city,
-    [K_ACCOMODATION] : accommodation,
-    [K_ROOMMATE] : roommate,
-    [K_SUPPORT] : support,
-    [K_PHONE] : phone,
-    [K_HEALTH_CONDITION] : healthCondition,
-    [K_NOTE] : note,
-    [K_VOLUNTEER_PREFERENCE] : volunteerPreference,
-    [K_VOLUNTEER_WEEKEND] : volunteerWeekend,
-    [K_AFTER_AV_INFO] : afterAVinfo,
-    [K_PRICE] : price,
-    [K_VAR_SYMBOL] : varSymbolId,
-    [K_DEADLINE] : deadline
-    };
+    [K_TIMESTAMP]: timestamp,
+    [K_NAME]: name,
+    [K_SURNAME]: surname,
+    [K_SEX]: sex,
+    [K_EMAIL]: userEmailAddress,
+    [K_BIRTH_YEAR]: birthYear,
+    [K_ADDRESS]: address,
+    [K_REGION]: region,
+    [K_CITY]: city,
+    [K_ACCOMODATION_TYPE]: accommodation,
+    [K_ROOMMATE]: roommate,
+    [K_SUPPORT]: support,
+    [K_PHONE]: phone,
+    [K_HEALTH_CONDITION]: healthCondition,
+    [K_NOTE]: note,
+    [K_VOLUNTEER_PREFERENCE]: volunteerPreference,
+    [K_VOLUNTEER_WEEKEND]: volunteerWeekend,
+    [K_AFTER_AV_INFO]: afterAVinfo,
+    [K_PRICE]: price,
+    [K_VAR_SYMBOL]: varSymbolId,
+    [K_DEADLINE]: deadline,
+    [K_SUB_ORDER]: 1+limitNumber+overLimitCount,
+    [K_SUPPORT_CONFIRM]: supportConfirm
+  };
 
   // store inferred var symbol in sheet
   addDataToCurrentRow(currentRow, 1, varSymbolId, answersSheet);
 
   // accomodation value is rewritten as a code
-  updateValueOnColumn(summaryVars[K_ACCOMODATION], currentRow-1, translationConfig[K_ACCOMODATION].title, answersSheet);
+  updateValueOnColumn(summaryVars[K_ACCOMODATION_TYPE], currentRow - 1, translationConfig[K_ACCOMODATION_TYPE].title, answersSheet);
 
-  startTrackingPayment(summaryVars, name + ' ' + surname, userEmailAddress, true);
-  sendEmailConfirmation(summaryVars);
+  if (normalMode) {
+    startTrackingPayment(summaryVars);
+    sendEmailConfirmation(summaryVars);
+  }
+  else {
+    sendEmailSub(summaryVars);
+  }
 
   // copy line added by form submittion into sheet where we do our calculations
   // we do not want to manually add rows into original form responses sheet
@@ -112,10 +127,25 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   // inserting new row instead of filling existing empty row. Therefore all
   // formula pointing to last empty line are still pointing to empty line after new
   // response
-
-  var valuesArr = formSubmitObj.values;
+  
+  var valuesArray = [
+    summaryVars[K_TIMESTAMP],
+    summaryVars[K_VAR_SYMBOL],
+    summaryVars[K_NAME],
+    summaryVars[K_SURNAME],
+    summaryVars[K_EMAIL],
+    summaryVars[K_BIRTH_YEAR],
+    summaryVars[K_ADDRESS],
+    summaryVars[K_ROOMMATE],
+    summaryVars[K_ACCOMODATION_TYPE],
+    summaryVars[K_PHONE],
+    summaryVars[K_SUPPORT],
+    summaryVars[K_SUPPORT_CONFIRM],
+    summaryVars[K_NOTE],
+    summaryVars[K_SUB_ORDER]
+  ];
   var sheet = getSheet(YOU_CAN_TOUCH_SHEET);
-  sheet.appendRow(valuesArr);
+  sheet.appendRow(valuesArray);
 }
 
 function getVariableSymbol(rowNumber, price) {
@@ -124,7 +154,7 @@ function getVariableSymbol(rowNumber, price) {
   return '21' + rowNumberPadded + pricePadded;
 }
 
-function getTicketPrice(accommodationCode, supportValue){
+function getTicketPrice(accommodationCode, supportValue) {
 
   var support = parseInt(supportValue) || 0;
   if (support < 0) {
@@ -132,51 +162,54 @@ function getTicketPrice(accommodationCode, supportValue){
   }
   var price = AccomondationPrice[accommodationCode];
 
-  return price+support;
+  return price + support;
 }
 
-function startTrackingPayment(summaryVars, name, email, registrationValid) {
-  var userDataHeader = [
-	  'timestamp',
-	  'name',
-	  'id',
-	  'manual override',
-	  'email',
-	  'price',
-	  'paid',
-	  'paid everything',
-    'paid everything timestamp',
-	  'registration valid (not too old, ...)',
-	  'upominka odeslana',
-	  'expired alert',
-	  'other notes'
-  ];
+function startTrackingPayment(summaryVars) {
+
+  var config = getTranslationConfig();
+  var userDataHeader = BankInfoDataHeader.map(k=>config[k].title);
+
+  summaryVars[K_MANUAL_OVERRIDE] = false;
+  summaryVars[K_PAID] = 0;
+  summaryVars[K_PAID_EVERYTHING] = false;
+
   createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
 
-  var moneyInfo = {
-    // timestamp is added by sheetLog function
-    'name' : name,
-    'id' : summaryVars.varSymbol,
-    'manualOverrideReq' : false,
-    'email' : email,
-    'finalPrice' : summaryVars.price,
-    'paidCZK' : 0,
-    'paidEverything' : false,
-    'registrationValid' : registrationValid
-  };
+  var moneyInfo = [];
+  BankInfoDataHeader.forEach(d => {
+    if(typeof summaryVars[d] !== "undefined")
+    {
+      moneyInfo.push(summaryVars[d]);
+    }
+  });
   sheetLog(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));
 }
 
-function getCurrentAccomodationTypeCounts()
-{
-  var sheet = getSheet(ANSWERS_SHEET);
-  var translationConfig = getTranslationConfig();
-  var accomodationIndex = getIndexOfColumnName(translationConfig[K_ACCOMODATION].title, sheet);
-  var values = getStringsFromColumn(accomodationIndex, sheet);
-  var withCount = values.filter(v=>v==WITH_TYPE).length;
-  var withoutCount = values.filter(v=>v==WITHOUT_TYPE).length;
-  var spacakCount = values.filter(v=>v==SPACAK_TYPE).length;
-  var programCount = values.filter(v=>v==PROGRAM_ONLY_TYPE||v==PROGRAM_FOOD_ONLY_TYPE).length;
-  return {[WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount};
+function overLimit(counts) {
+  var limit = 0;
+  Object.keys(AccomondationLimits).forEach((key) => {
+    limit += AccomondationLimits[key];
+  });
+  var current = 0;
+  Object.keys(counts).forEach((key) => {
+    current += counts[key];
+  });
+  return current - limit;
 }
 
+function isFullCapacity(counts) {
+  return overLimit(counts) <= 0;
+}
+
+function getCurrentAccomodationTypeCounts() {
+  var sheet = getSheet(ANSWERS_SHEET);
+  var translationConfig = getTranslationConfig();
+  var accomodationIndex = getIndexOfColumnName(translationConfig[K_ACCOMODATION_TYPE].title, sheet);
+  var values = getStringsFromColumn(accomodationIndex, sheet);
+  var withCount = values.filter(v => v == WITH_TYPE).length;
+  var withoutCount = values.filter(v => v == WITHOUT_TYPE).length;
+  var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
+  var programCount = values.filter(v => v == PROGRAM_ONLY_TYPE || v == PROGRAM_FOOD_ONLY_TYPE).length;
+  return { [WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount };
+}

@@ -183,6 +183,12 @@ function addDataToCurrentRow(rowIndex, columnIndex, data, sheet) {
 function updateValueOnColumn(value, rowIndex, columnName, sheet)
 {  
   var columns =  getColumnNames(sheet);
+  return updateValueOnColumnsDefined(value, rowIndex, columnName, sheet, columns);
+}
+
+// zero based index in parameters
+function updateValueOnColumnsDefined(value, rowIndex, columnName, sheet, columns)
+{  
   var columnIndex = columns.indexOf(columnName);
   var cellObject = sheet.getRange(rowIndex + 1, columnIndex + 1);
   cellObject.setValue(value);

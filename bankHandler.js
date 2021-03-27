@@ -1,5 +1,5 @@
 function bankLog(message){
-  sheetLog('bankLog', message);
+  sheetLog(BANK_LOG_SHEET, message);
 }
 
 function getNewDataFromBank(token){
@@ -21,9 +21,9 @@ function getTestingDataFromBank(){
   var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2019-01-01/2019-01-31/transactions.json";
   var data = UrlFetchApp.fetch(url);
 
-  return processDataFromBank(data);
+  return processDataFromBank(data)
 }
-
+ 
 function processDataFromBank(data){
 
   var responseCode = data.getResponseCode();
@@ -80,17 +80,14 @@ function extractTransaction(transaction){
       var properPropertyName = bankConfig[currParameterName];
       transactionObject[properPropertyName] = currParameterValue;
     }
-
   }
 
   return transactionObject;
 }
 
-function writeDownTransactionsToBankInfo(transactionDictionary){
-  var varSymbolIndex = 2;
-  var manualOverrideIndex = 3;
-
-  var bankSheetRange = getActiveRange('money info');
+function writeDownTransactionsToBankInfo(transactionDictionary)
+{
+  var bankSheetRange = getActiveRange(MONEY_INFO_SHEET);
   if(bankSheetRange == null) { return; } //No info to be processed
 
   var bankSheetData = bankSheetRange.getValues();
@@ -98,19 +95,17 @@ function writeDownTransactionsToBankInfo(transactionDictionary){
   for(var i = 1; i < bankSheetData.length; ++i){
 
     var bankData = bankSheetData[i];
-
-    var manOverride = bankData[manualOverrideIndex];
+    var manOverride = bankData[IndexMoneyInfo(K_MANUAL_OVERRIDE)];
     if(manOverride) { continue; }
 
-    var varSymbol = bankData[varSymbolIndex];
-    if(!transactionDictionary.hasOwnProperty(varSymbol)){ continue; }
+    var varSymbol = bankData[IndexMoneyInfo(K_VAR_SYMBOL)];
+    if(typeof transactionDictionary[varSymbol] === "undefined"){ continue; }
 
     var transactionsForVarSymbol = transactionDictionary[varSymbol];
     for(var j = 0; j < transactionsForVarSymbol.length; ++j){
 
       var currTransaction = transactionsForVarSymbol[j];
       writeDownTransactionToBankInfo(currTransaction, bankSheetRange, i);
-
     }
   }
 }
@@ -119,35 +114,29 @@ function writeDownTransactionsToBankInfo(transactionDictionary){
 
 function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndexInRange){
 
-  var manualOverrideIndex = 3;
-  var userEmailIndex = 4;
-  var finalPriceIndex = 5;
-  var alreadyPaidIndex = 6;
-  var paidEverythingIndex = 7;
-  var paidEverythingTimestampIndex = 8;
-
+  var config = getTranslationConfig();
   var moneyInfoSheet = bankSheetRange.getSheet();
   var row = bankSheetRange.getValues()[rowIndexInRange];
 
-  var userEmail = row[userEmailIndex];
+  var userEmail = row[IndexMoneyInfo(K_EMAIL)];
 
   if(transactionObj.currency != 'CZK') {
     logNeedsAttention(
-      ['Someone paid in non-supportd currency.', transactionObj.currency, transactionObj.amount],
+      ['Someone paid in non-supported currency.', transactionObj.currency, transactionObj.amount],
       userEmail,
       transactionObj.variableSymbol);
-    moneyInfoSheet.getRange(rowIndexInRange + 1, manualOverrideIndex + 1).setValue(true);
+    updateValueOnColumn(true, rowIndexInRange, config[K_MANUAL_OVERRIDE].title, moneyInfoSheet)
     return;
   }
 
-  var alreadyPaid = reliableToInt(row[alreadyPaidIndex]);
-  var finalPrice = reliableToInt(row[finalPriceIndex]);
+  var alreadyPaid = reliableToInt(row[IndexMoneyInfo(K_PAID)]);
+  var finalPrice = reliableToInt(row[IndexMoneyInfo(K_PRICE)]);
 
   var justPaid = reliableToInt(transactionObj.amount);
   var transactionDate = transactionObj.date;
 
   var alreadyPaidNew = alreadyPaid + justPaid;
-  moneyInfoSheet.getRange(rowIndexInRange + 1, alreadyPaidIndex + 1).setValue(alreadyPaidNew);
+  updateValueOnColumn(alreadyPaidNew, rowIndexInRange, config[K_PAID].title, moneyInfoSheet);
 
   // log payment in bank log
   var variablesObject = {
@@ -169,12 +158,12 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   }
 
   // now we already know that everyting was paid (possibly more)
-  moneyInfoSheet.getRange(rowIndexInRange + 1, paidEverythingIndex + 1).setValue(true);
+  updateValueOnColumn(true, rowIndexInRange, config[K_PAID_EVERYTHING].title, moneyInfoSheet)
   
   // add timestamp, when everything was paid
-  if(!row[paidEverythingTimestampIndex])
+  if(!row[IndexMoneyInfo(K_PAID_EVERYTHING_TIMESTAMP)])
   {
-    moneyInfoSheet.getRange(rowIndexInRange + 1, paidEverythingTimestampIndex + 1).setValue(transactionDate);
+    updateValueOnColumn(transactionDate, rowIndexInRange, config[K_PAID_EVERYTHING_TIMESTAMP].title, moneyInfoSheet)
   }
 
   // paid more then expected case
@@ -184,13 +173,13 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   }
 
   // send email
+  var summaryVarsBasic = getSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+  var summaryVarsMoney = getSummaryVars(userEmail, moneyInfoSheet);
+  var summaryVars = Object.assign({}, summaryVarsBasic, summaryVarsMoney);
 
-  var emailObj = emailPaymentArrived();
-
-  var plainText = fillInTemplate(emailObj.textPlain, variablesObject);
-  var htmlText  = fillInTemplate(emailObj.textHtml,  variablesObject);
-
-  sendEmail(userEmail, emailObj.subject, plainText, htmlText, undefined, true);
+  var paidEverythingOrder = getStringsFromColumn(IndexMoneyInfo(K_PAID_EVERYTHING), moneyInfoSheet).filter(e=>e).length;
+  summaryVars[K_PAID_EVERYTHING_ORDER] = paidEverythingOrder;
+  sendEmailPaymentOk(summaryVars);
 }
 
 function onGetBankingDataTick(){
@@ -203,26 +192,12 @@ function onGetBankingDataTick(){
     var transactionsDictionary = extactTransactions(transactionsRaw);
 
     writeDownTransactionsToBankInfo(transactionsDictionary);
-
   }
 }
 
 //NASTAVENÍ ODESLÁNÍ VÝZVY K ZAPLACENÍ
 
 function onCheckNotRecievedPayments(){
-  var timestampIndex = 0;
-  // name 1
-  // variable id 2
-  var manualOverrideIndex = 3;
-  var userEmailIndex = 4;
-  // price 5
-  // amounth paid 6
-  var paidEverythingIndex = 7;
-  var paidEverythingTimestampIndex = 8;
-  var registrationValidIndex = 9;
-  var paymentReminderSentDateIndex = 10;
-  // notes 10
-
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = spreadsheet.getSheetByName('money info');
 
@@ -236,45 +211,39 @@ function onCheckNotRecievedPayments(){
 
     var bankData = bankSheetData[i];
 
-    var manOverride = bankData[manualOverrideIndex];
+    var manOverride = bankData[IndexMoneyInfo(K_MANUAL_OVERRIDE)];
     if(manOverride) { continue; }
 
-    var reminderAlreadySent = bankData[paymentReminderSentDateIndex];
-    if(reminderAlreadySent != '') { continue; }
-
-    var paidEverything = bankData[paidEverythingIndex];
+    var paidEverything = bankData[IndexMoneyInfo(K_PAID_EVERYTHING)];
     if(paidEverything) { continue; }
 
-    var regValid = bankData[registrationValidIndex];
+    var regValid = bankData[IndexMoneyInfo(K_REGISTRATION_VALID)];
     if(!regValid) { continue; }
 
-    var timestamp = new Date(bankData[timestampIndex]);
+    var timestamp = new Date(bankData[IndexMoneyInfo(K_TIMESTAMP)]);
     var today = new Date();
     var timeDiff = Math.abs(today.getTime() - timestamp.getTime());
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     if(diffDays < REMINDER_DAYS) { continue; }
+    if(diffDays > PAYMENT_DEADLINE_DAYS) 
+    { 
+      updateValueOnColumn(true, i, config[K_EXPIRED_ALERT].title, moneyInfoSheet);
+    }
+
+    var reminderAlreadySent = bankData[IndexMoneyInfo(K_REMINDER_SENT)];
+    if(reminderAlreadySent != '') { continue; }
 
     timestamp.setDate(timestamp.getDate() + PAYMENT_DEADLINE_DAYS);
     var deadline = Utilities.formatDate(timestamp, 'Europe/Prague', 'dd.MM.yyyy');
-  
-    // save 'today' date as timstamp of when payment reminder email was sent
-    var cellObject = sheet.getRange(i+1, paymentReminderSentDateIndex + 1);
-    var originalValue = cellObject.getValue();
-    if (originalValue !== '') {
-      logError(['Cell for date was not empty:', originalValue, i, today]);
-      runtimeLog(originalValue);
-    }
-    cellObject.setValue(today);
 
     // send email
-    var userEmail = bankData[userEmailIndex];
-    var summaryVars = { 'deadline' : deadline };
-    var emailObj = emailPaymentReminder();
+    var userEmail = bankData[IndexMoneyInfo(K_EMAIL)];
+    var summaryVars = getSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+    summaryVars[K_DEADLINE] = deadline;
+    sendEmailPaymentRemidner(summaryVars);
 
-    var plainBody = fillInTemplate(emailObj.textPlain, summaryVars);
-    var htmlBody  = fillInTemplate(emailObj.textHtml,  summaryVars);
-
-    sendEmail(userEmail, emailObj.subject, plainBody, htmlBody, undefined);
+    var config = getBankConfig();
+    updateValueOnColumn(true, i, config[K_REMINDER_SENT].title, moneyInfoSheet);
   }
 }
