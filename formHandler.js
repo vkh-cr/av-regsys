@@ -173,6 +173,8 @@ function startTrackingPayment(summaryVars) {
   summaryVars[K_MANUAL_OVERRIDE] = false;
   summaryVars[K_PAID] = 0;
   summaryVars[K_PAID_EVERYTHING] = false;
+  summaryVars[K_NOTE] = "";
+
 
   createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
 

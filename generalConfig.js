@@ -71,7 +71,8 @@ const BankInfoDataHeader =
     K_REMINDER_SENT,
     K_REGISTRATION_VALID,
     K_DETAILS,
-    K_EXPIRED_ALERT
+    K_EXPIRED_ALERT,
+    K_NOTE
   ];
 
   function IndexMoneyInfo(key)
