@@ -23,9 +23,7 @@ function runtimeLog(obj) {
 
 function sheetLog(logSheetName, message) {
 
-  var logSheet = createSheetIfDoesntExist(logSheetName, undefined);
   var timestamp = new Date();
-
   if (Array.isArray(message)) {
     message = message.map(function (obj) { if (typeof obj !== 'string') { return JSON.stringify(obj); } else { return obj; } });
     message.unshift(timestamp);
@@ -33,7 +31,12 @@ function sheetLog(logSheetName, message) {
     if (typeof message !== 'string') { message = JSON.stringify(message); }
     message = [timestamp, message];
   }
+  appendRowToSheet(logSheetName, message)
+}
 
+function appendRowToSheet(sheetName, message)
+{
+  var logSheet = createSheetIfDoesntExist(sheetName, undefined);
   logSheet.appendRow(message);
 }
 //

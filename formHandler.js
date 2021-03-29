@@ -72,14 +72,10 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var deadline = getDeadlineFromCurrentDate();
 
+  var order = getCurrentOrderFromAccomodation();
   var counts = getCurrentAccomodationTypeCounts();
   var normalMode = isFullCapacity(counts);
-  var overLimitCount = overLimit(counts);
-  var limitNumber = 0;
-  Object.keys(AccomondationLimits)
-  .forEach(
-    k => limitNumber+=AccomondationLimits[k]
-    );
+  
   var summaryVars = {
     [K_TIMESTAMP]: timestamp,
     [K_NAME]: name,
@@ -102,7 +98,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
     [K_PRICE]: price,
     [K_VAR_SYMBOL]: varSymbolId,
     [K_DEADLINE]: deadline,
-    [K_SUB_ORDER]: 1+limitNumber+overLimitCount,
+    [K_SUB_ORDER]: order,
     [K_SUPPORT_CONFIRM]: supportConfirm
   };
 
@@ -185,7 +181,7 @@ function startTrackingPayment(summaryVars) {
       moneyInfo.push(summaryVars[d]);
     }
   });
-  sheetLog(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));
+  appendRowToSheet(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));
 }
 
 function overLimit(counts) {
@@ -204,14 +200,25 @@ function isFullCapacity(counts) {
   return overLimit(counts) <= 0;
 }
 
-function getCurrentAccomodationTypeCounts() {
-  var sheet = getSheet(ANSWERS_SHEET);
+function getValuesFromColumn(sheetName, columnType)
+{
+  var sheet = getSheet(sheetName);
   var translationConfig = getTranslationConfig();
-  var accomodationIndex = getIndexOfColumnName(translationConfig[K_ACCOMODATION_TYPE].title, sheet);
-  var values = getStringsFromColumn(accomodationIndex, sheet);
+  var accomodationIndex = getIndexOfColumnName(translationConfig[columnType].title, sheet);
+  return getStringsFromColumn(accomodationIndex, sheet);
+}
+
+function getCurrentAccomodationTypeCounts() {
+  var values = getValuesFromColumn(ANSWERS_SHEET, K_ACCOMODATION_TYPE);
   var withCount = values.filter(v => v == WITH_TYPE).length;
   var withoutCount = values.filter(v => v == WITHOUT_TYPE).length;
   var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
   var programCount = values.filter(v => v == PROGRAM_ONLY_TYPE || v == PROGRAM_FOOD_ONLY_TYPE).length;
   return { [WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount };
+}
+
+function getCurrentOrderFromAccomodation() {
+  var values = getValuesFromColumn(ANSWERS_SHEET, K_ACCOMODATION_TYPE);
+  var order = values.filter(v => v == WITH_TYPE || v == WITHOUT_TYPE || v == SPACAK_TYPE || v == PROGRAM_FOOD_ONLY_TYPE || v == PROGRAM_ONLY_TYPE || v == STORNO_TYPE).length;
+  return order;
 }

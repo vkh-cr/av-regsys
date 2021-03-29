@@ -95,8 +95,6 @@ function writeDownTransactionsToBankInfo(transactionDictionary)
   for(var i = 1; i < bankSheetData.length; ++i){
 
     var bankData = bankSheetData[i];
-    var manOverride = bankData[IndexMoneyInfo(K_MANUAL_OVERRIDE)];
-    if(manOverride) { continue; }
 
     var varSymbol = bankData[IndexMoneyInfo(K_VAR_SYMBOL)];
     if(typeof transactionDictionary[varSymbol] === "undefined"){ continue; }

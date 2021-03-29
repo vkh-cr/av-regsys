@@ -10,6 +10,8 @@ const WITH_TYPE = "with";
 const WITHOUT_TYPE = "without";
 const SPACAK_TYPE = "spacak";
 const PROGRAM_TYPE = "program";
+const STORNO_TYPE = "storno";
+
 const PROGRAM_ONLY_TYPE = "programOnly";
 const PROGRAM_FOOD_ONLY_TYPE = "programFoodOnly";
 
@@ -18,7 +20,7 @@ const AccomondationLimits = {
   [WITH_TYPE]: 12+15,
   [WITHOUT_TYPE]: 100,
   [SPACAK_TYPE]: 80,
-  // minus team and quests
+  // minus team and guests
   [PROGRAM_TYPE]: 158-17
   // test variant
   // [WITH_TYPE]: 12,
