@@ -72,7 +72,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
 
   var deadline = getDeadlineFromCurrentDate();
 
-  var order = getCurrentOrderFromAccomodation();
+  var order = getCurrentOrderFromAccomodation()+1;
   var counts = getCurrentAccomodationTypeCounts();
   var normalMode = isFullCapacity(counts);
   

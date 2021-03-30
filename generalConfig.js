@@ -79,9 +79,5 @@ const BankInfoDataHeader =
 
   function IndexMoneyInfo(key)
   {
-    if(key==K_TIMESTAMP)
-    {
-      return 0;
-    }
-    return BankInfoDataHeader.indexOf(key)+1;
+    return BankInfoDataHeader.indexOf(key);
   }
