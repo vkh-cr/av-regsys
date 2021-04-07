@@ -59,7 +59,7 @@ function sendEmailSub(summaryVars)
 
 function sendEmailPaymentRemidner(summaryVars)
 {
-  sendEmail(summaryVars[K_EMAIL], summaryVars, REMINDER_TEMPLATE);
+  sendEmail(summaryVars[K_EMAIL], summaryVars, REMINDER_VOLUNTEER_TEMPLATE);
 }
 
 function sendEmailPaymentOk(summaryVars)

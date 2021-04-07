@@ -27,16 +27,6 @@ function testBankWriteDown(){
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
 
-// important VS on beginning, date, amount, VS at the end
-function mondayBugFixMoneyArrival(){
-  var transactionDictionary = {
-      "210200003":[{"transferId":11331926089,"date":"2016-09-08+0200","amount":40,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210200003"}],
-      "210181520":[{"transferId":1234567890,"date":"2019-02-02+0200","amount":11450,"currency":"CZK","accountNumber":"3400304745","variableSymbol":"210181520"}]
-  };
-
-  writeDownTransactionsToBankInfo(transactionDictionary);
-}
-
 function testOnFormSubmit()
 {
   var testData = 

@@ -196,8 +196,7 @@ function onGetBankingDataTick(){
 //NASTAVENÍ ODESLÁNÍ VÝZVY K ZAPLACENÍ
 
 function onCheckNotRecievedPayments(){
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = spreadsheet.getSheetByName('money info');
+  var sheet = getSheet(MONEY_INFO_SHEET);
 
   if (sheet == null) { return null; }
   var bankSheetRange = sheet.getDataRange();
@@ -216,7 +215,8 @@ function onCheckNotRecievedPayments(){
     if(paidEverything) { continue; }
 
     var regValid = bankData[IndexMoneyInfo(K_REGISTRATION_VALID)];
-    if(!regValid) { continue; }
+    if(!regValid.isEmpty() && !regValid )
+    { continue; }
 
     var timestamp = new Date(bankData[IndexMoneyInfo(K_TIMESTAMP)]);
     var today = new Date();
@@ -224,9 +224,11 @@ function onCheckNotRecievedPayments(){
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     if(diffDays < REMINDER_DAYS) { continue; }
+
+    var config = getTranslationConfig();
     if(diffDays > PAYMENT_DEADLINE_DAYS) 
     { 
-      updateValueOnColumn(true, i, config[K_EXPIRED_ALERT].title, moneyInfoSheet);
+      updateValueOnColumn(true, i, config[K_EXPIRED_ALERT].title, sheet);
     }
 
     var reminderAlreadySent = bankData[IndexMoneyInfo(K_REMINDER_SENT)];
@@ -239,9 +241,11 @@ function onCheckNotRecievedPayments(){
     var userEmail = bankData[IndexMoneyInfo(K_EMAIL)];
     var summaryVars = getSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
     summaryVars[K_DEADLINE] = deadline;
+    var finalPrice = bankData[IndexMoneyInfo(K_PRICE)];
+    summaryVars[K_PRICE] = finalPrice;
+
     sendEmailPaymentRemidner(summaryVars);
 
-    var config = getBankConfig();
-    updateValueOnColumn(true, i, config[K_REMINDER_SENT].title, moneyInfoSheet);
+    updateValueOnColumn(true, i, config[K_REMINDER_SENT].title, sheet);
   }
 }
