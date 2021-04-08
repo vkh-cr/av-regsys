@@ -27,30 +27,6 @@ function testBankWriteDown(){
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
 
-// important VS on beginning, date, amount, VS at the end
-function mondayBugFixMoneyArrival(){
-  var transactionDictionary = {
-      "210393000":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":3000,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210393000"}],
-      "210161520":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":1520,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210161520"}],
-      "210481520":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":1520,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210481520"}],
-      "210030004":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":4,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210030004"}],
-      "210160005":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":5,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210160005"}],
-      "210230500":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":10500,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210230500"}],
-      "210282215":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":2215,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210282215"}],
-      "210332515":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":2515,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210332515"}],
-      //someone sent 3 czk, but cannot be found
-      "210070003":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":3,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210070003"}],
-      "210421520":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":1520,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210421520"}],
-      "210173515":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":3515,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210173515"}],
-      "210294495":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":4495,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210294495"}],
-      "210272315":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":2315,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210272315"}],
-      "210362495":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":2500,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210362495"}],
-      "210542500":[{"transferId":11331926089,"date":"2021-03-29+0200","amount":2500,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210542500"}],
-  };
-
-  writeDownTransactionsToBankInfo(transactionDictionary);
-}
-
 function testOnFormSubmit()
 {
   var testData = 
