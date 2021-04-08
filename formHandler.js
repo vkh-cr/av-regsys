@@ -170,6 +170,8 @@ function startTrackingPayment(summaryVars) {
   summaryVars[K_PAID] = 0;
   summaryVars[K_PAID_EVERYTHING] = false;
   summaryVars[K_NOTE] = "";
+  summaryVars[K_REGISTRATION_VALID] = true;
+  summaryVars[K_REMINDER_SENT] = false;
 
 
   createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
@@ -179,6 +181,10 @@ function startTrackingPayment(summaryVars) {
     if(typeof summaryVars[d] !== "undefined")
     {
       moneyInfo.push(summaryVars[d]);
+    }
+    else
+    {
+      moneyInfo.push('');
     }
   });
   appendRowToSheet(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));

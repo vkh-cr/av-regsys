@@ -215,8 +215,10 @@ function onCheckNotRecievedPayments(){
     if(paidEverything) { continue; }
 
     var regValid = bankData[IndexMoneyInfo(K_REGISTRATION_VALID)];
-    if(!regValid.isEmpty() && !regValid )
-    { continue; }
+    if(!regValid)
+    { 
+      continue; 
+    }
 
     var timestamp = new Date(bankData[IndexMoneyInfo(K_TIMESTAMP)]);
     var today = new Date();
@@ -232,7 +234,7 @@ function onCheckNotRecievedPayments(){
     }
 
     var reminderAlreadySent = bankData[IndexMoneyInfo(K_REMINDER_SENT)];
-    if(reminderAlreadySent != '') { continue; }
+    if(!reminderAlreadySent) { continue; }
 
     timestamp.setDate(timestamp.getDate() + PAYMENT_DEADLINE_DAYS);
     var deadline = Utilities.formatDate(timestamp, 'Europe/Prague', 'dd.MM.yyyy');

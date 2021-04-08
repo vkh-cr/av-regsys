@@ -46,6 +46,7 @@ function appendRowToSheet(sheetName, message)
 ////
 // Sheet manipulating functions
 //
+
 function getIndexOfColumnName(columnName, sheet)
 {
   var columns = getColumnNames(sheet);
