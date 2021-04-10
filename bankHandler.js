@@ -234,7 +234,7 @@ function onCheckNotRecievedPayments(){
     }
 
     var reminderAlreadySent = bankData[IndexMoneyInfo(K_REMINDER_SENT)];
-    if(!reminderAlreadySent) { continue; }
+    if(reminderAlreadySent) { continue; }
 
     timestamp.setDate(timestamp.getDate() + PAYMENT_DEADLINE_DAYS);
     var deadline = Utilities.formatDate(timestamp, 'Europe/Prague', 'dd.MM.yyyy');
