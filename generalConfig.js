@@ -18,10 +18,11 @@ const PROGRAM_FOOD_ONLY_TYPE = "programFoodOnly";
 const AccomondationLimits = {
   //extra for team
   [WITH_TYPE]: 12+15,
-  [WITHOUT_TYPE]: 100,
+  //extra for families
+  [WITHOUT_TYPE]: 100+2,
   [SPACAK_TYPE]: 80,
   // minus team and guests
-  [PROGRAM_TYPE]: 158-17
+  [PROGRAM_TYPE]: 158-19
   // test variant
   // [WITH_TYPE]: 12,
   // [WITHOUT_TYPE]: 12,
