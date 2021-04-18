@@ -21,6 +21,7 @@ function GetSalutation(name)
     {
         return DEFAULT_SALUTATION;
     }
+    name = name.trim();
     if(name in vocatives)
     {
         return vocatives[name];

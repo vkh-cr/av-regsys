@@ -27,6 +27,14 @@ function testBankWriteDown(){
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
 
+function invalidVS(){
+  var transactionDictionary = {
+      "210831520":[{"transferId":11331926089,"date":"2021-04-09+0200","amount":1520,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210831520"}]
+  };
+
+  writeDownTransactionsToBankInfo(transactionDictionary);
+}
+
 function testOnFormSubmit()
 {
   var testData = 
