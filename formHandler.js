@@ -169,7 +169,7 @@ function startTrackingPayment(summaryVars) {
   summaryVars[K_MANUAL_OVERRIDE] = false;
   summaryVars[K_PAID] = 0;
   summaryVars[K_PAID_EVERYTHING] = false;
-  summaryVars[K_NOTE] = "";
+  summaryVars[K_HIDDEN_NOTE] = "";
   summaryVars[K_REGISTRATION_VALID] = true;
   summaryVars[K_REMINDER_SENT] = false;
 

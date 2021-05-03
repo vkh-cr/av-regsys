@@ -19,6 +19,7 @@ function getTranslationConfig() {
     [K_PHONE]: { "title": "Telefon" },
     [K_HEALTH_CONDITION]: { "title": "Máš nějaké zdravotní omezení či dietu?" },
     [K_NOTE]: { "title": "Poznámka" },
+    [K_HIDDEN_NOTE]: { "title": "Skrytá poznámka" },
     [K_VOLUNTEER_PREFERENCE]: { "title": "Preferovaná oblast tvé pomoci" },
     [K_VOLUNTEER_WEEKEND]: { "title": "Pojedu na víkendovku pro dobrovolníky" },
     [K_AFTER_AV_INFO]: { "title": "Informace po AV" },
@@ -57,6 +58,7 @@ const K_SUPPORT = "support";
 const K_PHONE = "phone";
 const K_HEALTH_CONDITION = "healthCondition";
 const K_NOTE = "note";
+const K_HIDDEN_NOTE = "hiddenNote";
 const K_VOLUNTEER_PREFERENCE = "volunteerPreference";
 const K_VOLUNTEER_WEEKEND = "volunteerWeekend";
 const K_AFTER_AV_INFO = "afterAVinfo";
