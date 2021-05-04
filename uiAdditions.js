@@ -83,7 +83,7 @@ function sendRegistrationCancelledEmail() {
     return;
   }
 
-  var summaryVars = getSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+  var summaryVars = addSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
   sendEmailRegistrationCancelled(summaryVars);
 }
 
@@ -157,6 +157,8 @@ function sendToEmails() {
   var activeSheet = SpreadsheetApp.getActiveSheet();
   var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
   var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
+  var moneyInfoSheet = spreadsheet.getSheetByName(MONEY_INFO_SHEET);
+  var youCanTouchSheet = spreadsheet.getSheetByName(YOU_CAN_TOUCH_SHEET);
 
   var emails = getStringsFromColumn(0, activeSheet);
   emails = emails.filter(e => !e.isEmpty());
@@ -171,7 +173,8 @@ function sendToEmails() {
 
   emails.forEach(
     e => {
-      var summaryVars = getSummaryVars(e, answersSheet);
+      var summaryVars = addSummaryVars(e, moneyInfoSheet);
+      addSummaryVars(e, answersSheet, summaryVars);
       sendEmail(e, summaryVars, templateId);
     });
 }

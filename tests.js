@@ -1,7 +1,7 @@
 function testLoadingFromTableByEmail()
 {
   var answersSheet = getSheet(ANSWERS_SHEET);
-  var summaryVars = getSummaryVars("bujnmi@gmail.com", answersSheet);
+  var summaryVars = addSummaryVars("bujnmi@gmail.com", answersSheet);
   Logger.log(summaryVars);
 }
 

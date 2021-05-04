@@ -53,8 +53,12 @@ function getIndexOfColumnName(columnName, sheet)
   return columns.indexOf(columnName);
 }
 
-function getSummaryVars(mail, sheet)
+function addSummaryVars(mail, sheet, summaryVars)
 {
+  if (typeof summaryVars === "undefined")
+  {
+    summaryVars = {};
+  }
   var translations = getTranslationConfig();  
   var columns =  getColumnNames(sheet);
   var rowIndex = getIndexOfValueFromColumn(translations[K_EMAIL].title, mail, columns, sheet);
@@ -66,7 +70,6 @@ function getSummaryVars(mail, sheet)
 
   // +1, because first row is column names
   var values = getStringsFromRow(rowIndex+1, sheet);
-  var summaryVars = {};
   for (const i in columns) 
   {
     var translationKey = getKeyByTranslationValue(translations, columns[i]);

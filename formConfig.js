@@ -34,6 +34,7 @@ function getTranslationConfig() {
     [K_EXPIRED_ALERT]: { "title": "Expired alert" },
     [K_DETAILS]: { "title": "Detaily" },
     [K_SUPPORT_CONFIRM]: { "title": "Potvrzení o daru" },
+    [K_REG_NUMBER]: { "title": "Číslo registrace" },
   }
 }
 
@@ -78,6 +79,7 @@ const K_REGISTRATION_VALID = "registrationValid";
 const K_EXPIRED_ALERT = "expiredAlert";
 const K_DETAILS = "details";
 const K_SUPPORT_CONFIRM = "supportConfirm";
+const K_REG_NUMBER = "regNumber";
 
 
 const PAYMENT_DEADLINE_DAYS = 14;
