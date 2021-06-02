@@ -1,7 +1,6 @@
-const CONFIRMATION_TEMPLATE = "pxkjn4172q4z7815";
+const CONFIRMATION_TEMPLATE = "jpzkmgqzm2g059v7";
 const SUB_TEMPLATE = "x2p0347qwplzdrn7";
-const REMINDER_VOLUNTEER_TEMPLATE = "pxkjn417k04z7815";
-const REMINDER_TEMPLATE = "0r83ql3nw04zw1jm";
+const REMINDER_TEMPLATE = "pxkjn417k04z7815";
 const PAYMENT_OK_TEMPLATE = "v69oxl5z6kl785kw";
 const CANCELLED_TEMPLATE = "3zxk54v6dxgjy6v7";
 
@@ -59,7 +58,7 @@ function sendEmailSub(summaryVars)
 
 function sendEmailPaymentRemidner(summaryVars)
 {
-  sendEmail(summaryVars[K_EMAIL], summaryVars, REMINDER_VOLUNTEER_TEMPLATE);
+  sendEmail(summaryVars[K_EMAIL], summaryVars, REMINDER_TEMPLATE);
 }
 
 function sendEmailPaymentOk(summaryVars)

@@ -101,11 +101,35 @@ function updateSignInForm() {
   }
   var allItems = form.getItems();
   var counts = getCurrentAccomodationTypeCounts();
-  var normalMode = isFullCapacity(counts);
+  var subMode = isFullCapacity(counts);
+
+  var config = getTranslationConfig();
 
   for (var i = 0; i < allItems.length; i += 1) {
     var thisItem = allItems[i];
-    if (thisItem.getTitle() == "Varianta ubytování" && thisItem.getType() === FormApp.ItemType.MULTIPLE_CHOICE) {
+    if (thisItem.getTitle() == config[K_SUPPORT_CONFIRM].title)
+    {
+      if (subMode) {
+        form.deleteItem(thisItem);
+        continue;
+      }
+      else{
+        //Potvrzení o daru > Ano - Ne
+        thisItem.setHelpText("Budeš chtít vystavit potvrzení o daru?");
+      }
+    }
+    if (thisItem.getTitle() == config[K_SUPPORT].title)
+    {
+      if (subMode) {
+        form.deleteItem(thisItem);
+        continue;
+      }
+      else{
+        //Dobrovolný příspěvek > Číslo Větší než 0 Zadejte platné číslo
+        thisItem.setHelpText("Chceš-li nás podpořit, vlož sem částku v Kč.");
+      }
+    }
+    if (thisItem.getTitle() == config[K_ACCOMODATION_TYPE].title && thisItem.getType() === FormApp.ItemType.MULTIPLE_CHOICE) {
       var multipleChoice = thisItem.asMultipleChoiceItem();
 
       var choices = [];
@@ -123,30 +147,29 @@ function updateSignInForm() {
         }
       });
 
-      if (!normalMode) {
+      if (subMode) {
         form.deleteItem(thisItem);
-        break;
+        continue;
       }
-
+      // Varianta ubytování
       multipleChoice.setHelpText("Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/. V ceně je započítána sleva pro dobrovolníky.");
       multipleChoice.setChoiceValues(choices);
     }
   }
 
-  var par1 = "Tak velká akce jako AV se nedá zorganizovat bez pomoci dobrovolníků. Pokud se zapojí každý z nás malým dílem, dokážeme si uspořádat a setkání plně prožít všichni. Novinkou letošního AV je, že pro dobrovolníky chystáme víkendové setkání před samotným AV. Více informací najdeš na https://absolventskyvelehrad.cz/s-cim-potrebujeme-pomoci/";
   var newParSign = "\n\n";
   var par2 = "Podrobnosti k registraci, ubytování, stravování atd. najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/";
-  var par3 = "Proměnná kapacita z důvodu protiepidemických opatření";
+  var par3 = "Proměnná kapacita z důvodu protiepidemických opatření:";
   var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
-  var originalText = par1 + newParSign + par2 + newParSign + par3 + newParSign + par4;
-  if (normalMode) {
+  var originalText = par2 + newParSign + par3 + newParSign + par4;
+  if (!subMode) {
     // normal mode
-    form.setTitle("AV21 - Registrace dobrovolníků")
+    form.setTitle("AV21 - Registrace")
     form.setDescription(originalText);
   }
   else {
     // substitute mode
-    form.setTitle("AV21 - Registrace dobrovolníků - REŽIM NÁHRADNÍKŮ")
+    form.setTitle("AV21 - Registrace - REŽIM NÁHRADNÍKŮ")
     var subsText = "Kapacita již byla vyčerpána, ale stále se můžeš hlásit jako náhradník. Pokud se nějaké místo uvolní, budeme Tě kontaktovat. Pořadí náhradníků je dáno časem odeslání přihlášky, tak neváhej!";
     form.setDescription(subsText + newParSign + originalText);
   }

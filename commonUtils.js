@@ -100,7 +100,8 @@ function getIndexOfValueFromColumn(columnName, value, columns, sheet)
     return;
   }
   var allValues = getStringsFromColumn(index, sheet);
-  return allValues.indexOf(value);
+  // find latest value
+  return allValues.lastIndexOf(value);
 }
 
 function getColumnNames(sheet) 
@@ -115,6 +116,7 @@ function getStringsFromRow(rowIndex, sheet)
   return range.getDisplayValues()[0].map(s => s.toString());
 }
 
+// find latest value
 function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex) {
 
   var dataRange = getActiveRange(sheetName);
@@ -122,7 +124,7 @@ function findRowIndexAndRangeInSheet(sheetName, searchValue, searchColumnIndex) 
 
   var data = dataRange.getValues();
 
-  for (var i = 0; i < data.length; ++i) {
+  for (var i = data.length - 1; i >= 0; --i) {
 
     var dataRow = data[i];
     if (dataRow[searchColumnIndex] != searchValue) { continue; }

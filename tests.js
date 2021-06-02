@@ -35,6 +35,37 @@ function invalidVS(){
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
 
+function testOnFormSubmitSub()
+{
+  var testData = 
+  { "authMode": "FULL", 
+  "namedValues": 
+    { 
+      "Adresa trvalého bydliště": ["dsfa"], 
+      "Poznámka": [""], 
+      "Máš nějaké zdravotní omezení či dietu?": [""], 
+      "Pojedu na víkendovku pro dobrovolníky": [""], 
+      "Telefon": [""], 
+      "Preferovaná oblast tvé pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"], 
+      "Email": ["bujnmi@gmail.com"], 
+      "Příjmení": ["fdas"], 
+      "Chceme bydlet spolu": ["bujnmi@gmail.com"], 
+      "Jméno": ["Ondřej"], 
+      "Rok narození": ["1995"], 
+      "Kraj": ["Zlínský kraj"], 
+      "Město, kde trávíš čas": ["dfas"], 
+      "Časová značka": ["20.3.2021 13:30:21"], 
+      "Informace po AV": ["Ne"], 
+      "Pohlaví": ["Žena"]
+    },
+  "range": { "columnEnd": 18, "columnStart": 1, "rowEnd": 14, "rowStart": 14 }, 
+  "source": {}, 
+  "triggerUid": "6513079", 
+  "values": ["20.3.2021 13:30:21", "dfdf", "fdas", "Žena", "bujnmi@gmail.com", "1995", "dsfa", "Zlínský kraj", "dfas", "bujnmi@gmail.com", "", "", "", "", "Je mi to jedno, rád/a pomůžu, kde bude potřeba"] };
+  
+  onFormSubmit(testData);
+}
+
 function testOnFormSubmit()
 {
   var testData = 

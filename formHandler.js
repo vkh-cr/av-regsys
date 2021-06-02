@@ -33,9 +33,16 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
 
+  var counts = getCurrentAccomodationTypeCounts();
+  var subMode = isFullCapacity(counts);
+
+  var accommodation = formData[K_ACCOMODATION_TYPE].value || ' ';
+  if (subMode) {
+    accommodation = SUB_ACCOMODATION;
+  }
+
   var supportValue = formData[K_SUPPORT].value;
-  var accomodationCode = formData[K_ACCOMODATION_TYPE].value;
-  var price = getTicketPrice(accomodationCode, supportValue);
+  var price = getTicketPrice(accommodation, supportValue);
 
   var currentRow;
   var answersSheet = getSheet(ANSWERS_SHEET);
@@ -57,25 +64,22 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var address = formData[K_ADDRESS].value || ' ';
   var region = formData[K_REGION].value || ' ';
   var city = formData[K_CITY].value || ' ';
-  var accommodation = formData[K_ACCOMODATION_TYPE].value || ' ';
   var roommate = formData[K_ROOMMATE].value || ' ';
   var support = formData[K_SUPPORT].value || 0;
   var phone = formData[K_PHONE].value || ' ';
-  var healthCondition = formData[K_HEALTH_CONDITION].value || '';
-  var note = formData[K_NOTE].value || '';
-  var volunteerPreference = formData[K_VOLUNTEER_PREFERENCE].value || '';
-  var volunteerWeekend = formData[K_VOLUNTEER_WEEKEND].value || '';
-  var afterAVinfo = formData[K_AFTER_AV_INFO].value || '';
-  var supportConfirm = formData[K_SUPPORT_CONFIRM].value || '';
+  var healthCondition = formData[K_HEALTH_CONDITION].value || ' ';
+  var note = formData[K_NOTE].value || ' ';
+  var volunteerPreference = formData[K_VOLUNTEER_PREFERENCE].value || ' ';
+  var volunteerWeekend = formData[K_VOLUNTEER_WEEKEND].value || ' ';
+  var afterAVinfo = formData[K_AFTER_AV_INFO].value || ' ';
+  var supportConfirm = formData[K_SUPPORT_CONFIRM].value || ' ';
 
   if (support < 0) { support = 0; }
 
   var deadline = getDeadlineFromCurrentDate();
 
-  var order = getCurrentOrderFromAccomodation()+1;
-  var counts = getCurrentAccomodationTypeCounts();
-  var normalMode = isFullCapacity(counts);
-  
+  var order = getCurrentOrderFromAccomodation() + 1;
+
   var summaryVars = {
     [K_TIMESTAMP]: timestamp,
     [K_NAME]: name,
@@ -108,8 +112,8 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   // accomodation value is rewritten as a code
   updateValueOnColumn(summaryVars[K_ACCOMODATION_TYPE], currentRow - 1, translationConfig[K_ACCOMODATION_TYPE].title, answersSheet);
 
-  if (normalMode) {
-    startTrackingPayment(summaryVars);
+  startTrackingPayment(summaryVars, subMode);
+  if (!subMode) {
     sendEmailConfirmation(summaryVars);
   }
   else {
@@ -123,7 +127,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   // inserting new row instead of filling existing empty row. Therefore all
   // formula pointing to last empty line are still pointing to empty line after new
   // response
-  
+
   var valuesArray = [
     summaryVars[K_TIMESTAMP],
     summaryVars[K_VAR_SYMBOL],
@@ -157,16 +161,18 @@ function getTicketPrice(accommodationCode, supportValue) {
     support = 0;
   }
   var price = AccomondationPrice[accommodationCode];
-
+  if (typeof accommodationCode === "undefined") {
+    return 0;
+  }
   return price + support;
 }
 
-function startTrackingPayment(summaryVars) {
+function startTrackingPayment(summaryVars, isManual) {
 
   var config = getTranslationConfig();
-  var userDataHeader = BankInfoDataHeader.map(k=>config[k].title);
+  var userDataHeader = BankInfoDataHeader.map(k => config[k].title);
 
-  summaryVars[K_MANUAL_OVERRIDE] = false;
+  summaryVars[K_MANUAL_OVERRIDE] = isManual;
   summaryVars[K_PAID] = 0;
   summaryVars[K_PAID_EVERYTHING] = false;
   summaryVars[K_HIDDEN_NOTE] = "";
@@ -178,12 +184,10 @@ function startTrackingPayment(summaryVars) {
 
   var moneyInfo = [];
   BankInfoDataHeader.forEach(d => {
-    if(typeof summaryVars[d] !== "undefined")
-    {
+    if (typeof summaryVars[d] !== "undefined") {
       moneyInfo.push(summaryVars[d]);
     }
-    else
-    {
+    else {
       moneyInfo.push('');
     }
   });
@@ -203,11 +207,10 @@ function overLimit(counts) {
 }
 
 function isFullCapacity(counts) {
-  return overLimit(counts) <= 0;
+  return overLimit(counts) >= 0;
 }
 
-function getValuesFromColumn(sheetName, columnType)
-{
+function getValuesFromColumn(sheetName, columnType) {
   var sheet = getSheet(sheetName);
   var translationConfig = getTranslationConfig();
   var accomodationIndex = getIndexOfColumnName(translationConfig[columnType].title, sheet);
@@ -219,12 +222,35 @@ function getCurrentAccomodationTypeCounts() {
   var withCount = values.filter(v => v == WITH_TYPE).length;
   var withoutCount = values.filter(v => v == WITHOUT_TYPE).length;
   var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
+  var fridayCount = values.filter(v => v == PROGRAM_ONLY_FRIDAY).length;
+  var saturdayCount = values.filter(v => v == PROGRAM_ONLY_SATURDAY).length;
+  var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
   var programCount = values.filter(v => v == PROGRAM_ONLY_TYPE || v == PROGRAM_FOOD_ONLY_TYPE).length;
-  return { [WITH_TYPE]: withCount, [WITHOUT_TYPE]: withoutCount, [SPACAK_TYPE]: spacakCount, [PROGRAM_TYPE]: programCount };
+  return (
+    {
+      [WITH_TYPE]: withCount,
+      [WITHOUT_TYPE]: withoutCount,
+      [SPACAK_TYPE]: spacakCount,
+      [PROGRAM_TYPE]: programCount,
+      [PROGRAM_ONLY_FRIDAY]: fridayCount,
+      [PROGRAM_ONLY_SATURDAY]: saturdayCount
+    }
+  );
 }
 
 function getCurrentOrderFromAccomodation() {
   var values = getValuesFromColumn(ANSWERS_SHEET, K_ACCOMODATION_TYPE);
-  var order = values.filter(v => v == WITH_TYPE || v == WITHOUT_TYPE || v == SPACAK_TYPE || v == PROGRAM_FOOD_ONLY_TYPE || v == PROGRAM_ONLY_TYPE || v == STORNO_TYPE).length;
+  var order = values.filter(
+    v =>
+      v == WITH_TYPE ||
+      v == WITHOUT_TYPE ||
+      v == SPACAK_TYPE ||
+      v == PROGRAM_FOOD_ONLY_TYPE ||
+      v == PROGRAM_ONLY_TYPE ||
+      v == STORNO_TYPE ||
+      v == PROGRAM_ONLY_FRIDAY ||
+      v == PROGRAM_ONLY_SATURDAY ||
+      v == SUB_ACCOMODATION
+  ).length;
   return order;
 }

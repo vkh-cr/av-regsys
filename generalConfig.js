@@ -1,11 +1,3 @@
-function getGeneralConfig() {
-  return {
-    'attentionEmail' : 'tym.realizace@absolventskyvelehrad.cz',
-    'attentionSubject' : 'AV21 - problematicka registrace',
-    'replyToEmail' : 'tym.realizace@absolventskyvelehrad.cz',
-  };
-}
-
 const WITH_TYPE = "with";
 const WITHOUT_TYPE = "without";
 const SPACAK_TYPE = "spacak";
@@ -15,6 +7,11 @@ const STORNO_TYPE = "storno";
 const PROGRAM_ONLY_TYPE = "programOnly";
 const PROGRAM_FOOD_ONLY_TYPE = "programFoodOnly";
 
+const PROGRAM_ONLY_FRIDAY = "programOnlyFriday";
+const PROGRAM_ONLY_SATURDAY = "programOnlySaturday";
+const SUB_ACCOMODATION = "waiting";
+
+
 const AccomondationLimits = {
   //extra for team
   [WITH_TYPE]: 12+15,
@@ -22,7 +19,11 @@ const AccomondationLimits = {
   [WITHOUT_TYPE]: 100+2,
   [SPACAK_TYPE]: 80,
   // minus team and guests
-  [PROGRAM_TYPE]: 158-19
+  [PROGRAM_TYPE]: 158-19,
+  [PROGRAM_ONLY_FRIDAY]: 30,
+  [PROGRAM_ONLY_SATURDAY]: 30,
+  [SUB_ACCOMODATION]: 0
+
   // test variant
   // [WITH_TYPE]: 12,
   // [WITHOUT_TYPE]: 12,
@@ -31,11 +32,14 @@ const AccomondationLimits = {
 };
 
 const AccomondationPrice = {
-  [WITH_TYPE]: 2495,
-  [WITHOUT_TYPE]: 2015,
-  [SPACAK_TYPE]: 1520,
-  [PROGRAM_FOOD_ONLY_TYPE]: 1160,
-  [PROGRAM_ONLY_TYPE]: 500
+  [WITH_TYPE]: 2695,
+  [WITHOUT_TYPE]: 2215,
+  [SPACAK_TYPE]: 1720,
+  [PROGRAM_FOOD_ONLY_TYPE]: 1360,
+  [PROGRAM_ONLY_TYPE]: 700,
+  [PROGRAM_ONLY_FRIDAY]: 300,
+  [PROGRAM_ONLY_SATURDAY]: 300,
+  [SUB_ACCOMODATION]: 0
   // test variant
   // [WITH_TYPE]: 5,
   // [WITHOUT_TYPE]: 4,
@@ -49,7 +53,10 @@ const AccomondationType = {
   [WITHOUT_TYPE]: "Postel bez příslušenství",
   [SPACAK_TYPE]: "Spacák",
   [PROGRAM_FOOD_ONLY_TYPE]: "Program a strava (bez ubytování)",
-  [PROGRAM_ONLY_TYPE]: "Jen program (bez ubytování a bez stravy)"
+  [PROGRAM_ONLY_TYPE]: "Jen program (bez ubytování a bez stravy)",
+  [PROGRAM_ONLY_FRIDAY]: "Jen program pátek",
+  [PROGRAM_ONLY_SATURDAY]: "Jen program sobota",
+  [SUB_ACCOMODATION]: "Zatím neznámé"
 };
 
 const MAIN_FORM = '1q8kRtBRwmzo9DNhnVtzBPp1-uyZ7EZOqGJRglThPWG8';
