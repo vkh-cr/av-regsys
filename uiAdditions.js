@@ -151,8 +151,10 @@ function updateSignInForm() {
         form.deleteItem(thisItem);
         continue;
       }
+      var helpTextAccomodationOpen = "Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/. V ceně je započítána sleva pro dobrovolníky";
+      var helpTextAccomodationClosed = "Naše kapacity ubytování jsou téměř vyčerpány. Přesto je možné si zajistit vlastní ubytování. Doporučujeme místní kemp a společnou domluvu spolubydlení přes http://bit.ly/spolubydleniAV. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/.";
       // Varianta ubytování
-      multipleChoice.setHelpText("Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/. V ceně je započítána sleva pro dobrovolníky.");
+      multipleChoice.setHelpText(helpTextAccomodationClosed);
       multipleChoice.setChoiceValues(choices);
     }
   }

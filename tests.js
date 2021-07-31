@@ -35,6 +35,35 @@ function invalidVS(){
   writeDownTransactionsToBankInfo(transactionDictionary);
 }
 
+function invalidVS2(){
+  //211881120
+  var transactionDictionary = {
+      "211881720":[{"transferId":11331926089,"date":"2021-05-26+0200","amount":1720,"currency":"CZK","accountNumber":"2166890217","variableSymbol":"19-211881720"}]
+  };
+
+  writeDownTransactionsToBankInfo(transactionDictionary);
+}
+
+function invalidVS3(){
+  //211881120
+  var transactionDictionary = {
+      "211791720":[{"transferId":11331926089,"date":"2021-06-04+0200","amount":1720,"currency":"CZK","accountNumber":"2166890217","variableSymbol":"211791720"}]
+  };
+
+  writeDownTransactionsToBankInfo(transactionDictionary);
+}
+
+
+function fixSubstituteBug(){
+  var transactionDictionary = {
+      "211472000":[{"transferId":11331926089,"date":"2021-05-21+0200","amount":2000,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"211472000"}],
+      "211812215":[{"transferId":11331926089,"date":"2021-05-22+0200","amount":2215,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"211812215"}],
+      "211901720":[{"transferId":11331926089,"date":"2021-05-23+0200","amount":1720,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"211901720"}]
+  };
+
+  writeDownTransactionsToBankInfo(transactionDictionary);
+}
+
 function testOnFormSubmitSub()
 {
   var testData = 
@@ -101,24 +130,25 @@ function testOnFormSubmit()
 
 const testSummaryVars = {
   [K_TIMESTAMP] : new Date(),
-  [K_NAME] : "Jan",
-  [K_SURNAME] : "Maria",
+  [K_SUB_ORDER] : 275,
+  [K_NAME] : "Václav",
+  [K_SURNAME] : "Čáp",
   [K_SEX] : "Muž",
   [K_EMAIL] : "bujnmi@gmail.com",
-  [K_BIRTH_YEAR] : "1901",
-  [K_ADDRESS] : "17. listopadu 27",
-  [K_REGION] : "Moravskoslezský kraj",
-  [K_CITY] : "Ostrava",
-  [K_ACCOMODATION_TYPE] : PROGRAM_ONLY_TYPE,
-  [K_ROOMMATE] : "Jenda Šťastný",
+  [K_BIRTH_YEAR] : "1992",
+  [K_ADDRESS] : "Švábenice 81",
+  [K_REGION] : "Jihomoravský kraj",
+  [K_CITY] : "Vyškov",
+  [K_ACCOMODATION_TYPE] : PROGRAM_FOOD_ONLY_TYPE,
+  [K_ROOMMATE] : "",
   [K_SUPPORT] : 0,
-  [K_PHONE] : "+420 731 805 186",
-  [K_HEALTH_CONDITION] : "ne",
-  [K_NOTE] : " ",
-  [K_VOLUNTEER_PREFERENCE] : "Recepce / informace, Stravování, Technik, Moderování modlitebních skupinek",
-  [K_VOLUNTEER_WEEKEND] : "Ano, pojedu v termínu 14. - 16. 5.",
-  [K_AFTER_AV_INFO] : "Ano",
-  [K_PRICE] : 2000,
-  [K_VAR_SYMBOL] : getVariableSymbol(1, 2000),
+  [K_SUPPORT_CONFIRM] : "",
+  [K_PHONE] : "+420720373969",
+  [K_HEALTH_CONDITION] : "",
+  [K_NOTE] : "",
+  [K_VOLUNTEER_PREFERENCE] : "",
+  [K_AFTER_AV_INFO] : "Ne",
+  [K_PRICE] : 1360,
+  [K_VAR_SYMBOL] : 212751360,
   [K_DEADLINE] : getDeadlineFromCurrentDate()
 };

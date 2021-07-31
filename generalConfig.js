@@ -20,8 +20,8 @@ const AccomondationLimits = {
   [SPACAK_TYPE]: 80,
   // minus team and guests
   [PROGRAM_TYPE]: 158-19,
-  [PROGRAM_ONLY_FRIDAY]: 30,
-  [PROGRAM_ONLY_SATURDAY]: 30,
+  [PROGRAM_ONLY_FRIDAY]: 15,
+  [PROGRAM_ONLY_SATURDAY]: 15,
   [SUB_ACCOMODATION]: 0
 
   // test variant
