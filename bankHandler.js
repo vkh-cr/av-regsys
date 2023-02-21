@@ -18,7 +18,7 @@ function getNewDataFromBank(token){
 
 function getTestingDataFromBank(){
   var token = getBankSecret();
-  var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2019-01-01/2019-01-31/transactions.json";
+  var url = "https://www.fio.cz/ib_api/rest/periods/" + token + "/2022-01-01/2023-01-31/transactions.json";
   var data = UrlFetchApp.fetch(url);
 
   return processDataFromBank(data)

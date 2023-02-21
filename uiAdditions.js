@@ -2,9 +2,9 @@ function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Manage payments')
     .addItem('Zadat platbu', 'userPaidFunctionUI')
-    .addItem('Poslat upominky k zaplaceni', 'onCheckNotRecievedPayments')
-    .addItem('Stahnout a sparovat platby', 'onGetBankingDataTick')
-    .addItem('Poslat email zrusena registrace', 'sendRegistrationCancelledEmail')
+    .addItem('Poslat upomínky k zaplacení', 'onCheckNotRecievedPayments')
+    .addItem('Stáhnout a spárovat platby', 'onGetBankingDataTick')
+    .addItem('Poslat email zrušena registrace', 'sendRegistrationCancelledEmail')
     .addToUi();
 }
 
@@ -90,7 +90,7 @@ function sendRegistrationCancelledEmail() {
 function getOptionString(type) {
   const splitter = ", ";
   const czk = " Kč";
-  return AccomondationType[type] + splitter + AccomondationPrice[type] + czk;
+  return AccommodationType[type] + splitter + AccommodationPrice[type] + czk;
 }
 
 function updateSignInForm() {
@@ -100,7 +100,7 @@ function updateSignInForm() {
     form = FormApp.openById(MAIN_FORM);
   }
   var allItems = form.getItems();
-  var counts = getCurrentAccomodationTypeCounts();
+  var counts = getCurrentAccommodationTypeCounts();
   var subMode = isFullCapacity(counts);
 
   var config = getTranslationConfig();
@@ -135,14 +135,8 @@ function updateSignInForm() {
       var choices = [];
 
       Object.keys(counts).forEach((key) => {
-        if (counts[key] < AccomondationLimits[key])
+        if (counts[key] < AccommodationLimits[key])
         {
-          if (key == PROGRAM_TYPE) 
-          {
-            choices.push(getOptionString(PROGRAM_FOOD_ONLY_TYPE));
-            choices.push(getOptionString(PROGRAM_ONLY_TYPE));
-            return;
-          }
           choices.push(getOptionString(key));
         }
       });
@@ -151,27 +145,27 @@ function updateSignInForm() {
         form.deleteItem(thisItem);
         continue;
       }
-      var helpTextAccomodationOpen = "Varianty s postelí a také veškeré stravování zajišťuje poutní dům Stojanov (www.stojanov.cz). Termín „příslušenství“ označuje sociální zařízení (sprcha a záchod). Pro pokoje bez příslušenství jsou k dispozici společná sociální zařízení na chodbě. Místa pro spacáky poskytuje Velehradský dům sv. Cyrila a Metoděje, zkráceně VDCM. U všech variant ubytování se automaticky počítá i se stravou. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/. V ceně je započítána sleva pro dobrovolníky";
-      var helpTextAccomodationClosed = "Naše kapacity ubytování jsou téměř vyčerpány. Přesto je možné si zajistit vlastní ubytování. Doporučujeme místní kemp a společnou domluvu spolubydlení přes http://bit.ly/spolubydleniAV. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/.";
+      var helpTextAccomodationOpen = "Vyber jednu z dostupných variant ubytování. Údaje pro platbu přijdou hned po odeslání přihlášky na Tvůj mail. Více informací o ubytování a stravování najdeš na absolventskyvelehrad.cz.";
+      // var helpTextAccomodationClosed = "Naše kapacity ubytování jsou téměř vyčerpány. Přesto je možné si zajistit vlastní ubytování. Doporučujeme místní kemp a společnou domluvu spolubydlení přes http://bit.ly/spolubydleniAV. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/.";
       // Varianta ubytování
-      multipleChoice.setHelpText(helpTextAccomodationClosed);
+      multipleChoice.setHelpText(helpTextAccomodationOpen);
       multipleChoice.setChoiceValues(choices);
     }
   }
 
   var newParSign = "\n\n";
-  var par2 = "Podrobnosti k registraci, ubytování, stravování atd. najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/";
-  var par3 = "Proměnná kapacita z důvodu protiepidemických opatření:";
-  var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
-  var originalText = par2 + newParSign + par3 + newParSign + par4;
+  var par2 = "Chceš jet na AV23? Jsi na správném místě! Stačí vyplnit tuto přihlášku a postupovat podle pokynů, které Ti pošleme na mail. Podrobnosti k registraci, ubytování, stravování atd. najdeš na absolventskyvelehrad.cz. Těšíme se na Tebe.";
+  //var par3 = "Proměnná kapacita z důvodu protiepidemických opatření:";
+  //var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
+  var originalText = par2; //+ newParSign + par3 + newParSign + par4;
   if (!subMode) {
     // normal mode
-    form.setTitle("AV21 - Registrace")
+    form.setTitle("AV23 - Přihláška")
     form.setDescription(originalText);
   }
   else {
     // substitute mode
-    form.setTitle("AV21 - Registrace - REŽIM NÁHRADNÍKŮ")
+    form.setTitle("AV23 - Přihláška - REŽIM NÁHRADNÍKŮ")
     var subsText = "Kapacita již byla vyčerpána, ale stále se můžeš hlásit jako náhradník. Pokud se nějaké místo uvolní, budeme Tě kontaktovat. Pořadí náhradníků je dáno časem odeslání přihlášky, tak neváhej!";
     form.setDescription(subsText + newParSign + originalText);
   }
@@ -181,9 +175,8 @@ function sendToEmails() {
   var templateId = SpreadsheetApp.getActiveSheet().getRange(9, 3).getValue();
   var activeSheet = SpreadsheetApp.getActiveSheet();
   var spreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET);
-  var answersSheet = spreadsheet.getSheetByName(ANSWERS_SHEET);
   var moneyInfoSheet = spreadsheet.getSheetByName(MONEY_INFO_SHEET);
-  var youCanTouchSheet = spreadsheet.getSheetByName(YOU_CAN_TOUCH_SHEET);
+  var youCanTouchSheet = spreadsheet.getSheetByName(DATA_MASTER_SHEET);
 
   var emails = getStringsFromColumn(0, activeSheet);
   emails = emails.filter(e => !e.isEmpty());
@@ -199,7 +192,7 @@ function sendToEmails() {
   emails.forEach(
     e => {
       var summaryVars = addSummaryVars(e, moneyInfoSheet);
-      addSummaryVars(e, answersSheet, summaryVars);
+      addSummaryVars(e, youCanTouchSheet, summaryVars);
       sendEmail(e, summaryVars, templateId);
     });
 }

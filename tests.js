@@ -29,7 +29,7 @@ function testBankWriteDown(){
 
 function invalidVS(){
   var transactionDictionary = {
-      "210831520":[{"transferId":11331926089,"date":"2021-04-09+0200","amount":1520,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"210831520"}]
+      "213390700":[{"transferId":11331926089,"date":"2021-08-11+0200","amount":1300,"currency":"CZK","accountNumber":"2300203634","variableSymbol":"213390700"}]
   };
 
   writeDownTransactionsToBankInfo(transactionDictionary);
@@ -70,27 +70,30 @@ function testOnFormSubmitSub()
   { "authMode": "FULL", 
   "namedValues": 
     { 
-      "Adresa trvalého bydliště": ["dsfa"], 
-      "Poznámka": [""], 
-      "Máš nějaké zdravotní omezení či dietu?": [""], 
-      "Pojedu na víkendovku pro dobrovolníky": [""], 
-      "Telefon": [""], 
-      "Preferovaná oblast tvé pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"], 
-      "Email": ["bujnmi@gmail.com"], 
-      "Příjmení": ["fdas"], 
-      "Chceme bydlet spolu": ["bujnmi@gmail.com"], 
-      "Jméno": ["Ondřej"], 
-      "Rok narození": ["1995"], 
-      "Kraj": ["Zlínský kraj"], 
-      "Město, kde trávíš čas": ["dfas"], 
-      "Časová značka": ["20.3.2021 13:30:21"], 
-      "Informace po AV": ["Ne"], 
-      "Pohlaví": ["Žena"]
+      "Časová značka": ["20.3.2021 13:30:21"],
+      "Jméno": ["Ondřej"],
+      "Příjmení": ["Příjmenný"],
+      "Pohlaví": ["Žena"],
+      "Email": ["bujnmi@gmail.com"],
+      "Rok narození": ["1995"],
+      "Adresa trvalého bydliště": ["Ulice 89"],
+      "Kraj": ["Zlínský kraj"],
+      "Město, kde trávíš čas": ["Opava ř#@"],
+      "Chceme bydlet spolu": ["vichapavel@gmail.com"],
+      "Oblast dobrovolnické pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"],
+      "Diskuzní skupinky": ["Ano"],
+      "Telefon": ["+420731805186"],
+      "Telefon v případě ohrožení": ["+420123456789"],
+      "Zdravotní omezení a diety": ["string_string+:)"],
+      "Tištěná brožura": ["Ne"],
+      "Triko": ["XL"],
+      "Poznámka": ["Text poznámky;)"],
+      "Informace po AV": ["Ne"],
     },
   "range": { "columnEnd": 18, "columnStart": 1, "rowEnd": 14, "rowStart": 14 }, 
   "source": {}, 
   "triggerUid": "6513079", 
-  "values": ["20.3.2021 13:30:21", "dfdf", "fdas", "Žena", "bujnmi@gmail.com", "1995", "dsfa", "Zlínský kraj", "dfas", "bujnmi@gmail.com", "", "", "", "", "Je mi to jedno, rád/a pomůžu, kde bude potřeba"] };
+  "values": ["7.2.2023 20:30:21", "Ondřej", "Příjmenný", "Žena", "bujnmi@gmail.com", "1995", "Ulice 89", "Zlínský kraj", "Opava ř#@", "vichapavel@gmail.com", "Je mi to jedno, rád/a pomůžu, kde bude potřeba", "Ano", "+420731805186", "+420123456789", "string_string+:)", "Ne", "XL", "Text poznámky;)", "Ne"] };
   
   onFormSubmit(testData);
 }
@@ -101,54 +104,33 @@ function testOnFormSubmit()
   { "authMode": "FULL", 
   "namedValues": 
     { 
-      "Adresa trvalého bydliště": ["dsfa"], 
-      "Poznámka": [""], 
-      "Varianta ubytování": ["Spacák, 1520 Kč (zbývájící kapacita: 76)"], 
-      "Máš nějaké zdravotní omezení či dietu?": [""], 
-      "Pojedu na víkendovku pro dobrovolníky": [""], 
-      "Telefon": [""], 
-      "Preferovaná oblast tvé pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"], 
-      "Email": ["bujnmi@gmail.com"], 
-      "Příjmení": ["fdas"], 
-      "Chceme bydlet spolu": ["bujnmi@gmail.com"], 
-      "Jméno": ["Ondřej"], 
-      "Rok narození": ["1995"], 
-      "Kraj": ["Zlínský kraj"], 
-      "Město, kde trávíš čas": ["dfas"], 
-      "Časová značka": ["20.3.2021 13:30:21"], 
-      "Informace po AV": ["Ne"], 
-      "Pohlaví": ["Žena"], 
+      "Časová značka": ["20.3.2021 13:30:21"],
+      "Jméno": ["Ondřej"],
+      "Příjmení": ["Příjmenný"],
+      "Pohlaví": ["Žena"],
+      "Email": ["bujnmi@gmail.com"],
+      "Rok narození": ["1995"],
+      "Adresa trvalého bydliště": ["Ulice 89"],
+      "Kraj": ["Zlínský kraj"],
+      "Město, kde trávíš čas": ["Opava ř#@"],
+      "Varianta ubytování": ["Jen program"],
+      "Chceme bydlet spolu": ["vichapavel@gmail.com"],
+      "Oblast dobrovolnické pomoci": ["Je mi to jedno, rád/a pomůžu, kde bude potřeba"],
+      "Diskuzní skupinky": ["Ano"],
+      "Telefon": ["+420731805186"],
+      "Telefon v případě ohrožení": ["+420123456789"],
+      "Zdravotní omezení a diety": ["string_string+:)"],
+      "Tištěná brožura": ["Ne"],
+      "Triko": ["XL"],
       "Dobrovolný příspěvek": [""],
-      "Potvrzení o daru": ["Ano"] },
-  "range": { "columnEnd": 18, "columnStart": 1, "rowEnd": 14, "rowStart": 14 }, 
+      "Potvrzení o daru": ["Ano"],
+      "Poznámka": ["Text poznámky;)"],
+      "Informace po AV": ["Ne"],
+    },
+  "range": { "columnEnd": 18, "columnStart": 6, "rowEnd": 2, "rowStart": 2 }, 
   "source": {}, 
   "triggerUid": "6513079", 
-  "values": ["20.3.2021 13:30:21", "dfdf", "fdas", "Žena", "bujnmi@gmail.com", "1995", "dsfa", "Zlínský kraj", "dfas", "Spacák, 1520 Kč (zbývájící kapacita: 76)", "bujnmi@gmail.com", "", "", "", "", "Je mi to jedno, rád/a pomůžu, kde bude potřeba", "", "Ne"] };
+  "values": ["7.2.2023 20:30:21", "Ondřej", "Příjmenný", "Žena", "bujnmi@gmail.com", "1995", "Ulice 89", "Zlínský kraj", "Opava ř#@", "vichapavel@gmail.com", "Je mi to jedno, rád/a pomůžu, kde bude potřeba", "Ano", "+420731805186", "+420123456789", "string_string+:)", "Ne", "XL", "350", "Ano", "Text poznámky;)", "Ne"] };
   
   onFormSubmit(testData);
 }
-
-const testSummaryVars = {
-  [K_TIMESTAMP] : new Date(),
-  [K_SUB_ORDER] : 275,
-  [K_NAME] : "Václav",
-  [K_SURNAME] : "Čáp",
-  [K_SEX] : "Muž",
-  [K_EMAIL] : "bujnmi@gmail.com",
-  [K_BIRTH_YEAR] : "1992",
-  [K_ADDRESS] : "Švábenice 81",
-  [K_REGION] : "Jihomoravský kraj",
-  [K_CITY] : "Vyškov",
-  [K_ACCOMODATION_TYPE] : PROGRAM_FOOD_ONLY_TYPE,
-  [K_ROOMMATE] : "",
-  [K_SUPPORT] : 0,
-  [K_SUPPORT_CONFIRM] : "",
-  [K_PHONE] : "+420720373969",
-  [K_HEALTH_CONDITION] : "",
-  [K_NOTE] : "",
-  [K_VOLUNTEER_PREFERENCE] : "",
-  [K_AFTER_AV_INFO] : "Ne",
-  [K_PRICE] : 1360,
-  [K_VAR_SYMBOL] : 212751360,
-  [K_DEADLINE] : getDeadlineFromCurrentDate()
-};

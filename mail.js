@@ -36,7 +36,7 @@ function getSubsForMailerSend(obj)
   subs.push(createOneSub(K_SALUTATION, salutation));
   if(typeof obj[K_ACCOMODATION_TYPE] !== "undefined" && !obj[K_ACCOMODATION_TYPE].isEmpty())
   {
-    subs.push(createOneSub(K_ACCOMODATION, AccomondationType[obj[K_ACCOMODATION_TYPE]]));
+    subs.push(createOneSub(K_ACCOMODATION, AccommodationType[obj[K_ACCOMODATION_TYPE]]));
   }
   return subs;
 }

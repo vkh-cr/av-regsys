@@ -8,15 +8,8 @@ function onFormSubmit(formSubmitObj) {
     return;
   }
   runtimeLog('On form submited fired.');
-  prepareHeaderForId();
   workOnSendingConfirmationEmail(formSubmitObj);
   updateSignInForm();
-}
-
-function prepareHeaderForId() {
-  var sheet = getSheet(ANSWERS_SHEET);
-  var config = getTranslationConfig();
-  insertComumnIfDoesNotExist(config[K_VAR_SYMBOL].title, sheet, 1);
 }
 
 function getDeadlineFromCurrentDate() {
@@ -26,14 +19,14 @@ function getDeadlineFromCurrentDate() {
 }
 
 function workOnSendingConfirmationEmail(formSubmitObj) {
-  Logger.log("Sending email...");
+  Logger.log("Processing data...");
   var translationConfig = getTranslationConfig();
   console.log(translationConfig);
 
   var formData = getFormData(formSubmitObj, translationConfig);
   console.log(formData);
 
-  var counts = getCurrentAccomodationTypeCounts();
+  var counts = getCurrentAccommodationTypeCounts();
   var subMode = isFullCapacity(counts);
 
   var accommodation = formData[K_ACCOMODATION_TYPE].value || ' ';
@@ -42,135 +35,112 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   }
 
   var supportValue = formData[K_SUPPORT].value;
-  var price = getTicketPrice(accommodation, supportValue);
+  var isShirtChosen = !formData[K_SHIRT].value.isEmpty();
+  var price = getTicketPrice(accommodation, supportValue, isShirtChosen);
 
   var currentRow;
   var answersSheet = getSheet(ANSWERS_SHEET);
 
   if (typeof formSubmitObj.range.getRow !== "undefined") {
-    currentRow = formSubmitObj.range.getRow();
+    currentRow = formSubmitObj.range.getRow()-1;
   }
   else {
-    currentRow = answersSheet.getLastRow() + 1;
+    currentRow = answersSheet.getLastRow();
   }
   var varSymbolId = getVariableSymbol(currentRow, price);
 
-  var timestamp = formData[K_TIMESTAMP].value;
-  var name = formData[K_NAME].value || ' ';
-  var surname = formData[K_SURNAME].value || ' ';
-  var sex = formData[K_SEX].value || ' ';
-  var userEmailAddress = formData.email.value;
-  var birthYear = formData[K_BIRTH_YEAR].value || ' ';
-  var address = formData[K_ADDRESS].value || ' ';
-  var region = formData[K_REGION].value || ' ';
-  var city = formData[K_CITY].value || ' ';
-  var roommate = formData[K_ROOMMATE].value || ' ';
-  var support = formData[K_SUPPORT].value || 0;
-  var phone = formData[K_PHONE].value || ' ';
-  var healthCondition = formData[K_HEALTH_CONDITION].value || ' ';
-  var note = formData[K_NOTE].value || ' ';
-  var volunteerPreference = formData[K_VOLUNTEER_PREFERENCE].value || ' ';
-  var volunteerWeekend = formData[K_VOLUNTEER_WEEKEND].value || ' ';
-  var afterAVinfo = formData[K_AFTER_AV_INFO].value || ' ';
-  var supportConfirm = formData[K_SUPPORT_CONFIRM].value || ' ';
 
-  if (support < 0) { support = 0; }
+
+  if (supportValue < 0) { supportValue = 0; }
 
   var deadline = getDeadlineFromCurrentDate();
 
-  var order = getCurrentOrderFromAccomodation() + 1;
+  var timestamp = formData[K_TIMESTAMP].value;
 
   var summaryVars = {
     [K_TIMESTAMP]: timestamp,
-    [K_NAME]: name,
-    [K_SURNAME]: surname,
-    [K_SEX]: sex,
-    [K_EMAIL]: userEmailAddress,
-    [K_BIRTH_YEAR]: birthYear,
-    [K_ADDRESS]: address,
-    [K_REGION]: region,
-    [K_CITY]: city,
-    [K_ACCOMODATION_TYPE]: accommodation,
-    [K_ROOMMATE]: roommate,
-    [K_SUPPORT]: support,
-    [K_PHONE]: phone,
-    [K_HEALTH_CONDITION]: healthCondition,
-    [K_NOTE]: note,
-    [K_VOLUNTEER_PREFERENCE]: volunteerPreference,
-    [K_VOLUNTEER_WEEKEND]: volunteerWeekend,
-    [K_AFTER_AV_INFO]: afterAVinfo,
-    [K_PRICE]: price,
     [K_VAR_SYMBOL]: varSymbolId,
+    [K_PRICE]: price,
     [K_DEADLINE]: deadline,
-    [K_SUB_ORDER]: order,
-    [K_SUPPORT_CONFIRM]: supportConfirm
+    [K_SUB_ORDER]: currentRow,
+    //hidden note
   };
 
-  // store inferred var symbol in sheet
-  addDataToCurrentRow(currentRow, 1, varSymbolId, answersSheet);
+  RegistrationFormQuestions.forEach(q=>summaryVars[q] = formData[q].value);
 
-  // accomodation value is rewritten as a code
-  updateValueOnColumn(summaryVars[K_ACCOMODATION_TYPE], currentRow - 1, translationConfig[K_ACCOMODATION_TYPE].title, answersSheet);
+  Logger.log("Adding data to Master data...");
+  
+  createDataMasterRow(summaryVars);
+
+  Logger.log("Adding data to Bank info...");
 
   startTrackingPayment(summaryVars, subMode);
+
+  Logger.log("Sending email...");
+
   if (!subMode) {
     sendEmailConfirmation(summaryVars);
   }
   else {
     sendEmailSub(summaryVars);
   }
-
-  // copy line added by form submittion into sheet where we do our calculations
-  // we do not want to manually add rows into original form responses sheet
-  // and at the same time we do not want to copy data from sheet to sheet manually.
-  // using simple equals formular is not working since new form data are added by
-  // inserting new row instead of filling existing empty row. Therefore all
-  // formula pointing to last empty line are still pointing to empty line after new
-  // response
-
-  var valuesArray = [
-    summaryVars[K_TIMESTAMP],
-    summaryVars[K_VAR_SYMBOL],
-    summaryVars[K_NAME],
-    summaryVars[K_SURNAME],
-    summaryVars[K_EMAIL],
-    summaryVars[K_BIRTH_YEAR],
-    summaryVars[K_ADDRESS],
-    summaryVars[K_ROOMMATE],
-    summaryVars[K_ACCOMODATION_TYPE],
-    summaryVars[K_PHONE],
-    summaryVars[K_SUPPORT],
-    summaryVars[K_SUPPORT_CONFIRM],
-    summaryVars[K_NOTE],
-    summaryVars[K_SUB_ORDER]
-  ];
-  var sheet = getSheet(YOU_CAN_TOUCH_SHEET);
-  sheet.appendRow(valuesArray);
 }
 
 function getVariableSymbol(rowNumber, price) {
   var rowNumberPadded = ("000" + rowNumber).slice(-3);
   var pricePadded = ("0000" + price).slice(-4);
-  return '21' + rowNumberPadded + pricePadded;
+  return '23' + rowNumberPadded + pricePadded;
 }
 
-function getTicketPrice(accommodationCode, supportValue) {
+function getTicketPrice(accommodationCode, supportValue, isShirtChosen) {
 
+  var price = 0;
+ 
   var support = parseInt(supportValue) || 0;
   if (support < 0) {
     support = 0;
   }
-  var price = AccomondationPrice[accommodationCode];
-  if (typeof accommodationCode === "undefined") {
-    return 0;
+  price += support;
+  if(isShirtChosen)
+  {
+    price += SHIRT_PRICE;
   }
-  return price + support;
+  var accomodationPrice = AccommodationPrice[accommodationCode];
+  price += accomodationPrice;
+
+  return price;
+}
+
+function createDataMasterRow(summaryVars) {
+  var config = getTranslationConfig();
+  var userDataHeader = DataMasterHeader.map(k => config[k].title);
+  createSheetIfDoesntExist(DATA_MASTER_SHEET, userDataHeader);
+
+  summaryVars[K_HIDDEN_NOTE] = "";
+  summaryVars[K_ROLE] = "participant";
+
+  appendRowToSheet(DATA_MASTER_SHEET, projectVarsIntoArray(summaryVars, DataMasterHeader));
+}
+
+function projectVarsIntoArray(summaryVars, array)
+{
+  var targetArray = [];
+  array.forEach(d => {
+    if (typeof summaryVars[d] !== "undefined") {
+      targetArray.push(summaryVars[d].toString());
+    }
+    else {
+      targetArray.push('');
+    }
+  });
+  return targetArray;
 }
 
 function startTrackingPayment(summaryVars, isManual) {
 
   var config = getTranslationConfig();
   var userDataHeader = BankInfoDataHeader.map(k => config[k].title);
+  createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
 
   summaryVars[K_MANUAL_OVERRIDE] = isManual;
   summaryVars[K_PAID] = 0;
@@ -179,26 +149,14 @@ function startTrackingPayment(summaryVars, isManual) {
   summaryVars[K_REGISTRATION_VALID] = true;
   summaryVars[K_REMINDER_SENT] = false;
 
-
-  createSheetIfDoesntExist(MONEY_INFO_SHEET, userDataHeader);
-
-  var moneyInfo = [];
-  BankInfoDataHeader.forEach(d => {
-    if (typeof summaryVars[d] !== "undefined") {
-      moneyInfo.push(summaryVars[d]);
-    }
-    else {
-      moneyInfo.push('');
-    }
-  });
-  appendRowToSheet(MONEY_INFO_SHEET, objectValuesToArray(moneyInfo));
+  appendRowToSheet(MONEY_INFO_SHEET, projectVarsIntoArray(summaryVars, BankInfoDataHeader));
 }
 
 function overLimit(counts) {
-  var limit = 0;
-  Object.keys(AccomondationLimits).forEach((key) => {
-    limit += AccomondationLimits[key];
-  });
+  var limit = 350;
+  // Object.keys(AccomondationLimits).forEach((key) => {
+  //   limit += AccomondationLimits[key];
+  // });
   var current = 0;
   Object.keys(counts).forEach((key) => {
     current += counts[key];
@@ -217,40 +175,18 @@ function getValuesFromColumn(sheetName, columnType) {
   return getStringsFromColumn(accomodationIndex, sheet);
 }
 
-function getCurrentAccomodationTypeCounts() {
-  var values = getValuesFromColumn(ANSWERS_SHEET, K_ACCOMODATION_TYPE);
-  var withCount = values.filter(v => v == WITH_TYPE).length;
-  var withoutCount = values.filter(v => v == WITHOUT_TYPE).length;
-  var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
-  var fridayCount = values.filter(v => v == PROGRAM_ONLY_FRIDAY).length;
-  var saturdayCount = values.filter(v => v == PROGRAM_ONLY_SATURDAY).length;
-  var spacakCount = values.filter(v => v == SPACAK_TYPE).length;
-  var programCount = values.filter(v => v == PROGRAM_ONLY_TYPE || v == PROGRAM_FOOD_ONLY_TYPE).length;
+function getCurrentAccommodationTypeCounts() {
+  var values = getValuesFromColumn(DATA_MASTER_SHEET, K_ACCOMODATION_TYPE);
   return (
     {
-      [WITH_TYPE]: withCount,
-      [WITHOUT_TYPE]: withoutCount,
-      [SPACAK_TYPE]: spacakCount,
-      [PROGRAM_TYPE]: programCount,
-      [PROGRAM_ONLY_FRIDAY]: fridayCount,
-      [PROGRAM_ONLY_SATURDAY]: saturdayCount
+      [GYMPL_TYPE]: values.filter(v => v == GYMPL_TYPE).length,
+      [VDCM_POSTEL_TYPE]:  values.filter(v => v == VDCM_POSTEL_TYPE).length,
+      [SPACAK_FOOD_TYPE]: values.filter(v => v == SPACAK_FOOD_TYPE).length,
+      [SPACAK_ONLY_TYPE]: values.filter(v => v == SPACAK_ONLY_TYPE).length,
+      [PROGRAM_FOOD_TYPE]: values.filter(v => v == PROGRAM_FOOD_TYPE).length,
+      [PROGRAM_ONLY_TYPE]: values.filter(v => v == PROGRAM_ONLY_TYPE).length,
+      [PROGRAM_ONLY_FRIDAY]: values.filter(v => v == PROGRAM_ONLY_FRIDAY).length,
+      [PROGRAM_ONLY_SATURDAY]: values.filter(v => v == PROGRAM_ONLY_SATURDAY).length
     }
   );
-}
-
-function getCurrentOrderFromAccomodation() {
-  var values = getValuesFromColumn(ANSWERS_SHEET, K_ACCOMODATION_TYPE);
-  var order = values.filter(
-    v =>
-      v == WITH_TYPE ||
-      v == WITHOUT_TYPE ||
-      v == SPACAK_TYPE ||
-      v == PROGRAM_FOOD_ONLY_TYPE ||
-      v == PROGRAM_ONLY_TYPE ||
-      v == STORNO_TYPE ||
-      v == PROGRAM_ONLY_FRIDAY ||
-      v == PROGRAM_ONLY_SATURDAY ||
-      v == SUB_ACCOMODATION
-  ).length;
-  return order;
 }
