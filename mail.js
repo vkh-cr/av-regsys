@@ -36,7 +36,12 @@ function getSubsForMailerSend(obj)
   subs.push(createOneSub(K_SALUTATION, salutation));
   if(typeof obj[K_ACCOMODATION_TYPE] !== "undefined" && !obj[K_ACCOMODATION_TYPE].isEmpty())
   {
-    subs.push(createOneSub(K_ACCOMODATION, AccommodationType[obj[K_ACCOMODATION_TYPE]]));
+    var accomodationString = AccommodationType[obj[K_ACCOMODATION_TYPE]];
+    if(accomodationString==null)
+    {
+      accomodationString = obj[K_ACCOMODATION_TYPE];
+    }
+    subs.push(createOneSub(K_ACCOMODATION_STRING, accomodationString));
   }
   return subs;
 }
@@ -86,7 +91,7 @@ function sendEmailMailerSend(recipient, templateData, templateId) {
     "reply_to": [
       {
         "email": 'info@absolventskyvelehrad.cz',
-        "name": 'AV21'
+        "name": 'AV23'
       }
     ],
     "variables": [

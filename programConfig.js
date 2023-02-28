@@ -9,7 +9,7 @@ const K_ADDRESS = "address";
 const K_REGION = "region";
 const K_CITY = "city";
 const K_ACCOMODATION_TYPE = "accommodationType";
-const K_ACCOMODATION = "accommodation";
+const K_ACCOMODATION_STRING = "accommodation";
 const K_ROOMMATE = "roommate";
 const K_SUPPORT = "support";
 const K_PHONE = "phone";
@@ -55,8 +55,8 @@ const SUB_ACCOMODATION = "waiting";
 const STORNO_TYPE = "storno";
 const OTHERS_TYPE = "others";
 
-const PAYMENT_DEADLINE_DAYS = 14;
-const REMINDER_DAYS = 7;
+const PAYMENT_DEADLINE_DAYS = 2;
+const REMINDER_DAYS = 1;
 
 const AccommodationLimits = {
   //extra for team
@@ -84,7 +84,7 @@ const SHIRT_PRICE = 300;
 
 const AccommodationPrice = {
   // [GYMPL_TYPE]: 2575,
-  // [VDCM_POSTEL_TYPE]: 3000,
+  // [VDCM_POSTEL_TYPE]: 2750,
   // [SPACAK_FOOD_TYPE]: 1950,
   // [SPACAK_ONLY_TYPE]: 1060,
   // [PROGRAM_FOOD_TYPE]: 1575,
@@ -266,7 +266,7 @@ const DataMasterHeader =
       [K_PAID_EVERYTHING_TIMESTAMP]: { "title": "Datum zaplacení všeho" },
       [K_REMINDER_SENT]: { "title": "Upomínka odeslána" },
       [K_REGISTRATION_VALID]: { "title": "Platná registrace" },
-      [K_EXPIRED_ALERT]: { "title": "Upozornění zasláno" },
+      [K_EXPIRED_ALERT]: { "title": "Vypršel termín splatnosti" },
       [K_DETAILS]: { "title": "Detaily" },
       [K_SUB_ORDER]: { "title": "Číslo registrace" },
     }

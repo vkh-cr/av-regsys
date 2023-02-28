@@ -171,7 +171,7 @@ function writeDownTransactionToBankInfo(transactionObj, bankSheetRange, rowIndex
   }
 
   // send email
-  var summaryVars = addSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+  var summaryVars = addSummaryVars(userEmail, getSheet(DATA_MASTER_SHEET));
   addSummaryVars(userEmail, moneyInfoSheet, summaryVars);
 
   var paidEverythingOrder = getStringsFromColumn(IndexMoneyInfo(K_PAID_EVERYTHING), moneyInfoSheet).filter(e=>e).length;
@@ -196,8 +196,8 @@ function onGetBankingDataTick(){
 
 function onCheckNotRecievedPayments(){
   var sheet = getSheet(MONEY_INFO_SHEET);
-
   if (sheet == null) { return null; }
+  
   var bankSheetRange = sheet.getDataRange();
   if(bankSheetRange == null) { return; } //No info to be processed
 
@@ -240,7 +240,7 @@ function onCheckNotRecievedPayments(){
 
     // send email
     var userEmail = bankData[IndexMoneyInfo(K_EMAIL)];
-    var summaryVars = addSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+    var summaryVars = addSummaryVars(userEmail, getSheet(DATA_MASTER_SHEET));
     summaryVars[K_DEADLINE] = deadline;
     var finalPrice = bankData[IndexMoneyInfo(K_PRICE)];
     summaryVars[K_PRICE] = finalPrice;

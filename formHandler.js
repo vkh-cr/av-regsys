@@ -3,7 +3,7 @@ function onFormSubmit(formSubmitObj) {
   // For unknown reason onFormSubmit is sometimes called without form being submitted.
   // Usually two or three times immediately after legitimate submission. In such a case
   // formSubmitObj contains timestmap but it is otherwise empty.
-  if (formSubmitObj.namedValues.Email == '' || formSubmitObj.namedValues['Varianta ubytování'] == '') {
+  if (formSubmitObj.namedValues.Email == '') {
     console.log('On form submitted call suppressed');
     return;
   }
@@ -42,7 +42,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   var answersSheet = getSheet(ANSWERS_SHEET);
 
   if (typeof formSubmitObj.range.getRow !== "undefined") {
-    currentRow = formSubmitObj.range.getRow()-1;
+    currentRow = formSubmitObj.range.getRow();
   }
   else {
     currentRow = answersSheet.getLastRow();

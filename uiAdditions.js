@@ -4,7 +4,7 @@ function onOpen() {
     .addItem('Zadat platbu', 'userPaidFunctionUI')
     .addItem('Poslat upomínky k zaplacení', 'onCheckNotRecievedPayments')
     .addItem('Stáhnout a spárovat platby', 'onGetBankingDataTick')
-    .addItem('Poslat email zrušena registrace', 'sendRegistrationCancelledEmail')
+    .addItem('Poslat email zrušená registrace', 'sendRegistrationCancelledEmail')
     .addToUi();
 }
 
@@ -46,7 +46,8 @@ function userPaidFunctionUI() {
 
 function updateBankInfoWithTransactionObj(varSymbol, transactionObj) {
 
-  var rowInfo = findRowIndexAndRangeInSheet(MONEY_INFO_SHEET, varSymbol, IndexMoneyInfo(K_VAR_SYMBOL)); runtimeLog(rowInfo);
+  var rowInfo = findRowIndexAndRangeInSheet(MONEY_INFO_SHEET, varSymbol, IndexMoneyInfo(K_VAR_SYMBOL)); 
+  runtimeLog(rowInfo);
   if (rowInfo == null) { return; }
 
   writeDownInfoAboutDirectPayment(rowInfo, transactionObj);
@@ -69,21 +70,34 @@ function writeDownInfoAboutDirectPayment(rowInfo, transactionObj) {
   currRange.getSheet().getRange(indexInRange + 1, IndexMoneyInfo(K_DETAILS) + 1).setValue(cellValue);
 }
 
-function sendRegistrationCancelledEmail() {
-  var ui = SpreadsheetApp.getUi(); // Same variations.
+function sendRegistrationCancelledEmail(emailAddress) {
 
-  var result = ui.prompt(
-    'Email address please', '',
-    ui.ButtonSet.OK);
-
-  var button = result.getSelectedButton();
-  var emailAddress = result.getResponseText();
-
-  if (button == ui.Button.CLOSE || emailAddress == null || emailAddress == '') {
-    return;
+  if(emailAddress==null)
+  {
+    var ui = SpreadsheetApp.getUi(); // Same variations.
+    var result = ui.prompt(
+      'Email address please', '',
+      ui.ButtonSet.OK);
+  
+    var button = result.getSelectedButton();
+    emailAddress = result.getResponseText();
+    if (button == ui.Button.CLOSE || emailAddress == null || emailAddress == '') {
+      return;
+    }
   }
 
-  var summaryVars = addSummaryVars(userEmail, getSheet(ANSWERS_SHEET));
+  var row = findRowIndexAndRangeInSheet(MONEY_INFO_SHEET, emailAddress, IndexMoneyInfo(K_EMAIL)); 
+  if (row == null) { return; }
+
+  updateValueOnColumn(false, row.indexInRange, getTranslationConfig()[K_REGISTRATION_VALID].title, getSheet(MONEY_INFO_SHEET));
+
+  var rowMaster = findRowIndexAndRangeInSheet(DATA_MASTER_SHEET, emailAddress, DataMasterHeader.indexOf(K_EMAIL)); 
+  if (rowMaster != null) 
+  { 
+    updateValueOnColumn("storno", rowMaster.indexInRange, getTranslationConfig()[K_ACCOMODATION_TYPE].title, getSheet(DATA_MASTER_SHEET));
+  }
+
+  var summaryVars = addSummaryVars(emailAddress, getSheet(DATA_MASTER_SHEET));
   sendEmailRegistrationCancelled(summaryVars);
 }
 
