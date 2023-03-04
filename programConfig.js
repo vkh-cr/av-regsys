@@ -55,52 +55,52 @@ const SUB_ACCOMODATION = "waiting";
 const STORNO_TYPE = "storno";
 const OTHERS_TYPE = "others";
 
-const PAYMENT_DEADLINE_DAYS = 2;
-const REMINDER_DAYS = 1;
+const PAYMENT_DEADLINE_DAYS = 14;
+const REMINDER_DAYS = 7;
 
 const AccommodationLimits = {
   //extra for team
   //-15 pro hosty
-  // [GYMPL_TYPE]: 23+92,
-  // [VDCM_POSTEL_TYPE]: 51,
-  // [SPACAK_FOOD_TYPE]: 130,
-  // [SPACAK_ONLY_TYPE]: 100,
-  // [PROGRAM_FOOD_TYPE]: 40,
-  // [PROGRAM_ONLY_TYPE]: 300,
-  // [PROGRAM_ONLY_FRIDAY]: 40,
-  // [PROGRAM_ONLY_SATURDAY]: 40
+   [GYMPL_TYPE]: 23+92,
+   [VDCM_POSTEL_TYPE]: 51,
+   [SPACAK_FOOD_TYPE]: 130,
+   [SPACAK_ONLY_TYPE]: 100,
+   [PROGRAM_FOOD_TYPE]: 40,
+   [PROGRAM_ONLY_TYPE]: 300,
+   [PROGRAM_ONLY_FRIDAY]: 40,
+   [PROGRAM_ONLY_SATURDAY]: 40
   // test variant
-  [GYMPL_TYPE]: 1,
-  [VDCM_POSTEL_TYPE]: 2,
-  [SPACAK_FOOD_TYPE]: 2,
-  [SPACAK_ONLY_TYPE]: 2,
-  [PROGRAM_FOOD_TYPE]: 2,
-  [PROGRAM_ONLY_TYPE]: 2,
-  [PROGRAM_ONLY_FRIDAY]: 2,
-  [PROGRAM_ONLY_SATURDAY]: 2
+  //[GYMPL_TYPE]: 1 ,
+  //[VDCM_POSTEL_TYPE]: 2,
+  //[SPACAK_FOOD_TYPE]: 2,
+  //[SPACAK_ONLY_TYPE]: 2,
+  //[PROGRAM_FOOD_TYPE]: 2,
+  //[PROGRAM_ONLY_TYPE]: 2,
+  //[PROGRAM_ONLY_FRIDAY]: 2,
+  //[PROGRAM_ONLY_SATURDAY]: 2
 };
 
 const SHIRT_PRICE = 300;
 
 const AccommodationPrice = {
-  // [GYMPL_TYPE]: 2575,
-  // [VDCM_POSTEL_TYPE]: 2750,
-  // [SPACAK_FOOD_TYPE]: 1950,
-  // [SPACAK_ONLY_TYPE]: 1060,
-  // [PROGRAM_FOOD_TYPE]: 1575,
-  // [PROGRAM_ONLY_TYPE]: 700,
-  // [PROGRAM_ONLY_FRIDAY]: 300,
-  // [PROGRAM_ONLY_SATURDAY]: 300
+  [GYMPL_TYPE]: 2575,
+  [VDCM_POSTEL_TYPE]: 2750,  
+  [SPACAK_FOOD_TYPE]: 1950,
+  [SPACAK_ONLY_TYPE]: 1060,
+  [PROGRAM_FOOD_TYPE]: 1575,
+  [PROGRAM_ONLY_TYPE]: 700,
+  [PROGRAM_ONLY_FRIDAY]: 300,
+  [PROGRAM_ONLY_SATURDAY]: 300
 
   //test variant
-  [GYMPL_TYPE]: 2,
-  [VDCM_POSTEL_TYPE]: 2,
-  [SPACAK_FOOD_TYPE]: 2,
-  [SPACAK_ONLY_TYPE]: 2,
-  [PROGRAM_FOOD_TYPE]: 2,
-  [PROGRAM_ONLY_TYPE]: 2,
-  [PROGRAM_ONLY_FRIDAY]: 2,
-  [PROGRAM_ONLY_SATURDAY]: 2
+  // [GYMPL_TYPE]: 2,
+  // [VDCM_POSTEL_TYPE]: 2,
+  // [SPACAK_FOOD_TYPE]: 2,
+  // [SPACAK_ONLY_TYPE]: 2,
+  // [PROGRAM_FOOD_TYPE]: 2,
+  // [PROGRAM_ONLY_TYPE]: 2,
+  // [PROGRAM_ONLY_FRIDAY]: 2,
+  // [PROGRAM_ONLY_SATURDAY]: 2
 };
 
 const AccommodationType = {
@@ -236,7 +236,7 @@ const DataMasterHeader =
       [K_NAME]: { "title": "Jméno" },
       [K_SURNAME]: { "title": "Příjmení" },
       [K_SEX]: { "title": "Pohlaví" },
-      [K_EMAIL]: { "title": "Email" },
+      [K_EMAIL]: { "title": "E-mail" },
       [K_BIRTH_YEAR]: { "title": "Rok narození" },
       [K_ADDRESS]: { "title": "Adresa trvalého bydliště" },
       [K_REGION]: { "title": "Kraj" },

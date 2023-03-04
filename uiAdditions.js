@@ -159,7 +159,7 @@ function updateSignInForm() {
         form.deleteItem(thisItem);
         continue;
       }
-      var helpTextAccomodationOpen = "Vyber jednu z dostupných variant ubytování. Údaje pro platbu přijdou hned po odeslání přihlášky na Tvůj mail. Více informací o ubytování a stravování najdeš na absolventskyvelehrad.cz.";
+      var helpTextAccomodationOpen = "Vyber jednu z dostupných variant ubytování. Údaje pro platbu přijdou hned po odeslání přihlášky na Tvůj e-mail. Více informací o ubytování a stravování najdeš na absolventskyvelehrad.cz.";
       // var helpTextAccomodationClosed = "Naše kapacity ubytování jsou téměř vyčerpány. Přesto je možné si zajistit vlastní ubytování. Doporučujeme místní kemp a společnou domluvu spolubydlení přes http://bit.ly/spolubydleniAV. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/.";
       // Varianta ubytování
       multipleChoice.setHelpText(helpTextAccomodationOpen);
@@ -168,13 +168,13 @@ function updateSignInForm() {
   }
 
   var newParSign = "\n\n";
-  var par2 = "Chceš jet na AV23? Jsi na správném místě! Stačí vyplnit tuto přihlášku a postupovat podle pokynů, které Ti pošleme na mail. Podrobnosti k registraci, ubytování, stravování atd. najdeš na absolventskyvelehrad.cz. Těšíme se na Tebe.";
+  var par2 = "Chceš jet na AV23? Jsi na správném místě! Stačí vyplnit tuto přihlášku a postupovat podle pokynů, které Ti pošleme na e-mail. Podrobnosti k registraci, ubytování, stravování atd. najdeš na absolventskyvelehrad.cz. Těšíme se na Tebe.";
   //var par3 = "Proměnná kapacita z důvodu protiepidemických opatření:";
   //var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
   var originalText = par2; //+ newParSign + par3 + newParSign + par4;
   if (!subMode) {
     // normal mode
-    form.setTitle("AV23 - Přihláška")
+    form.setTitle("AV23 - Přihláška - Dobrovolníci")
     form.setDescription(originalText);
   }
   else {
@@ -196,7 +196,7 @@ function sendToEmails() {
   emails = emails.filter(e => !e.isEmpty());
 
   var ui = SpreadsheetApp.getUi();
-  var message = 'Opravdu chcete rozeslat:' + '\nPočet emailů: ' + emails.length + '\nŠablona: ' + templateId;
+  var message = 'Opravdu chcete rozeslat:' + '\nPočet e-mailů: ' + emails.length + '\nŠablona: ' + templateId;
   var response = ui.alert('Opravdu?', message, ui.ButtonSet.YES_NO);
 
   if (response == ui.Button.NO) {
