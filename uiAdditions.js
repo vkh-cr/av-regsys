@@ -1,19 +1,19 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('Manage payments')
+  ui.createMenu('Spravovat platby')
     .addItem('Zadat platbu', 'userPaidFunctionUI')
     .addItem('Poslat upomínky k zaplacení', 'onCheckNotRecievedPayments')
     .addItem('Stáhnout a spárovat platby', 'onGetBankingDataTick')
-    .addItem('Poslat email zrušená registrace', 'sendRegistrationCancelledEmail')
+    .addItem('Stornovat registraci', 'sendRegistrationCancelledEmail')
     .addToUi();
 }
 
 function userPaidFunctionUI() {
-  var ui = SpreadsheetApp.getUi(); // Same variations.
+  var ui = SpreadsheetApp.getUi();
 
   var result = ui.prompt(
-    'Enter information about payment',
-    'Please enter var. symbol and amount paid separated by ; (E.g.: "9510234298;2000"',
+    'Zadej variabilní symbol a částku oddělenou znakem ";" (např.: "9510234298;2000")',
+    '',
     ui.ButtonSet.OK);
 
   // Process the user's response.
@@ -26,7 +26,7 @@ function userPaidFunctionUI() {
 
   var matches = text.match(/^([0-9]+);([0-9]+)$/);
   if (matches == null || matches.length != 3) {
-    ui.alert("Incorrect format :(. #matches");
+    ui.alert("Nesprávný formát :(. #matches");
     return;
   }
 
@@ -63,7 +63,7 @@ function writeDownInfoAboutDirectPayment(rowInfo, transactionObj) {
   var newEntry = currUserEmail + ": " + transactionObj.amount + ' ' + transactionObj.currency;
 
   var cellValue = currRange.getValues()[indexInRange][IndexMoneyInfo(K_DETAILS)];
-  if (cellValue != null || cellValue != undefined) { cellValue += '\n'; }
+  if (cellValue != null || cellValue != undefined || !cellValue.isEmpty()) { cellValue += '\n'; }
   else { cellValue = ''; }
 
   cellValue += newEntry;
@@ -74,9 +74,9 @@ function sendRegistrationCancelledEmail(emailAddress) {
 
   if(emailAddress==null)
   {
-    var ui = SpreadsheetApp.getUi(); // Same variations.
+    var ui = SpreadsheetApp.getUi();
     var result = ui.prompt(
-      'Email address please', '',
+      'Zadej e-mailovou adresu účastníka pro zaslání storno e-mailu:', '',
       ui.ButtonSet.OK);
   
     var button = result.getSelectedButton();
@@ -94,7 +94,7 @@ function sendRegistrationCancelledEmail(emailAddress) {
   var rowMaster = findRowIndexAndRangeInSheet(DATA_MASTER_SHEET, emailAddress, DataMasterHeader.indexOf(K_EMAIL)); 
   if (rowMaster != null) 
   { 
-    updateValueOnColumn("storno", rowMaster.indexInRange, getTranslationConfig()[K_ACCOMODATION_TYPE].title, getSheet(DATA_MASTER_SHEET));
+    updateValueOnColumn(STORNO_TYPE, rowMaster.indexInRange, getTranslationConfig()[K_ACCOMODATION_TYPE].title, getSheet(DATA_MASTER_SHEET));
   }
 
   var summaryVars = addSummaryVars(emailAddress, getSheet(DATA_MASTER_SHEET));
@@ -168,7 +168,7 @@ function updateSignInForm() {
   }
 
   var newParSign = "\n\n";
-  var par2 = "Chceš jet na AV23? Jsi na správném místě! Stačí vyplnit tuto přihlášku a postupovat podle pokynů, které Ti pošleme na e-mail. Podrobnosti k registraci, ubytování, stravování atd. najdeš na absolventskyvelehrad.cz. Těšíme se na Tebe.";
+  var par2 = "Chceš jet na AV23? Jsi na správném místě! Stačí vyplnit tuto přihlášku a postupovat podle pokynů, které Ti pošleme na e-mail. Podrobnosti k registraci, ubytování, stravování atd., najdeš na absolventskyvelehrad.cz. Těšíme se na Tebe.";
   //var par3 = "Proměnná kapacita z důvodu protiepidemických opatření:";
   //var par4 = "Máme připravené tři scénáře: 350, 250 a 150 lidí. Registrace je otevřena v plné výši, avšak bude-li v létě podle aktuálních opatření nutné omezit počet účastníků, nezbývá než přejít k nižší variantě. Rozhodujícím kritériem pro účast bude čas podání přihlášky. Pokud se z tohoto důvodu na tebe nedostane, samozřejmostí je vrácení registračního poplatku. Podrobnosti najdeš na https://absolventskyvelehrad.cz/covid-situace/";
   var originalText = par2; //+ newParSign + par3 + newParSign + par4;

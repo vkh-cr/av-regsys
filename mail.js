@@ -1,4 +1,4 @@
-const CONFIRMATION_TEMPLATE = "jpzkmgqzm2g059v7";
+const CONFIRMATION_TEMPLATE = "pxkjn4172q4z7815";
 const SUB_TEMPLATE = "x2p0347qwplzdrn7";
 const REMINDER_TEMPLATE = "pxkjn417k04z7815";
 const PAYMENT_OK_TEMPLATE = "v69oxl5z6kl785kw";

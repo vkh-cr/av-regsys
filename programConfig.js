@@ -61,7 +61,7 @@ const REMINDER_DAYS = 7;
 const AccommodationLimits = {
   //extra for team
   //-15 pro hosty
-   [GYMPL_TYPE]: 23+92,
+   [GYMPL_TYPE]: 24+91,
    [VDCM_POSTEL_TYPE]: 51,
    [SPACAK_FOOD_TYPE]: 130,
    [SPACAK_ONLY_TYPE]: 100,
@@ -80,7 +80,8 @@ const AccommodationLimits = {
   //[PROGRAM_ONLY_SATURDAY]: 2
 };
 
-const SHIRT_PRICE = 300;
+const MAX_PARTICIPANTS = 350;
+const SHIRT_PRICE = 250;
 
 const AccommodationPrice = {
   [GYMPL_TYPE]: 2575,
@@ -135,6 +136,7 @@ const testSummaryVars = {
   [K_ACCOMODATION_TYPE] : PROGRAM_FOOD_TYPE,
   [K_ROOMMATE] : "",
   [K_VOLUNTEER_PREFERENCE] : "",
+  [K_VOLUNTEER_WEEKEND] : "",
   [K_DISCUSS_GROUP] : "Ano",
   [K_PHONE] : "+420720373969",
   [K_PHONE2] : "+420123456789",
@@ -172,6 +174,7 @@ const RegistrationFormQuestions =
     K_SUPPORT,
     K_SUPPORT_CONFIRM,
     K_NOTE,
+    K_VOLUNTEER_WEEKEND,
     K_AFTER_AV_INFO
   ];
 
@@ -211,6 +214,7 @@ const DataMasterHeader =
   K_ACCOMODATION_TYPE,
   K_ROOMMATE,
   K_VOLUNTEER_PREFERENCE,
+  K_VOLUNTEER_WEEKEND,
   K_DISCUSS_GROUP,
   K_PHONE,
   K_PHONE2,
@@ -244,6 +248,7 @@ const DataMasterHeader =
       [K_ACCOMODATION_TYPE]: { "title": "Varianta ubytování", "typeTranslations": AccommodationType },
       [K_ROOMMATE]: { "title": "Chceme bydlet spolu" },
       [K_VOLUNTEER_PREFERENCE]: { "title": "Oblast dobrovolnické pomoci" },
+      [K_VOLUNTEER_WEEKEND]: { "title": "Víkendovka pro dobrovolníky" },
       [K_DISCUSS_GROUP]: { "title": "Diskuzní skupinky" },
       [K_PHONE]: { "title": "Telefon" },
       [K_PHONE2]: { "title": "Telefon v případě ohrožení" },
@@ -254,10 +259,10 @@ const DataMasterHeader =
       [K_SUPPORT_CONFIRM]: { "title": "Potvrzení o daru" },
       [K_NOTE]: { "title": "Poznámka" },
       [K_AFTER_AV_INFO]: { "title": "Informace po AV" },
+
       [K_HIDDEN_NOTE]: { "title": "Skrytá poznámka" },
       [K_ROLE]: { "title": "Role" },
       
-      [K_VOLUNTEER_WEEKEND]: { "title": "Pojedu na víkendovku pro dobrovolníky" },
       [K_VAR_SYMBOL]: { "title": "Id" },
       [K_MANUAL_OVERRIDE]: { "title": "Manuální změna" },
       [K_PAID]: { "title": "Zaplaceno" },

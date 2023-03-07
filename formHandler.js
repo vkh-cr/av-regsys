@@ -35,7 +35,7 @@ function workOnSendingConfirmationEmail(formSubmitObj) {
   }
 
   var supportValue = formData[K_SUPPORT].value;
-  var isShirtChosen = !formData[K_SHIRT].value.isEmpty();
+  var isShirtChosen = !(formData[K_SHIRT].value.isEmpty() || formData[K_SHIRT].value == "Bez trika");
   var price = getTicketPrice(accommodation, supportValue, isShirtChosen);
 
   var currentRow;
@@ -153,7 +153,6 @@ function startTrackingPayment(summaryVars, isManual) {
 }
 
 function overLimit(counts) {
-  var limit = 350;
   // Object.keys(AccomondationLimits).forEach((key) => {
   //   limit += AccomondationLimits[key];
   // });
@@ -161,7 +160,7 @@ function overLimit(counts) {
   Object.keys(counts).forEach((key) => {
     current += counts[key];
   });
-  return current - limit;
+  return current - MAX_PARTICIPANTS;
 }
 
 function isFullCapacity(counts) {
