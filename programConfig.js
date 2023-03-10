@@ -60,8 +60,8 @@ const REMINDER_DAYS = 7;
 
 const AccommodationLimits = {
   //extra for team
-  //-15 pro hosty
-   [GYMPL_TYPE]: 24+91,
+  //-30 pro hosty
+   [GYMPL_TYPE]: 24+76,
    [VDCM_POSTEL_TYPE]: 51,
    [SPACAK_FOOD_TYPE]: 130,
    [SPACAK_ONLY_TYPE]: 100,
@@ -105,7 +105,7 @@ const AccommodationPrice = {
 };
 
 const AccommodationType = {
-  [GYMPL_TYPE]: "Program + strava + ubytování gympl",
+  [GYMPL_TYPE]: "Program + strava + ubytování gympl postel",
   [VDCM_POSTEL_TYPE]: "Program + strava + ubytování VDCM postel",
   [SPACAK_FOOD_TYPE]: "Program + strava + ubytování spacák (ZŠ)",
   [SPACAK_ONLY_TYPE]: "Program + ubytování spacák (ZŠ)",
