@@ -62,7 +62,8 @@ const AccommodationLimits = {
   //extra for team
   //-30 pro hosty
    [GYMPL_TYPE]: 24+76,
-   [VDCM_POSTEL_TYPE]: 51,
+  //-12 pro superdobrovolníky
+   [VDCM_POSTEL_TYPE]: 39,
    [SPACAK_FOOD_TYPE]: 130,
    [SPACAK_ONLY_TYPE]: 100,
    [PROGRAM_FOOD_TYPE]: 40,
@@ -84,11 +85,11 @@ const MAX_PARTICIPANTS = 350;
 const SHIRT_PRICE = 250;
 
 const AccommodationPrice = {
-  [GYMPL_TYPE]: 2575,
-  [VDCM_POSTEL_TYPE]: 2750,  
-  [SPACAK_FOOD_TYPE]: 1950,
-  [SPACAK_ONLY_TYPE]: 1060,
-  [PROGRAM_FOOD_TYPE]: 1575,
+  [GYMPL_TYPE]: 2775,
+  [VDCM_POSTEL_TYPE]: 2950,  
+  [SPACAK_FOOD_TYPE]: 2150,
+  [SPACAK_ONLY_TYPE]: 1260,
+  [PROGRAM_FOOD_TYPE]: 1775,
   [PROGRAM_ONLY_TYPE]: 700,
   [PROGRAM_ONLY_FRIDAY]: 300,
   [PROGRAM_ONLY_SATURDAY]: 300

@@ -159,7 +159,7 @@ function updateSignInForm() {
         form.deleteItem(thisItem);
         continue;
       }
-      var helpTextAccomodationOpen = "Vyber jednu z dostupných variant ubytování. Údaje pro platbu přijdou hned po odeslání přihlášky na Tvůj e-mail. Více informací o ubytování a stravování najdeš na absolventskyvelehrad.cz.";
+      var helpTextAccomodationOpen = "Vyber jednu z dostupných variant ubytování. Pokoje na gymnáziu a VDCM jsou již obsazené, ale míst pro spacáky je stále dost.\nÚdaje pro platbu přijdou hned po odeslání přihlášky na Tvůj e-mail. Více informací o ubytování a stravování najdeš na absolventskyvelehrad.cz.";
       // var helpTextAccomodationClosed = "Naše kapacity ubytování jsou téměř vyčerpány. Přesto je možné si zajistit vlastní ubytování. Doporučujeme místní kemp a společnou domluvu spolubydlení přes http://bit.ly/spolubydleniAV. Více informací o ubytování a stravování najdeš na https://absolventskyvelehrad.cz/vse-o-registraci-na-av-21/.";
       // Varianta ubytování
       multipleChoice.setHelpText(helpTextAccomodationOpen);
@@ -174,7 +174,7 @@ function updateSignInForm() {
   var originalText = par2; //+ newParSign + par3 + newParSign + par4;
   if (!subMode) {
     // normal mode
-    form.setTitle("AV23 - Přihláška - Dobrovolníci")
+    form.setTitle("AV23 - Přihláška")
     form.setDescription(originalText);
   }
   else {
